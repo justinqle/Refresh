@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // Adapter
-        mAdapter = new MyAdapter(new String[]{"news", "progmetal", "politics", "posthardcore", "umd"});
+        mAdapter = new MyAdapter(new String[]{"news", "progmetal", "politics", "posthardcore", "umd", "dancegavindance", "android", "gifs", "funny", "showerthoughts", "smashbros", "csMajors", "frugal", "google"});
         mRecyclerView.setAdapter(mAdapter);
     }
 
