@@ -2,22 +2,34 @@ package com.example.android.waves;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.View;
+
+import com.example.android.waves.models.Child;
+import com.example.android.waves.models.Listing;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -57,12 +69,33 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // Changes in content does not change layout size
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         // LinearLayout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // Adapter
-        mAdapter = new MyAdapter(new String[]{"news", "progmetal", "politics", "posthardcore", "umd", "dancegavindance", "android", "gifs", "funny", "showerthoughts", "smashbros", "csMajors", "frugal", "google"});
-        mRecyclerView.setAdapter(mAdapter);
+        loadPosts();
+    }
+
+    private void loadPosts() {
+        NetworkService.getInstance()
+                .getJSONApi()
+                .getListing()
+                .enqueue(new Callback<Listing>() {
+                    @Override
+                    public void onResponse(Call<Listing> call, Response<Listing> response) {
+                        Log.i(TAG, "Enqueue succeeded.");
+                        List<Child> children = response.body().getData().getChildren();
+                        mAdapter = new MyAdapter(children);
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Listing> call, Throwable t) {
+                        Log.i(TAG.toString(), "Enqueue failed.");
+                        t.printStackTrace();
+                    }
+                });
     }
 
     @Override
