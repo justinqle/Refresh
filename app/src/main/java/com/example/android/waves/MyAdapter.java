@@ -6,9 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.waves.models.Child;
+
+import java.util.List;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    private String[] mDataset;
+    private List<Child> children;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,14 +24,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    public MyAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public MyAdapter(List<Child> children) {
+        this.children = children;
     }
 
     @Override
     public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.news_row, parent, false);
 
@@ -37,15 +40,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-
-        holder.mTextView.setText(mDataset[position]);
-
+        holder.mTextView.setText(children.get(position).getData().getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return children.size();
     }
 }
