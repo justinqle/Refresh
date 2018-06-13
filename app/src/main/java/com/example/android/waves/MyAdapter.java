@@ -1,6 +1,7 @@
 package com.example.android.waves;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.waves.models.Child;
+import com.example.android.waves.models.Preview;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+    private static final String TAG = "MyAdapter";
 
     private List<Child> children;
 
@@ -32,6 +37,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             user = (TextView) v.findViewById(R.id.user);
             created_utc = (TextView) v.findViewById(R.id.created_utc);
             num_comments = (TextView) v.findViewById(R.id.num_comments);
+
+            thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
         }
     }
 
@@ -56,6 +63,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.user.setText(children.get(position).getData().getAuthor());
         holder.created_utc.setText(unixTimeToElapsed(children.get(position).getData().getCreatedUtc()));
         holder.num_comments.setText(children.get(position).getData().getNumComments() + " comments");
+
+        Preview preview = children.get(position).getData().getPreview();
+        if (preview == null) {
+            Log.d(TAG, "No preview");
+        } else {
+            String url = preview.getImages().get(0).getSource().getUrl();
+            Picasso.get().load(url).into(holder.thumbnail);
+        }
     }
 
     // Could use some optimization
