@@ -16,7 +16,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-            //mTextView = v;
+            mTextView = v.findViewById(R.id.text_view);
         }
     }
 
@@ -40,7 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        //holder.mTextView.setText(mDataset[position]);
+        holder.mTextView.setText(mDataset[position]);
 
     }
 
