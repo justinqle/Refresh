@@ -120,9 +120,9 @@ public class Post {
     @SerializedName("thumbnail")
     @Expose
     private String thumbnail;
-    @SerializedName("edited")
-    @Expose
-    private boolean edited;
+//    @SerializedName("edited")
+//    @Expose
+//    private boolean edited;
     @SerializedName("author_flair_css_class")
     @Expose
     private Object authorFlairCssClass;
@@ -587,13 +587,13 @@ public class Post {
         this.thumbnail = thumbnail;
     }
 
-    public boolean isEdited() {
-        return edited;
-    }
-
-    public void setEdited(boolean edited) {
-        this.edited = edited;
-    }
+//    public boolean isEdited() {
+//        return edited;
+//    }
+//
+//    public void setEdited(boolean edited) {
+//        this.edited = edited;
+//    }
 
     public Object getAuthorFlairCssClass() {
         return authorFlairCssClass;
