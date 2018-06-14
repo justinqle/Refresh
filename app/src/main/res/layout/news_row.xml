@@ -10,6 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
@@ -24,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".10" />
+        app:layout_constraintGuide_percent=".15" />
 
     <android.support.constraint.Group
         android:id="@+id/post_info"
@@ -37,7 +39,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@android:color/black"
