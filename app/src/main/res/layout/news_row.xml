@@ -28,12 +28,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".12" />
 
-    <android.support.constraint.Group
-        android:id="@+id/post_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="title,subreddit,user,num_comments,created_utc" />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
@@ -42,7 +36,9 @@
         android:layout_marginTop="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/subreddit"
         app:layout_constraintEnd_toStartOf="@+id/thumbnail"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/left"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title" />
@@ -54,6 +50,7 @@
         android:layout_marginTop="4dp"
         android:textColor="@color/colorAccent"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/num_comments"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:text="Subreddit" />
@@ -93,6 +90,7 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/thumbnail"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/subreddit"
         app:layout_constraintVertical_bias="0.0"
@@ -112,5 +110,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/transparent" />
+
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="false"
+        android:background="@null"
+        app:layout_constraintBottom_toTopOf="@+id/points"
+        app:layout_constraintEnd_toStartOf="@+id/left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_arrow_up_gray" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        app:layout_constraintEnd_toStartOf="@+id/left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/points"
+        app:srcCompat="@drawable/ic_arrow_down_gray" />
 
 </android.support.constraint.ConstraintLayout>
