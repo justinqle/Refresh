@@ -69,11 +69,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.points.setText(toConciseThousands(children.get(position).getData().getUps()));
 
         Preview preview = children.get(position).getData().getPreview();
-        if (preview == null) {
-            Log.d(TAG, "No preview");
-        } else {
+        if (preview != null) {
             String url = preview.getImages().get(0).getSource().getUrl();
-            Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
+            Picasso.get().load(url).resize(holder.thumbnail.getMaxWidth(), holder.thumbnail.getMaxHeight()).centerCrop().into(holder.thumbnail);
         }
     }
 

@@ -42,7 +42,7 @@
         android:layout_marginTop="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@android:color/black"
-        app:layout_constraintEnd_toStartOf="@+id/right"
+        app:layout_constraintEnd_toStartOf="@+id/thumbnail"
         app:layout_constraintStart_toStartOf="@+id/left"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title" />
@@ -78,7 +78,7 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/subreddit"
-        app:layout_constraintEnd_toStartOf="@+id/right"
+        app:layout_constraintEnd_toStartOf="@+id/thumbnail"
         app:layout_constraintStart_toEndOf="@+id/user"
         tools:text="Time" />
 
@@ -92,29 +92,24 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/right"
+        app:layout_constraintEnd_toStartOf="@+id/thumbnail"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/subreddit"
         app:layout_constraintVertical_bias="0.0"
         tools:text="#### comments" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".80" />
-
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginTop="4dp"
+        android:adjustViewBounds="false"
+        android:maxHeight="75dp"
+        android:maxWidth="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/right"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/transparent" />
 
