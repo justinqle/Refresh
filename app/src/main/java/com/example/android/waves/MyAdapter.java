@@ -12,6 +12,7 @@ import com.example.android.waves.models.Child;
 import com.example.android.waves.models.Preview;
 import com.squareup.picasso.Picasso;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -27,6 +28,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private TextView user;
         private TextView created_utc;
         private TextView num_comments;
+        private TextView points;
 
         private ImageView thumbnail;
 
@@ -37,6 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             user = (TextView) v.findViewById(R.id.user);
             created_utc = (TextView) v.findViewById(R.id.created_utc);
             num_comments = (TextView) v.findViewById(R.id.num_comments);
+            points = (TextView) v.findViewById(R.id.points);
 
             thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
         }
@@ -63,6 +66,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.user.setText(children.get(position).getData().getAuthor());
         holder.created_utc.setText(unixTimeToElapsed(children.get(position).getData().getCreatedUtc()));
         holder.num_comments.setText(children.get(position).getData().getNumComments() + " comments");
+        holder.points.setText(toConciseThousands(children.get(position).getData().getUps()));
 
         Preview preview = children.get(position).getData().getPreview();
         if (preview == null) {
@@ -70,6 +74,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         } else {
             String url = preview.getImages().get(0).getSource().getUrl();
             Picasso.get().load(url).into(holder.thumbnail);
+        }
+    }
+
+    private String toConciseThousands(int number) {
+        if (number >= 10000) {
+            number /= 100;
+            BigDecimal bigDecimal = new BigDecimal(number);
+            return bigDecimal.movePointLeft(1).toString() + "k";
+        } else {
+            return String.valueOf(number);
         }
     }
 
