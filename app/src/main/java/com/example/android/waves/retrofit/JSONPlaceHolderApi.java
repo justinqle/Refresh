@@ -1,4 +1,4 @@
-package com.example.android.waves;
+package com.example.android.waves.retrofit;
 
 import com.example.android.waves.models.Listing;
 
