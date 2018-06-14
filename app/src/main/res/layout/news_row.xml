@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageButton
+        android:id="@+id/upvote"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="false"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/upvote"
+        app:layout_constraintBottom_toTopOf="@+id/points"
+        app:layout_constraintEnd_toStartOf="@+id/left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_arrow_up_gray" />
+
     <TextView
         android:id="@+id/points"
         android:layout_width="wrap_content"
@@ -20,6 +34,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="59.8k" />
+
+    <ImageButton
+        android:id="@+id/downvote"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/downvote"
+        app:layout_constraintEnd_toStartOf="@+id/left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/points"
+        app:srcCompat="@drawable/ic_arrow_down_gray" />
 
     <android.support.constraint.Guideline
         android:id="@+id/left"
@@ -104,36 +131,12 @@
         android:layout_marginEnd="4dp"
         android:layout_marginTop="4dp"
         android:adjustViewBounds="false"
+        android:contentDescription="@string/thumbnail"
         android:maxHeight="75dp"
         android:maxWidth="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/transparent" />
-
-    <ImageButton
-        android:id="@+id/imageButton7"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="false"
-        android:background="@null"
-        app:layout_constraintBottom_toTopOf="@+id/points"
-        app:layout_constraintEnd_toStartOf="@+id/left"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_arrow_up_gray" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@null"
-        app:layout_constraintEnd_toStartOf="@+id/left"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/points"
-        app:srcCompat="@drawable/ic_arrow_down_gray" />
 
 </android.support.constraint.ConstraintLayout>
