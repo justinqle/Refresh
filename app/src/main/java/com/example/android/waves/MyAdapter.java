@@ -73,7 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Log.d(TAG, "No preview");
         } else {
             String url = preview.getImages().get(0).getSource().getUrl();
-            Picasso.get().load(url).into(holder.thumbnail);
+            Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
         }
     }
 
