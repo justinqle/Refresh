@@ -1,7 +1,6 @@
 package com.example.android.waves;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.num_comments.setText(children.get(position).getData().getNumComments() + " comments");
         holder.points.setText(toConciseThousands(children.get(position).getData().getUps()));
 
+        // TODO: Show thumbnail for gifs and videos(?)
         Preview preview = children.get(position).getData().getPreview();
         if (preview != null) {
             String url = preview.getImages().get(0).getSource().getUrl();
