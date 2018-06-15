@@ -19,8 +19,10 @@ import android.view.View;
 
 import com.justinqle.refresh.models.Child;
 import com.justinqle.refresh.models.Listing;
+import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.retrofit.NetworkService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    private List<Post> posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // Changes in content does not change layout size
         mRecyclerView.setHasFixedSize(true);
+        // Dividers between ViewHolders
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         // LinearLayout manager
         mLayoutManager = new LinearLayoutManager(this);
@@ -86,14 +91,17 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(Call<Listing> call, Response<Listing> response) {
                         Log.i(TAG, "Enqueue succeeded.");
-                        List<Child> children = response.body().getData().getChildren();
-                        mAdapter = new MyAdapter(children);
+                        posts = new ArrayList<>();
+                        for (Child child : response.body().getData().getChildren()) {
+                            posts.add(child.getData());
+                        }
+                        mAdapter = new PostsAdapter(posts);
                         mRecyclerView.setAdapter(mAdapter);
                     }
 
                     @Override
                     public void onFailure(Call<Listing> call, Throwable t) {
-                        Log.i(TAG.toString(), "Enqueue failed.");
+                        Log.i(TAG, "Enqueue failed.");
                         t.printStackTrace();
                     }
                 });

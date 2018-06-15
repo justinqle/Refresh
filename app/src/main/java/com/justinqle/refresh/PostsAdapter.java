@@ -7,18 +7,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.justinqle.refresh.models.Child;
+import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.models.Preview;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
-    private static final String TAG = "MyAdapter";
+    private static final String TAG = "PostsAdapter";
 
-    private List<Child> children;
+    private List<Post> posts;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -44,13 +44,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    public MyAdapter(List<Child> children) {
-        this.children = children;
+    public PostsAdapter(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public PostsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                      int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.news_row, parent, false);
 
@@ -60,21 +60,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.title.setText(children.get(position).getData().getTitle());
-        holder.subreddit.setText(children.get(position).getData().getSubreddit());
-        holder.user.setText(children.get(position).getData().getAuthor());
-        holder.created_utc.setText(unixTimeToElapsed(children.get(position).getData().getCreatedUtc()));
-        holder.num_comments.setText(children.get(position).getData().getNumComments() + " comments");
-        holder.points.setText(toConciseThousands(children.get(position).getData().getUps()));
+        Post post = posts.get(position);
+
+        holder.title.setText(post.getTitle());
+        holder.subreddit.setText(post.getSubreddit());
+        holder.user.setText(post.getAuthor());
+        holder.created_utc.setText(unixTimeToElapsed(post.getCreatedUtc()));
+        holder.num_comments.setText(post.getNumComments() + " comments");
+        holder.points.setText(toConciseThousands(post.getUps()));
 
         // TODO: Show thumbnail for gifs and videos(?)
-        Preview preview = children.get(position).getData().getPreview();
+        Preview preview = post.getPreview();
         if (preview != null) {
             String url = preview.getImages().get(0).getSource().getUrl();
             Picasso.get().load(url).resize(holder.thumbnail.getMaxWidth(), holder.thumbnail.getMaxHeight()).centerCrop().into(holder.thumbnail);
         }
     }
 
+    // TODO Could modfiy a bit for numbers >= 100,0000
     private String toConciseThousands(int number) {
         if (number >= 10000) {
             number /= 100;
@@ -85,7 +88,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    // Could use some optimization
+    // TODO Could use some optimization
     private String unixTimeToElapsed(long unixTime) {
         long currentUnixTime = System.currentTimeMillis() / 1000;
         long elapsedTime = currentUnixTime - unixTime;
@@ -108,6 +111,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return children.size();
+        return posts.size();
     }
 }
