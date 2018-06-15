@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.justinqle.refresh.models.Child;
 import com.justinqle.refresh.models.Listing;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity
                     public void onFailure(Call<Listing> call, Throwable t) {
                         Log.i(TAG, "Enqueue failed.");
                         t.printStackTrace();
+                        Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
