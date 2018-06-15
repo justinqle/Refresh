@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    // Modify "posts" object directly, not re-reference, and then notify adapter of change
+    // TODO implement refresh feature
     private List<Post> posts;
 
     @Override
