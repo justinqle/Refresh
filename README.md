@@ -1,2 +1,2 @@
-# Waves
-Waves for Reddit, a work in progress Reddit client for Android.
+# Refresh
+Reddit Refresh, a work in progress Reddit client for Android.
