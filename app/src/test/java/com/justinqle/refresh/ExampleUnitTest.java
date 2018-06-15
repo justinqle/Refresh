@@ -1,4 +1,4 @@
-package com.example.android.waves;
+package com.justinqle.refresh;
 
 import org.junit.Test;
 

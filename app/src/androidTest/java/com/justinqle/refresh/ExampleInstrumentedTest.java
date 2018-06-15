@@ -1,4 +1,4 @@
-package com.example.android.waves;
+package com.justinqle.refresh;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.android.waves", appContext.getPackageName());
+        assertEquals("com.justinqle.refresh", appContext.getPackageName());
     }
 }

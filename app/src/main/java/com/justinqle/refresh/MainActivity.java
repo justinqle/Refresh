@@ -1,4 +1,4 @@
-package com.example.android.waves;
+package com.justinqle.refresh;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,9 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.android.waves.models.Child;
-import com.example.android.waves.models.Listing;
-import com.example.android.waves.retrofit.NetworkService;
+import com.justinqle.refresh.models.Child;
+import com.justinqle.refresh.models.Listing;
+import com.justinqle.refresh.retrofit.NetworkService;
 
 import java.util.List;
 

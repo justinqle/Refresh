@@ -1,4 +1,4 @@
-package com.example.android.waves.retrofit;
+package com.justinqle.refresh.retrofit;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

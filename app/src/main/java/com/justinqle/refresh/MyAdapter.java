@@ -1,4 +1,4 @@
-package com.example.android.waves;
+package com.justinqle.refresh;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.waves.models.Child;
-import com.example.android.waves.models.Preview;
+import com.justinqle.refresh.models.Child;
+import com.justinqle.refresh.models.Preview;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;

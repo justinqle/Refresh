@@ -1,6 +1,6 @@
-package com.example.android.waves.retrofit;
+package com.justinqle.refresh.retrofit;
 
-import com.example.android.waves.models.Listing;
+import com.justinqle.refresh.models.Listing;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

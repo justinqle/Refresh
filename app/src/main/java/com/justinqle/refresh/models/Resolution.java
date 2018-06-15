@@ -1,4 +1,4 @@
-package com.example.android.waves.models;
+package com.justinqle.refresh.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
