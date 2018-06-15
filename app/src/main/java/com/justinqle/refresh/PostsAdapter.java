@@ -1,5 +1,7 @@
 package com.justinqle.refresh;
 
+import android.support.v7.recyclerview.extensions.ListAdapter;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +14,22 @@ import com.justinqle.refresh.models.Preview;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+public class PostsAdapter extends ListAdapter<Post, PostsAdapter.ViewHolder> {
 
     private static final String TAG = "PostsAdapter";
 
-    private List<Post> posts;
+    public static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Post>() {
+                @Override
+                public boolean areItemsTheSame(Post oldItem, Post newItem) {
+                    return oldItem.getId().equals(newItem.getId());
+                }
+                @Override
+                public boolean areContentsTheSame(Post oldItem, Post newItem) {
+                    return oldItem.getTitle().equals(newItem.getTitle());
+                }
+            };
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -44,8 +55,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
     }
 
-    public PostsAdapter(List<Post> posts) {
-        this.posts = posts;
+    public PostsAdapter() {
+        super(DIFF_CALLBACK);
     }
 
     @Override
@@ -60,7 +71,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Post post = posts.get(position);
+        Post post = getItem(position);
 
         holder.title.setText(post.getTitle());
         holder.subreddit.setText(post.getSubreddit());
@@ -107,10 +118,5 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         } else {
             return (elapsedTime / 31540000) + "y";
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return posts.size();
     }
 }

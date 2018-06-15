@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private PostsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     // Modify "posts" object directly, not re-reference, and then notify adapter of change
@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity
                         for (Child child : response.body().getData().getChildren()) {
                             posts.add(child.getData());
                         }
-                        mAdapter = new PostsAdapter(posts);
+                        mAdapter = new PostsAdapter();
+                        mAdapter.submitList(posts);
                         mRecyclerView.setAdapter(mAdapter);
                     }
 
