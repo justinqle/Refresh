@@ -1,6 +1,6 @@
-package com.justinqle.refresh;
+package com.justinqle.refresh.paging;
 
-import android.support.v7.recyclerview.extensions.ListAdapter;
+import android.arch.paging.PagedListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,22 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.justinqle.refresh.R;
 import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.models.Preview;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 
-public class PostsAdapter extends ListAdapter<Post, PostsAdapter.ViewHolder> {
+public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> {
 
-    private static final String TAG = "PostsAdapter";
+    private static final String TAG = "PostAdapter";
 
-    public static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK =
+    private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Post>() {
                 @Override
                 public boolean areItemsTheSame(Post oldItem, Post newItem) {
                     return oldItem.getId().equals(newItem.getId());
                 }
+
                 @Override
                 public boolean areContentsTheSame(Post oldItem, Post newItem) {
                     return oldItem.getTitle().equals(newItem.getTitle());
@@ -55,13 +57,13 @@ public class PostsAdapter extends ListAdapter<Post, PostsAdapter.ViewHolder> {
         }
     }
 
-    public PostsAdapter() {
+    public PostAdapter() {
         super(DIFF_CALLBACK);
     }
 
     @Override
-    public PostsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                      int viewType) {
+    public PostAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                     int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.news_row, parent, false);
 
