@@ -1,6 +1,11 @@
 package com.justinqle.refresh;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -12,23 +17,14 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.justinqle.refresh.models.Child;
-import com.justinqle.refresh.models.Listing;
 import com.justinqle.refresh.models.Post;
+import com.justinqle.refresh.paging.PostAdapter;
+import com.justinqle.refresh.paging.PostDataSourceFactory;
 import com.justinqle.refresh.retrofit.NetworkService;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,12 +32,11 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
 
     private RecyclerView mRecyclerView;
-    private PostsAdapter mAdapter;
+    private PostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    // Modify "posts" object directly, not re-reference, and then notify adapter of change
-    // TODO implement refresh feature
-    private List<Post> posts;
+    // TODO Encapsulate data in ViewModels
+    private LiveData<PagedList<Post>> posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,33 +78,19 @@ public class MainActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // Adapter
-        loadPosts();
-    }
+        mAdapter = new PostAdapter();
+        mRecyclerView.setAdapter(mAdapter);
 
-    private void loadPosts() {
-        NetworkService.getInstance()
-                .getJSONApi()
-                .getListing()
-                .enqueue(new Callback<Listing>() {
-                    @Override
-                    public void onResponse(Call<Listing> call, Response<Listing> response) {
-                        Log.i(TAG, "Enqueue succeeded.");
-                        posts = new ArrayList<>();
-                        for (Child child : response.body().getData().getChildren()) {
-                            posts.add(child.getData());
-                        }
-                        mAdapter = new PostsAdapter();
-                        mAdapter.submitList(posts);
-                        mRecyclerView.setAdapter(mAdapter);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Listing> call, Throwable t) {
-                        Log.i(TAG, "Enqueue failed.");
-                        t.printStackTrace();
-                        Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        // initial page size to fetch can also be configured here too
+        PagedList.Config config = new PagedList.Config.Builder().setPageSize(20).build();
+        PostDataSourceFactory factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi());
+        posts = new LivePagedListBuilder(factory, config).build();
+        posts.observe(this, new Observer<PagedList<Post>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<Post> tweets) {
+                mAdapter.submitList(tweets);
+            }
+        });
     }
 
     @Override
