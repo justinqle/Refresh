@@ -28,7 +28,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
-        jsonPlaceHolderApi.getListing().enqueue(new Callback<Listing>() {
+        jsonPlaceHolderApi.getListing(params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 Data data = response.body().getData();
@@ -54,7 +54,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     // TODO Use rxJava, as this all runs on the main thread
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
-        jsonPlaceHolderApi.getListingAfter(params.key).enqueue(new Callback<Listing>() {
+        jsonPlaceHolderApi.getListingAfter(params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 if (response.isSuccessful()) {

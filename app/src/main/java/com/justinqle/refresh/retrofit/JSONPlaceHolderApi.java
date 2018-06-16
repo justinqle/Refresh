@@ -9,11 +9,14 @@ import retrofit2.http.Query;
 public interface JSONPlaceHolderApi {
 
     @GET("/.json")
-    Call<Listing> getListing();
+    Call<Listing> getListing(
+            @Query("limit") int limit
+    );
 
     @GET("/.json")
     Call<Listing> getListingAfter(
-            @Query("after") String nextKey
+            @Query("after") String nextKey,
+            @Query("limit") int limit
     );
 
 }
