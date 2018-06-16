@@ -1,8 +1,9 @@
 package com.justinqle.refresh.models;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Data {
 
@@ -20,7 +21,7 @@ public class Data {
     private String after;
     @SerializedName("before")
     @Expose
-    private Object before;
+    private String before;
 
     public String getModhash() {
         return modhash;
@@ -54,11 +55,11 @@ public class Data {
         this.after = after;
     }
 
-    public Object getBefore() {
+    public String getBefore() {
         return before;
     }
 
-    public void setBefore(Object before) {
+    public void setBefore(String before) {
         this.before = before;
     }
 
