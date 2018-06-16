@@ -84,9 +84,11 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
 
         // TODO: Show thumbnail for gifs and videos(?)
         Preview preview = post.getPreview();
-        if (preview != null) {
+        if (preview == null) {
+            holder.thumbnail.setVisibility(View.GONE);
+        } else {
             String url = preview.getImages().get(0).getSource().getUrl();
-            Picasso.get().load(url).resize(holder.thumbnail.getMaxWidth(), holder.thumbnail.getMaxHeight()).centerCrop().into(holder.thumbnail);
+            Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
         }
     }
 
