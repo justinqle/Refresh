@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity
 
     // TODO Encapsulate data in ViewModels
     private LiveData<PagedList<Post>> posts;
+    // TODO Should be in the ViewModel but shown here for simplicity
+    private PostDataSourceFactory factory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +83,29 @@ public class MainActivity extends AppCompatActivity
 
         // initial page size to fetch can also be configured here too
         PagedList.Config config = new PagedList.Config.Builder().setPageSize(20).build();
-        PostDataSourceFactory factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi());
+        factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi());
         posts = new LivePagedListBuilder(factory, config).build();
         posts.observe(this, new Observer<PagedList<Post>>() {
             @Override
             public void onChanged(@Nullable PagedList<Post> tweets) {
                 mAdapter.submitList(tweets);
+            }
+        });
+
+        // invalidate to loadInitial() again
+        SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                factory.postLiveData.getValue().invalidate();
+            }
+        });
+        // submit new set of data and set refreshing false
+        posts.observe(this, new Observer<PagedList<Post>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<Post> posts) {
+                mAdapter.submitList(posts);
+                swipeContainer.setRefreshing(false);
             }
         });
     }
