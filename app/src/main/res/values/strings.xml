@@ -9,4 +9,5 @@
     <string name="thumbnail">Thumbnail for Reddit posts</string>
     <string name="upvote">Upvote button</string>
     <string name="downvote">Downvote button</string>
+    <string name="add_account">Add Account</string>
 </resources>
