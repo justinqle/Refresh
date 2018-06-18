@@ -50,6 +50,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     // javax.annotation library
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+    // wasabeef recyclerview animators
+    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

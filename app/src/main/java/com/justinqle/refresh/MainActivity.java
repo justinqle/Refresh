@@ -26,6 +26,8 @@ import com.justinqle.refresh.paging.PostAdapter;
 import com.justinqle.refresh.paging.PostDataSourceFactory;
 import com.justinqle.refresh.retrofit.NetworkService;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -77,6 +79,14 @@ public class MainActivity extends AppCompatActivity
         // LinearLayout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Initial animation / refresh
+        SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
+        slideInUpAnimator.setRemoveDuration(250);
+        slideInUpAnimator.setAddDuration(250);
+        slideInUpAnimator.setInterpolator(null);
+        mRecyclerView.setItemAnimator(slideInUpAnimator);
+
         // Adapter
         mAdapter = new PostAdapter();
         mRecyclerView.setAdapter(mAdapter);
