@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.add_account:
-
+                startActivity(new Intent(this, AccountLogin.class));
             case R.id.nav_camera:
 
             case R.id.nav_gallery:
