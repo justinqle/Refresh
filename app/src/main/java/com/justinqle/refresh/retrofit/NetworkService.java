@@ -9,7 +9,7 @@ Singleton
 public class NetworkService {
 
     private static NetworkService mInstance;
-    private static final String BASE_URL = "https://www.reddit.com";
+    private static final String BASE_URL = "https://oauth.reddit.com";
     private Retrofit mRetrofit;
 
     private NetworkService() {

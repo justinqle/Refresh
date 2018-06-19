@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
+    private static Context contextOfApplication;
+
     private RecyclerView mRecyclerView;
     private PostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        contextOfApplication = getApplicationContext();
 
         // Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,6 +124,10 @@ public class MainActivity extends AppCompatActivity
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    public static Context getContextOfApplication() {
+        return contextOfApplication;
     }
 
     @Override
