@@ -52,6 +52,8 @@ dependencies {
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     // wasabeef recyclerview animators
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
+    // Apache Commons Lang
+    implementation 'org.apache.commons:commons-lang3:3.7'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
