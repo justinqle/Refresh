@@ -34,12 +34,17 @@ public class MainActivity extends AppCompatActivity
     private PostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private static SwipeRefreshLayout swipeContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         contextOfApplication = getApplicationContext();
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setRefreshing(true);
 
         // Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -90,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         PostViewModel postViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
 
         // invalidate to loadInitial() again
-        SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
             swipeContainer.setRefreshing(true);
             // invalidate data source to force refresh
@@ -100,8 +104,11 @@ public class MainActivity extends AppCompatActivity
         // submit new set of data and set refreshing false
         postViewModel.getPosts().observe(this, posts -> {
             mAdapter.submitList(posts);
-            swipeContainer.setRefreshing(false);
         });
+    }
+
+    public static void loading(boolean show) {
+        swipeContainer.setRefreshing(show);
     }
 
     public static Context getContextOfApplication() {
