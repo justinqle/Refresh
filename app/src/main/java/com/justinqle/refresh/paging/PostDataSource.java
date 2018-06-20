@@ -83,40 +83,33 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         Log.i(TAG, request.toString());
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                Log.e(TAG, "ERROR: " + e);
-            }
+        try {
+            String json = client.newCall(request).execute().body().string();
+            Log.i(TAG, json);
 
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                String json = response.body().string();
-                Log.i(TAG, json);
+            JSONObject data = null;
+            data = new JSONObject(json);
+            String accessToken = data.optString("access_token");
+            String refreshToken = data.optString("refresh_token");
 
-                JSONObject data = null;
-                try {
-                    data = new JSONObject(json);
-                    String accessToken = data.optString("access_token");
-                    String refreshToken = data.optString("refresh_token");
+            Log.d(TAG, "Access Token = " + accessToken);
+            Log.d(TAG, "Refresh Token = " + refreshToken);
 
-                    Log.d(TAG, "Access Token = " + accessToken);
-                    Log.d(TAG, "Refresh Token = " + refreshToken);
-
-                    SharedPreferences sharedPref = MainActivity.getContextOfApplication().getSharedPreferences("oauth", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("access_token", accessToken);
-                    editor.putString("refresh_token", refreshToken);
-                    editor.commit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+            SharedPreferences sharedPref = MainActivity.getContextOfApplication().getSharedPreferences("oauth", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("access_token", accessToken);
+            editor.putString("refresh_token", refreshToken);
+            editor.commit();
+        } catch (IOException io) {
+            io.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
+        Log.d(TAG, "Access Token (Load Initial) = " + accessToken);
         jsonPlaceHolderApi.getListing("bearer " + accessToken, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
