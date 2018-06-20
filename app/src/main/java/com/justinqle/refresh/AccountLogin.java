@@ -14,6 +14,7 @@ import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,18 +98,28 @@ public class AccountLogin extends AppCompatActivity {
             if (uri.getQueryParameter("error") != null) {
                 String error = uri.getQueryParameter("error");
                 Log.e(TAG, "An error has occurred : " + error);
+                switch (error) {
+                    case "access_denied":
+                        Toast.makeText(getApplicationContext(), "Can not login without user approval", Toast.LENGTH_LONG).show();
+                    case "unsupported_response_type":
+                    case "invalid_scope":
+                    case "invalid_request":
+                    default:
+                        break;
+                }
             } else {
                 String state = uri.getQueryParameter("state");
                 if (state.equals(STATE)) {
                     String code = uri.getQueryParameter("code");
-                    getAccessToken(code);
+                    getUserAccessToken(code);
                 }
             }
+            finish();
             return true;
         }
     }
 
-    private void getAccessToken(String code) {
+    private void getUserAccessToken(String code) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -135,6 +146,8 @@ public class AccountLogin extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
 
+                Log.i(TAG, json);
+
                 JSONObject data = null;
                 try {
                     data = new JSONObject(json);
@@ -154,8 +167,6 @@ public class AccountLogin extends AppCompatActivity {
                 }
             }
         });
-
-        finish();
     }
 
     @Override
