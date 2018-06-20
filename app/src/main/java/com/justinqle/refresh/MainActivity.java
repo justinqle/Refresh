@@ -1,13 +1,9 @@
 package com.justinqle.refresh;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.paging.LivePagedListBuilder;
-import android.arch.paging.PagedList;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -23,10 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.paging.PostAdapter;
-import com.justinqle.refresh.paging.PostDataSourceFactory;
-import com.justinqle.refresh.retrofit.NetworkService;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
@@ -40,11 +33,6 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private PostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    // TODO Encapsulate data in ViewModels
-    private LiveData<PagedList<Post>> posts;
-    // TODO Should be in the ViewModel but shown here for simplicity
-    private PostDataSourceFactory factory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,32 +85,22 @@ public class MainActivity extends AppCompatActivity
         mAdapter = new PostAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        // initial page size to fetch can also be configured here too
-        PagedList.Config config = new PagedList.Config.Builder().setPageSize(20).build();
-        factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi());
-        posts = new LivePagedListBuilder(factory, config).build();
-        posts.observe(this, new Observer<PagedList<Post>>() {
-            @Override
-            public void onChanged(@Nullable PagedList<Post> tweets) {
-                mAdapter.submitList(tweets);
-            }
-        });
+        // Create a ViewModel the first time the system calls an activity's onCreate() method.
+        // Re-created activities receive the same MyViewModel instance created by the first activity.
+        PostViewModel postViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
 
         // invalidate to loadInitial() again
         SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                factory.postLiveData.getValue().invalidate();
-            }
+        swipeContainer.setOnRefreshListener(() -> {
+            swipeContainer.setRefreshing(true);
+            // invalidate data source to force refresh
+            postViewModel.invalidateDataSource();
         });
+
         // submit new set of data and set refreshing false
-        posts.observe(this, new Observer<PagedList<Post>>() {
-            @Override
-            public void onChanged(@Nullable PagedList<Post> posts) {
-                mAdapter.submitList(posts);
-                swipeContainer.setRefreshing(false);
-            }
+        postViewModel.getPosts().observe(this, posts -> {
+            mAdapter.submitList(posts);
+            swipeContainer.setRefreshing(false);
         });
     }
 
