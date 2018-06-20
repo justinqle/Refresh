@@ -122,14 +122,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                     callback.onResult(posts, data.getBefore(), data.getAfter());
                 } else {
-                    Log.e(TAG, "Http request is not 2xx or 3xx");
+                    Log.e(TAG, "Load Initial: Http response status code is " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
                 t.printStackTrace();
-                Log.e(TAG, "Network request failed");
+                Log.e(TAG, "Load Initial: Network request failed");
             }
         });
     }
@@ -155,14 +155,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                     callback.onResult(posts, data.getAfter());
                 } else {
-                    Log.e(TAG, "Http request is not 2xx or 3xx");
+                    Log.e(TAG, "Load After: Http response status code is " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
                 t.printStackTrace();
-                Log.e(TAG, "Network request failed");
+                Log.e(TAG, "Load After: Network request failed");
             }
         });
     }
