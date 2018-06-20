@@ -54,10 +54,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         if (accessToken == null || refreshToken == null) {
             Log.i(TAG, "Getting new Application access token");
             getApplicationAccessToken();
+            accessToken = sharedPreferences.getString("access_token", "No access token available");
+            refreshToken = sharedPreferences.getString("refresh_token", "No refresh token available");
         }
-
-        accessToken = sharedPreferences.getString("access_token", "Error: No access token");
-        refreshToken = sharedPreferences.getString("refresh_token", "Error: No refresh token");
     }
 
     private void getApplicationAccessToken() {
