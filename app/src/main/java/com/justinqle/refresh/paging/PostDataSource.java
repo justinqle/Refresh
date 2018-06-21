@@ -104,15 +104,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             editor.putString("refresh_token", refreshToken);
             editor.commit();
         } catch (IOException io) {
+            backgroundThreadLongToast("Login failed");
             Log.e(TAG, "IOException attempting to retrieve application-only access token");
             io.printStackTrace();
         } catch (JSONException e) {
+            backgroundThreadLongToast("Login failed");
             Log.e(TAG, "JSONException attempting to retrieve application-only access token");
             e.printStackTrace();
         }
     }
 
-    private static void backgroundThreadShortToast(final String msg) {
+    private static void backgroundThreadLongToast(final String msg) {
         if (msg != null) {
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.getContextOfApplication(), msg, Toast.LENGTH_LONG).show());
         }
@@ -144,7 +146,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                         call.clone().enqueue(this);
                     } else {
                         Log.e(TAG, "Unresolved HTTP error");
-                        backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
+                        backgroundThreadLongToast("Bad Request: HTTP Error " + response.code());
                     }
                 }
             }
@@ -154,7 +156,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 MainActivity.loading(false);
                 Log.e(TAG, "Load Initial: Network request failed");
                 t.printStackTrace();
-                backgroundThreadShortToast("Network request failed");
+                backgroundThreadLongToast("Network request failed");
             }
         });
     }
@@ -191,7 +193,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                         call.clone().enqueue(this);
                     } else {
                         Log.e(TAG, "Unresolved HTTP error");
-                        backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
+                        backgroundThreadLongToast("Bad Request: HTTP Error " + response.code());
                     }
                 }
             }
@@ -201,7 +203,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 MainActivity.loading(false);
                 Log.e(TAG, "Load After: Network request failed");
                 t.printStackTrace();
-                backgroundThreadShortToast("Network request failed");
+                backgroundThreadLongToast("Network request failed");
             }
         });
     }

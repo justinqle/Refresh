@@ -39,20 +39,20 @@ public class AccountLogin extends AppCompatActivity {
     private static final String AUTH_URL =
             "https://www.reddit.com/api/v1/authorize.compact" +
                     "?client_id=%s" +
-                    "&response_type=code" +
+                    "&response_type=%s" +
                     "&state=%s" +
                     "&redirect_uri=%s" +
-                    "&duration=permanent" +
-                    "&scope=read";
+                    "&duration=%s" +
+                    "&scope=%s";
 
     private static final String CLIENT_ID = "tyVAE3jn8OsMlg";
-
+    private static final String RESPONSE_TYPE = "code";
     private static final String STATE = UUID.randomUUID().toString();
-
     private static final String REDIRECT_URI = "https://example.com";
+    private static final String DURATION = "permanent";
+    private static final String SCOPE = "read";
 
-    private static final String ACCESS_TOKEN_URL =
-            "https://www.reddit.com/api/v1/access_token";
+    private static final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class AccountLogin extends AppCompatActivity {
 
         webView = findViewById(R.id.login);
         webView.setWebViewClient(new LoginWebViewClient());
-        webView.loadUrl(String.format(AUTH_URL, CLIENT_ID, STATE, REDIRECT_URI));
+        webView.loadUrl(String.format(AUTH_URL, CLIENT_ID, RESPONSE_TYPE, STATE, REDIRECT_URI, DURATION, SCOPE));
     }
 
     private class LoginWebViewClient extends WebViewClient {
@@ -75,6 +75,7 @@ public class AccountLogin extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.startsWith(REDIRECT_URI)) {
+                Log.i(TAG, "Account Login Successful (redirected to specified URI)");
                 final Uri uri = Uri.parse(url);
                 return handleUri(uri);
             } else {
@@ -87,6 +88,7 @@ public class AccountLogin extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             final Uri uri = request.getUrl();
             if (uri.toString().startsWith(REDIRECT_URI)) {
+                Log.i(TAG, "Account Login Successful (redirected to specified URI)");
                 return handleUri(uri);
             } else {
                 return false;
@@ -94,24 +96,31 @@ public class AccountLogin extends AppCompatActivity {
         }
 
         private boolean handleUri(final Uri uri) {
-            Log.i(TAG, "Uri =" + uri);
+            Log.d(TAG, "Uri =" + uri);
             if (uri.getQueryParameter("error") != null) {
                 String error = uri.getQueryParameter("error");
-                Log.e(TAG, "An error has occurred : " + error);
+                Log.e(TAG, "A login error has occurred : " + error);
                 switch (error) {
                     case "access_denied":
-                        Toast.makeText(getApplicationContext(), "Can not login without user approval", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Cannot login without user approval", Toast.LENGTH_LONG).show();
                     case "unsupported_response_type":
+                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                     case "invalid_scope":
+                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                     case "invalid_request":
+                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                     default:
                         break;
                 }
             } else {
                 String state = uri.getQueryParameter("state");
                 if (state.equals(STATE)) {
+                    Log.i(TAG, "STATE matches one in initial authorization request");
                     String code = uri.getQueryParameter("code");
                     getUserAccessToken(code);
+                } else {
+                    Log.e(TAG, "STATE does not match one in initial authorization request");
+                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                 }
             }
             finish();
@@ -128,7 +137,7 @@ public class AccountLogin extends AppCompatActivity {
                 Base64.NO_WRAP);
 
         Request request = new Request.Builder()
-                .addHeader("User-Agent", "Sample App")
+                .addHeader("User-Agent", "android:com.justinqle.refresh:v1.0.0 (by /u/doctor_re)")
                 .addHeader("Authorization", "Basic " + encodedAuthString)
                 .url(ACCESS_TOKEN_URL)
                 .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),
@@ -138,15 +147,10 @@ public class AccountLogin extends AppCompatActivity {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "ERROR: " + e);
-            }
-
-            @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
 
-                Log.i(TAG, json);
+                Log.d(TAG, json);
 
                 JSONObject data = null;
                 try {
@@ -154,8 +158,8 @@ public class AccountLogin extends AppCompatActivity {
                     String accessToken = data.optString("access_token");
                     String refreshToken = data.optString("refresh_token");
 
-                    Log.d(TAG, "Access Token = " + accessToken);
-                    Log.d(TAG, "Refresh Token = " + refreshToken);
+                    Log.d(TAG, "(Account Login) Access Token retrieved = " + accessToken);
+                    Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
 
                     SharedPreferences sharedPref = getSharedPreferences("oauth", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -163,8 +167,17 @@ public class AccountLogin extends AppCompatActivity {
                     editor.putString("refresh_token", refreshToken);
                     editor.commit();
                 } catch (JSONException e) {
+                    Log.e(TAG, "JSONException attempting to retrieve user access token");
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                 }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "IOException attempting to retrieve application-only access token");
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
             }
         });
     }
