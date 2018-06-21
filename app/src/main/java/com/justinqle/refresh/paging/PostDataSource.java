@@ -15,7 +15,7 @@ import com.justinqle.refresh.models.Child;
 import com.justinqle.refresh.models.Data;
 import com.justinqle.refresh.models.Listing;
 import com.justinqle.refresh.models.Post;
-import com.justinqle.refresh.retrofit.JSONPlaceHolderApi;
+import com.justinqle.refresh.retrofit.RedditApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,14 +40,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private static final String TAG = "PostDataSource";
 
     // pass whatever dependencies are needed to make the network call
-    private JSONPlaceHolderApi jsonPlaceHolderApi;
+    private RedditApi redditApi;
 
     private String accessToken;
     private String refreshToken;
 
     // define the type of data that will be emitted by this datasource
-    PostDataSource(JSONPlaceHolderApi jsonPlaceHolderApi) {
-        this.jsonPlaceHolderApi = jsonPlaceHolderApi;
+    PostDataSource(RedditApi redditApi) {
+        this.redditApi = redditApi;
 
         Context applicationContext = MainActivity.getContextOfApplication();
         SharedPreferences sharedPreferences = applicationContext.getSharedPreferences("oauth", MODE_PRIVATE);
@@ -73,7 +73,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 Base64.NO_WRAP);
 
         Request request = new Request.Builder()
-                .addHeader("User-Agent", "Sample App")
+                .addHeader("User-Agent", "android:com.justinqle.refresh:v1.0.0 (by /u/doctor_re)")
                 .addHeader("Authorization", "Basic " + encodedAuthString)
                 .url(ACCESS_TOKEN_URL)
                 .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),
@@ -121,7 +121,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
         Log.d(TAG, "(Load Initial) Access Token = " + accessToken);
-        jsonPlaceHolderApi.getListing("bearer " + accessToken, params.requestedLoadSize).enqueue(new Callback<Listing>() {
+        redditApi.getListing("bearer " + accessToken, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 MainActivity.loading(false);
@@ -168,7 +168,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
         Log.d(TAG, "(Load After) Access Token = " + accessToken);
-        jsonPlaceHolderApi.getListingAfter("bearer " + accessToken, params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
+        redditApi.getListingAfter("bearer " + accessToken, params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 MainActivity.loading(false);

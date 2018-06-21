@@ -26,8 +26,8 @@ public class NetworkService {
         return mInstance;
     }
 
-    public JSONPlaceHolderApi getJSONApi() {
-        return mRetrofit.create(JSONPlaceHolderApi.class);
+    public RedditApi getJSONApi() {
+        return mRetrofit.create(RedditApi.class);
     }
 
 }
