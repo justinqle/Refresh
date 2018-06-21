@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.justinqle.refresh.MainActivity;
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.models.Preview;
@@ -74,8 +73,6 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        MainActivity.loading(false);
-
         Post post = getItem(position);
 
         holder.title.setText(post.getTitle());

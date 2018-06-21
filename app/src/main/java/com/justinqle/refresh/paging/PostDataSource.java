@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.justinqle.refresh.MainActivity;
 import com.justinqle.refresh.models.Child;
@@ -123,15 +124,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     callback.onResult(posts, data.getBefore(), data.getAfter());
                 } else {
                     Log.e(TAG, "Load Initial: Http response status code is " + response.code());
+                    Toast.makeText(MainActivity.getContextOfApplication(), "Bad Request: HTTP Error " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                t.printStackTrace();
                 Log.e(TAG, "Load Initial: Network request failed");
+                t.printStackTrace();
+                Toast.makeText(MainActivity.getContextOfApplication(), "Network request failed", Toast.LENGTH_SHORT).show();
             }
         });
+        MainActivity.loading(false);
     }
 
     @Override
@@ -156,14 +160,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     callback.onResult(posts, data.getAfter());
                 } else {
                     Log.e(TAG, "Load After: Http response status code is " + response.code());
+                    Toast.makeText(MainActivity.getContextOfApplication(), "Bad Request: HTTP Error " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                t.printStackTrace();
                 Log.e(TAG, "Load After: Network request failed");
+                t.printStackTrace();
+                Toast.makeText(MainActivity.getContextOfApplication(), "Network request failed", Toast.LENGTH_SHORT).show();
             }
         });
+        MainActivity.loading(false);
     }
 }
