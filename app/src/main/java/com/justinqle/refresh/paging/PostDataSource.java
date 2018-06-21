@@ -121,6 +121,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         jsonPlaceHolderApi.getListing("bearer " + accessToken, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
+                MainActivity.loading(false);
                 if (response.isSuccessful()) {
                     Listing listing = response.body();
                     Data data = listing.getData();
@@ -138,12 +139,12 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
+                MainActivity.loading(false);
                 Log.e(TAG, "Load Initial: Network request failed");
                 t.printStackTrace();
                 backgroundThreadShortToast("Network request failed");
             }
         });
-        MainActivity.loading(false);
     }
 
     @Override
@@ -157,6 +158,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         jsonPlaceHolderApi.getListingAfter("bearer " + accessToken, params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
+                MainActivity.loading(false);
                 if (response.isSuccessful()) {
                     Listing listing = response.body();
                     Data data = listing.getData();
@@ -174,11 +176,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
+                MainActivity.loading(false);
                 Log.e(TAG, "Load After: Network request failed");
                 t.printStackTrace();
                 backgroundThreadShortToast("Network request failed");
             }
         });
-        MainActivity.loading(false);
     }
 }
