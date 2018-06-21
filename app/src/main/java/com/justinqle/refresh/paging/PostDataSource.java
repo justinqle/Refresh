@@ -3,6 +3,8 @@ package com.justinqle.refresh.paging;
 import android.arch.paging.PageKeyedDataSource;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
@@ -107,6 +109,12 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         }
     }
 
+    private static void backgroundThreadShortToast(final String msg) {
+        if (msg != null) {
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.getContextOfApplication(), msg, Toast.LENGTH_LONG).show());
+        }
+    }
+
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
         Log.d(TAG, "Access Token (Load Initial) = " + accessToken);
@@ -124,7 +132,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     callback.onResult(posts, data.getBefore(), data.getAfter());
                 } else {
                     Log.e(TAG, "Load Initial: Http response status code is " + response.code());
-                    Toast.makeText(MainActivity.getContextOfApplication(), "Bad Request: HTTP Error " + response.code(), Toast.LENGTH_SHORT).show();
+                    backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
                 }
             }
 
@@ -132,7 +140,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
                 Log.e(TAG, "Load Initial: Network request failed");
                 t.printStackTrace();
-                Toast.makeText(MainActivity.getContextOfApplication(), "Network request failed", Toast.LENGTH_SHORT).show();
+                backgroundThreadShortToast("Network request failed");
             }
         });
         MainActivity.loading(false);
@@ -160,7 +168,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     callback.onResult(posts, data.getAfter());
                 } else {
                     Log.e(TAG, "Load After: Http response status code is " + response.code());
-                    Toast.makeText(MainActivity.getContextOfApplication(), "Bad Request: HTTP Error " + response.code(), Toast.LENGTH_SHORT).show();
+                    backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
                 }
             }
 
@@ -168,7 +176,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
                 Log.e(TAG, "Load After: Network request failed");
                 t.printStackTrace();
-                Toast.makeText(MainActivity.getContextOfApplication(), "Network request failed", Toast.LENGTH_SHORT).show();
+                backgroundThreadShortToast("Network request failed");
             }
         });
         MainActivity.loading(false);
