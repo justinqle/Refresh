@@ -55,10 +55,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         refreshToken = sharedPreferences.getString("refresh_token", null);
 
         if (accessToken == null || refreshToken == null) {
-            Log.i(TAG, "Getting new Application access token");
+            Log.d(TAG, "Getting new Application access token");
             getApplicationAccessToken();
-            accessToken = sharedPreferences.getString("access_token", "No access token available");
-            refreshToken = sharedPreferences.getString("refresh_token", "No refresh token available");
         }
     }
 
@@ -83,19 +81,22 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 "&device_id=" + DEVICE_ID))
                 .build();
 
-        Log.i(TAG, request.toString());
+        Log.d(TAG, "Request for access token: " + request.toString());
 
         try {
             String json = client.newCall(request).execute().body().string();
-            Log.i(TAG, json);
+            Log.d(TAG, "JSON response of retrieving Application-only access token: " + json);
 
             JSONObject data = null;
             data = new JSONObject(json);
             String accessToken = data.optString("access_token");
             String refreshToken = data.optString("refresh_token");
 
-            Log.d(TAG, "Access Token = " + accessToken);
-            Log.d(TAG, "Refresh Token = " + refreshToken);
+            Log.d(TAG, "Access Token retrieved = " + accessToken);
+            Log.d(TAG, "Refresh Token retrieved = " + refreshToken);
+
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
 
             SharedPreferences sharedPref = MainActivity.getContextOfApplication().getSharedPreferences("oauth", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -103,8 +104,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             editor.putString("refresh_token", refreshToken);
             editor.commit();
         } catch (IOException io) {
+            Log.e(TAG, "IOException attempting to retrieve application-only access token");
             io.printStackTrace();
         } catch (JSONException e) {
+            Log.e(TAG, "JSONException attempting to retrieve application-only access token");
             e.printStackTrace();
         }
     }
@@ -117,12 +120,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
-        Log.d(TAG, "Access Token (Load Initial) = " + accessToken);
+        Log.d(TAG, "(Load Initial) Access Token = " + accessToken);
         jsonPlaceHolderApi.getListing("bearer " + accessToken, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 MainActivity.loading(false);
+                Log.i(TAG, "Successfully connected to server");
                 if (response.isSuccessful()) {
+                    Log.i(TAG, "HTTP Response Code between 200-300");
                     Listing listing = response.body();
                     Data data = listing.getData();
                     List<Child> children = data.getChildren();
@@ -132,8 +137,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                     callback.onResult(posts, data.getBefore(), data.getAfter());
                 } else {
-                    Log.e(TAG, "Load Initial: Http response status code is " + response.code());
-                    backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
+                    Log.d(TAG, "Load Initial: Http response status code is " + response.code());
+                    if (response.code() == 401) {
+                        Log.i(TAG, "HTTP 401: Access token expired, refreshing token");
+                        getApplicationAccessToken();
+                        call.clone().enqueue(this);
+                    } else {
+                        Log.e(TAG, "Unresolved HTTP error");
+                        backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
+                    }
                 }
             }
 
@@ -155,11 +167,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     // TODO Use rxJava, as this all runs on the main thread
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
+        Log.d(TAG, "(Load After) Access Token = " + accessToken);
         jsonPlaceHolderApi.getListingAfter("bearer " + accessToken, params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 MainActivity.loading(false);
+                Log.i(TAG, "Successfully connected to server");
                 if (response.isSuccessful()) {
+                    Log.i(TAG, "HTTP Response Code between 200-300");
                     Listing listing = response.body();
                     Data data = listing.getData();
                     List<Child> children = data.getChildren();
@@ -169,8 +184,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                     callback.onResult(posts, data.getAfter());
                 } else {
-                    Log.e(TAG, "Load After: Http response status code is " + response.code());
-                    backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
+                    Log.d(TAG, "Load After: Http response status code is " + response.code());
+                    if (response.code() == 401) {
+                        Log.i(TAG, "HTTP 401: Access token expired, refreshing token");
+                        getApplicationAccessToken();
+                        call.clone().enqueue(this);
+                    } else {
+                        Log.e(TAG, "Unresolved HTTP error");
+                        backgroundThreadShortToast("Bad Request: HTTP Error " + response.code());
+                    }
                 }
             }
 
