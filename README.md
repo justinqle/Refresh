@@ -1,2 +1,2 @@
 # Refresh
-Refresh for Reddit, a fresh look at the frontpage of the internet.
+Refresh for Reddit, a Reddit client for Android.
