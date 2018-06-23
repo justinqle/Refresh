@@ -1,4 +1,4 @@
-package com.justinqle.refresh.paging;
+package com.justinqle.refresh.architecture;
 
 import android.arch.paging.PageKeyedDataSource;
 import android.os.Handler;
@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.justinqle.refresh.MainActivity;
 import com.justinqle.refresh.models.Child;
 import com.justinqle.refresh.models.Data;
 import com.justinqle.refresh.models.Listing;

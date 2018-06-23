@@ -1,4 +1,4 @@
-package com.justinqle.refresh.paging;
+package com.justinqle.refresh.architecture;
 
 import android.arch.paging.PagedListAdapter;
 import android.support.v7.util.DiffUtil;

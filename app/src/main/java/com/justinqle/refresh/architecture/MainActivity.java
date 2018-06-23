@@ -1,4 +1,4 @@
-package com.justinqle.refresh;
+package com.justinqle.refresh.architecture;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -19,7 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.justinqle.refresh.paging.PostAdapter;
+import com.justinqle.refresh.AccountLogin;
+import com.justinqle.refresh.R;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 

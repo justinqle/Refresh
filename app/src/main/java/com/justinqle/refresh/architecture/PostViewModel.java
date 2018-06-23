@@ -1,4 +1,4 @@
-package com.justinqle.refresh;
+package com.justinqle.refresh.architecture;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -7,7 +7,6 @@ import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
 import com.justinqle.refresh.models.Post;
-import com.justinqle.refresh.paging.PostDataSourceFactory;
 import com.justinqle.refresh.retrofit.NetworkService;
 
 public class PostViewModel extends ViewModel {
