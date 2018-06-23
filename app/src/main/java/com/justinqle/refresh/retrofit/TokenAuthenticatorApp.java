@@ -29,12 +29,13 @@ public class TokenAuthenticatorApp implements Authenticator {
 
     @Override
     public Request authenticate(Route route, okhttp3.Response response) {
-        if (accessToken.equals(response.request().header("Authorization"))) {
-            return null; // If we already failed with this access token, don't retry.
-        }
         Log.d(TAG, "Authenticating after HTTP error");
         Log.d(TAG, "HTTP error 401: Token expired");
-        Log.d(TAG, "Route: " + route.toString());
+
+        if (response.request().header("Authorization").equals(accessToken)) {
+            Log.d(TAG, "Retry with this access token failed already");
+            return null; // If we already failed with this access token, don't retry.
+        }
 
         // Refresh access_token using a synchronous api request
         accessToken = getApplicationAccessTokenSync();

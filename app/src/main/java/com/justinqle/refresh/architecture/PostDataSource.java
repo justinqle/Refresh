@@ -36,11 +36,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         if (accessToken == null) {
             // Synchronous
-            Log.d(TAG, "accessToken is null");
+            Log.d(TAG, "accessToken is null (first time opening app)");
             Log.d(TAG, "Getting new application-only access token and writing it to SharedPreferences");
             accessToken = TokenAuthenticatorApp.getApplicationAccessTokenSync();
         } else {
-            Log.d(TAG, "Unexpired accessToken retrieved from SharedPreferences");
+            Log.d(TAG, "accessToken retrieved from SharedPreferences (may be expired, taken care of by Authenticator)");
         }
     }
 
