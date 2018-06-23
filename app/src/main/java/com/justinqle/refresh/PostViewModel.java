@@ -28,7 +28,7 @@ public class PostViewModel extends ViewModel {
     private void loadPosts() {
         // Do an asynchronous operation to fetch posts.
         // initial page size to fetch can also be configured here too
-        PagedList.Config config = new PagedList.Config.Builder().setPageSize(20).build();
+        PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(20).setPageSize(20).build();
         factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi());
         posts = new LivePagedListBuilder(factory, config).build();
     }

@@ -161,7 +161,7 @@ public class AccountLogin extends AppCompatActivity {
                     Log.d(TAG, "(Account Login) Access Token retrieved = " + accessToken);
                     Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
 
-                    SharedPreferences sharedPref = getSharedPreferences("oauth", MODE_PRIVATE);
+                    SharedPreferences sharedPref = getSharedPreferences("oauth_user", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("access_token", accessToken);
                     editor.putString("refresh_token", refreshToken);

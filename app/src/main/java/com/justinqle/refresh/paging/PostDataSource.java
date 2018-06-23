@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,19 +15,11 @@ import com.justinqle.refresh.models.Data;
 import com.justinqle.refresh.models.Listing;
 import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.retrofit.RedditApi;
+import com.justinqle.refresh.retrofit.TokenAuthenticatorApp;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,74 +34,19 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private RedditApi redditApi;
 
     private String accessToken;
-    private String refreshToken;
 
     // define the type of data that will be emitted by this datasource
     PostDataSource(RedditApi redditApi) {
         this.redditApi = redditApi;
 
         Context applicationContext = MainActivity.getContextOfApplication();
-        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences("oauth", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences("oauth_app", MODE_PRIVATE);
         accessToken = sharedPreferences.getString("access_token", null);
-        refreshToken = sharedPreferences.getString("refresh_token", null);
 
-        if (accessToken == null || refreshToken == null) {
-            Log.d(TAG, "Getting new Application access token");
-            getApplicationAccessToken();
-        }
-    }
-
-    private void getApplicationAccessToken() {
-        OkHttpClient client = new OkHttpClient();
-
-        final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
-        final String GRANT_TYPE_VALUE = "https://oauth.reddit.com/grants/installed_client";
-        final String DEVICE_ID = UUID.randomUUID().toString();
-        final String CLIENT_ID = "tyVAE3jn8OsMlg";
-
-        String authString = CLIENT_ID + ":";
-        String encodedAuthString = Base64.encodeToString(authString.getBytes(),
-                Base64.NO_WRAP);
-
-        Request request = new Request.Builder()
-                .addHeader("User-Agent", "android:com.justinqle.refresh:v1.0.0 (by /u/doctor_re)")
-                .addHeader("Authorization", "Basic " + encodedAuthString)
-                .url(ACCESS_TOKEN_URL)
-                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),
-                        "grant_type=" + GRANT_TYPE_VALUE +
-                                "&device_id=" + DEVICE_ID))
-                .build();
-
-        Log.d(TAG, "Request for access token: " + request.toString());
-
-        try {
-            String json = client.newCall(request).execute().body().string();
-            Log.d(TAG, "JSON response of retrieving Application-only access token: " + json);
-
-            JSONObject data = null;
-            data = new JSONObject(json);
-            String accessToken = data.optString("access_token");
-            String refreshToken = data.optString("refresh_token");
-
-            Log.d(TAG, "Access Token retrieved = " + accessToken);
-            Log.d(TAG, "Refresh Token retrieved = " + refreshToken);
-
-            this.accessToken = accessToken;
-            this.refreshToken = refreshToken;
-
-            SharedPreferences sharedPref = MainActivity.getContextOfApplication().getSharedPreferences("oauth", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("access_token", accessToken);
-            editor.putString("refresh_token", refreshToken);
-            editor.commit();
-        } catch (IOException io) {
-            backgroundThreadLongToast("Login failed");
-            Log.e(TAG, "IOException attempting to retrieve application-only access token");
-            io.printStackTrace();
-        } catch (JSONException e) {
-            backgroundThreadLongToast("Login failed");
-            Log.e(TAG, "JSONException attempting to retrieve application-only access token");
-            e.printStackTrace();
+        if (accessToken == null) {
+            // Synchronous
+            Log.d(TAG, "Getting new application-only access token and writing it to SharedPreferences");
+            accessToken = TokenAuthenticatorApp.getApplicationAccessTokenSync();
         }
     }
 
@@ -139,15 +75,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                     callback.onResult(posts, data.getBefore(), data.getAfter());
                 } else {
-                    Log.d(TAG, "Load Initial: Http response status code is " + response.code());
-                    if (response.code() == 401) {
-                        Log.i(TAG, "HTTP 401: Access token expired, refreshing token");
-                        getApplicationAccessToken();
-                        call.clone().enqueue(this);
-                    } else {
-                        Log.e(TAG, "Unresolved HTTP error");
-                        backgroundThreadLongToast("Bad Request: HTTP Error " + response.code());
-                    }
+                    Log.e(TAG, "HTTP Response Error " + response.code());
                 }
             }
 
@@ -186,15 +114,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                     callback.onResult(posts, data.getAfter());
                 } else {
-                    Log.d(TAG, "Load After: Http response status code is " + response.code());
-                    if (response.code() == 401) {
-                        Log.i(TAG, "HTTP 401: Access token expired, refreshing token");
-                        getApplicationAccessToken();
-                        call.clone().enqueue(this);
-                    } else {
-                        Log.e(TAG, "Unresolved HTTP error");
-                        backgroundThreadLongToast("Bad Request: HTTP Error " + response.code());
-                    }
+                    Log.e(TAG, "HTTP Response Error " + response.code());
                 }
             }
 
