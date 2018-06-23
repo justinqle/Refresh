@@ -1,8 +1,6 @@
 package com.justinqle.refresh.paging;
 
 import android.arch.paging.PageKeyedDataSource;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -24,29 +22,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private static final String TAG = "PostDataSource";
 
     // pass whatever dependencies are needed to make the network call
     private RedditApi redditApi;
-
     private String accessToken;
 
     // define the type of data that will be emitted by this datasource
     PostDataSource(RedditApi redditApi) {
         this.redditApi = redditApi;
-
-        Context applicationContext = MainActivity.getContextOfApplication();
-        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences("oauth_app", MODE_PRIVATE);
-        accessToken = sharedPreferences.getString("access_token", null);
+        this.accessToken = TokenAuthenticatorApp.getApplicationAccessTokenFromStorage();
 
         if (accessToken == null) {
             // Synchronous
+            Log.d(TAG, "accessToken is null");
             Log.d(TAG, "Getting new application-only access token and writing it to SharedPreferences");
             accessToken = TokenAuthenticatorApp.getApplicationAccessTokenSync();
+        } else {
+            Log.d(TAG, "Unexpired accessToken retrieved from SharedPreferences");
         }
     }
 

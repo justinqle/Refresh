@@ -27,7 +27,7 @@ public class NetworkService {
                             .build();
                     return chain.proceed(request);
                 }).authenticator(new TokenAuthenticatorApp())
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
                 .build();
 
         mRetrofit = new Retrofit.Builder()

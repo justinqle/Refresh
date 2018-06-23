@@ -33,7 +33,7 @@ public class TokenAuthenticatorApp implements Authenticator {
             return null; // If we already failed with this access token, don't retry.
         }
         Log.d(TAG, "Authenticating after HTTP error");
-        Log.d(TAG, "HTTP error 401");
+        Log.d(TAG, "HTTP error 401: Token expired");
         Log.d(TAG, "Route: " + route.toString());
 
         // Refresh access_token using a synchronous api request
@@ -88,10 +88,7 @@ public class TokenAuthenticatorApp implements Authenticator {
             Log.d(TAG, "Access Token retrieved = " + accessToken);
 
             // Store access token in shared preferences for later retrieval
-            SharedPreferences sharedPref = MainActivity.getContextOfApplication().getSharedPreferences("oauth_app", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("access_token", accessToken);
-            editor.commit();
+            setApplicationAccessTokenIntoStorage(accessToken);
         } catch (IOException io) {
             Log.e(TAG, "IOException attempting to retrieve application-only access token");
             io.printStackTrace();
@@ -101,6 +98,18 @@ public class TokenAuthenticatorApp implements Authenticator {
         }
 
         return accessToken;
+    }
+
+    private static void setApplicationAccessTokenIntoStorage(String accessToken) {
+        SharedPreferences sharedPreferences = MainActivity.getContextOfApplication().getSharedPreferences("oauth_app", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("access_token", accessToken);
+        editor.commit();
+    }
+
+    public static String getApplicationAccessTokenFromStorage() {
+        SharedPreferences sharedPreferences = MainActivity.getContextOfApplication().getSharedPreferences("oauth_app", MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
     }
 
 }
