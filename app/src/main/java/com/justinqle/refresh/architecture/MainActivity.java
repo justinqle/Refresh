@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         // Widget that can be used inside Drawer
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        disableNavigationViewScrollbars(navigationView);
 
         // Dropdown menu for adding Accounts in Nav Header
         View headerView = navigationView.getHeaderView(0);
@@ -128,6 +130,15 @@ public class MainActivity extends AppCompatActivity
         postViewModel.getPosts().observe(this, posts -> {
             mAdapter.submitList(posts);
         });
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     public static void loading(boolean show) {
