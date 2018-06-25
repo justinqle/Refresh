@@ -190,17 +190,7 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.add_account:
                 startActivity(new Intent(this, AccountLogin.class));
-            case R.id.nav_camera:
-
-            case R.id.nav_gallery:
-
-            case R.id.nav_slideshow:
-
-            case R.id.nav_manage:
-
-            case R.id.nav_share:
-
-            case R.id.nav_send:
+            case R.id.settings:
 
             default:
                 break;

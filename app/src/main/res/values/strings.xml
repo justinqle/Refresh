@@ -11,4 +11,6 @@
     <string name="downvote">Downvote button</string>
     <string name="add_account">Add Account</string>
     <string name="guest_user">Guest</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
 </resources>
