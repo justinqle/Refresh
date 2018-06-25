@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.justinqle.refresh.AccountLogin;
@@ -81,11 +82,14 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         ConstraintLayout header = headerView.findViewById(R.id.nav_header_layout);
         LinearLayout dropdown = headerView.findViewById(R.id.account_dropdown);
+        ImageView expandArrow = header.findViewById(R.id.header_icon);
         header.setOnClickListener((view) -> {
             if (dropdown.getVisibility() == View.GONE) {
                 ExpandCollapseAnimations.expand(dropdown);
+                expandArrow.animate().rotation(180).setDuration(250).start();
             } else {
                 ExpandCollapseAnimations.collapse(dropdown);
+                expandArrow.animate().rotation(0).setDuration(250).start();
             }
         });
         ConstraintLayout addAccountItem = dropdown.findViewById(R.id.account_item);
