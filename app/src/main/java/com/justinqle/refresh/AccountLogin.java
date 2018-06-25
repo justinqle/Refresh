@@ -60,7 +60,7 @@ public class AccountLogin extends AppCompatActivity {
         setContentView(R.layout.activity_account_login);
 
         ActionBar toolbar = getSupportActionBar();
-        toolbar.setTitle("Login to Reddit");
+        toolbar.setTitle("Log into Reddit");
         toolbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setDisplayShowHomeEnabled(true);
 
