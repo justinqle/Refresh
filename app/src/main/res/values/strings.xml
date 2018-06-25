@@ -10,4 +10,5 @@
     <string name="upvote">Upvote button</string>
     <string name="downvote">Downvote button</string>
     <string name="add_account">Add Account</string>
+    <string name="guest_user">Guest</string>
 </resources>
