@@ -93,7 +93,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
         ConstraintLayout addAccountItem = dropdown.findViewById(R.id.account_item);
-        addAccountItem.setOnClickListener(v -> startActivity(new Intent(this, AccountLogin.class)));
+        addAccountItem.setOnClickListener(v -> {
+            startActivity(new Intent(this, AccountLogin.class));
+            overridePendingTransition(R.anim.enter, R.anim.exit);
+        });
 
         // RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
