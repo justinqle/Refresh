@@ -118,6 +118,7 @@ public class AccountLogin extends AppCompatActivity {
                     Log.i(TAG, "STATE matches one in initial authorization request");
                     String code = uri.getQueryParameter("code");
                     getUserAccessToken(code);
+                    setResult(RESULT_OK);
                 } else {
                     Log.e(TAG, "STATE does not match one in initial authorization request");
                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();

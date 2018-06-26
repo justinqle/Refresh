@@ -3,7 +3,10 @@ package com.justinqle.refresh.architecture;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.FloatingActionButton;
@@ -17,15 +20,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.justinqle.refresh.AccountLogin;
 import com.justinqle.refresh.ExpandCollapseAnimations;
 import com.justinqle.refresh.R;
+import com.justinqle.refresh.retrofit.NetworkService;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
@@ -40,7 +49,14 @@ public class MainActivity extends AppCompatActivity
     private PostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private PostViewModel postViewModel;
     private static SwipeRefreshLayout swipeContainer;
+
+    private SharedPreferences sharedPreferences;
+    private boolean loggedIn;
+    private LinearLayout dropdown;
+
+    private static final int ADD_ACCOUNT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +94,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         disableNavigationViewScrollbars(navigationView);
 
-        // Dropdown menu for adding Accounts in Nav Header
+        // Setting up dropdown menu for adding Accounts in Nav Header
         View headerView = navigationView.getHeaderView(0);
         ConstraintLayout header = headerView.findViewById(R.id.nav_header_layout);
-        LinearLayout dropdown = headerView.findViewById(R.id.account_dropdown);
+        dropdown = headerView.findViewById(R.id.account_dropdown);
         ImageView expandArrow = header.findViewById(R.id.header_icon);
         header.setOnClickListener((view) -> {
             if (dropdown.getVisibility() == View.GONE) {
@@ -92,9 +108,19 @@ public class MainActivity extends AppCompatActivity
                 expandArrow.animate().rotation(0).setDuration(250).start();
             }
         });
-        ConstraintLayout addAccountItem = dropdown.findViewById(R.id.account_item);
-        addAccountItem.setOnClickListener(v -> {
-            startActivity(new Intent(this, AccountLogin.class));
+        // Set title of header and add header submenu items based on logged in/out status and different account options
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        loggedIn = sharedPreferences.getBoolean("logged_in", false);
+        TextView headerTitle = header.findViewById(R.id.header_title);
+        // "Guest" if logged out
+        if (!loggedIn) {
+            headerTitle.setText(R.string.guest_user);
+        } else {
+            //NetworkService.getInstance().getJSONApi().getUser();
+        }
+        // Always an add account menu option
+        addHeaderMenuItem(R.id.add_account, getString(R.string.add_account), getDrawable(R.drawable.add_account_light)).setOnClickListener(v -> {
+            startActivityForResult(new Intent(this, AccountLogin.class), ADD_ACCOUNT_REQUEST);
             overridePendingTransition(R.anim.enter, R.anim.exit);
         });
 
@@ -119,7 +145,7 @@ public class MainActivity extends AppCompatActivity
 
         // Create a ViewModel the first time the system calls an activity's onCreate() method.
         // Re-created activities receive the same MyViewModel instance created by the first activity.
-        PostViewModel postViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
+        postViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
 
         // invalidate to loadInitial() again
         swipeContainer.setOnRefreshListener(() -> {
@@ -201,5 +227,44 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "Returned request code: " + requestCode);
+        Log.d(TAG, "Returned result code: " + resultCode);
+        if (requestCode == ADD_ACCOUNT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Login succeeded");
+                sharedPreferences.edit().putBoolean("logged_in", true).commit();
+                finish();
+                startActivity(getIntent());
+                Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d(TAG, "Login failed");
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT);
+            }
+        }
+    }
+
+    /**
+     * Adds item to header menu while also returning the view to set click event
+     *
+     * @param id
+     * @param text
+     * @param icon
+     * @return
+     */
+    private View addHeaderMenuItem(int id, String text, Drawable icon) {
+        View menuItem = LayoutInflater.from(this).inflate(R.layout.account_menu_item, dropdown, false);
+
+        menuItem.setId(id);
+        TextView textView = menuItem.findViewById(R.id.account_text);
+        textView.setText(text);
+        ImageButton imageButton = menuItem.findViewById(R.id.account_icon);
+        imageButton.setImageDrawable(icon);
+
+        dropdown.addView(menuItem);
+        return menuItem;
     }
 }

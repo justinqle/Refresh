@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -37,11 +38,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
-            android:text="@string/guest_user"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Guest" />
 
         <ImageView
             android:id="@+id/header_icon"
@@ -60,45 +61,7 @@
         android:id="@+id/account_dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardview_dark_background"
         android:orientation="vertical"
-        android:visibility="gone">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/account_item"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/add_account_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/add_account"
-                android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/add_account_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/add_account_light" />
-
-        </android.support.constraint.ConstraintLayout>
-
-    </LinearLayout>
+        android:visibility="gone"></LinearLayout>
 
 </LinearLayout>

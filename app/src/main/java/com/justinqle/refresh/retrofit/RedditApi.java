@@ -22,4 +22,9 @@ public interface RedditApi {
             @Query("limit") int limit
     );
 
+    @GET("/api/v1/me")
+    Call<Void> getUser(
+            @Header("Authorization") String token
+    );
+
 }
