@@ -4,7 +4,7 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/add_account"
+        android:id="@+id/profile"
         android:icon="@drawable/account_circle"
         android:title="@string/profile" />
 

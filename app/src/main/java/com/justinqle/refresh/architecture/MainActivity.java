@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.add_account:
+            case R.id.profile:
 
             case R.id.settings:
 
