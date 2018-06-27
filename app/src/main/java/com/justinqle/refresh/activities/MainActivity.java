@@ -1,4 +1,4 @@
-package com.justinqle.refresh;
+package com.justinqle.refresh.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -32,14 +32,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.justinqle.refresh.AccountLogin;
-import com.justinqle.refresh.ExpandCollapseAnimations;
+import com.justinqle.refresh.animations.ExpandCollapseAnimations;
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.architecture.PostAdapter;
 import com.justinqle.refresh.architecture.PostViewModel;
 import com.justinqle.refresh.retrofit.NetworkService;
-
-import org.json.JSONObject;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import retrofit2.Call;

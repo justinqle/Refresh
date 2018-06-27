@@ -1,4 +1,4 @@
-package com.justinqle.refresh;
+package com.justinqle.refresh.animations;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

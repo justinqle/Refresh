@@ -1,4 +1,4 @@
-package com.justinqle.refresh;
+package com.justinqle.refresh.activities;
 
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
@@ -16,6 +16,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import com.justinqle.refresh.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

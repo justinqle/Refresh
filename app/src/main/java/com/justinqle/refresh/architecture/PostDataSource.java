@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.justinqle.refresh.MainActivity;
+import com.justinqle.refresh.activities.MainActivity;
 import com.justinqle.refresh.models.Child;
 import com.justinqle.refresh.models.Data;
 import com.justinqle.refresh.models.Listing;

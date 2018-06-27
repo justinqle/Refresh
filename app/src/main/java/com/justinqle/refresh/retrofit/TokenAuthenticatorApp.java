@@ -5,7 +5,7 @@ import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
-import com.justinqle.refresh.MainActivity;
+import com.justinqle.refresh.activities.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

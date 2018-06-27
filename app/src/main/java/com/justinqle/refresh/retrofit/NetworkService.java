@@ -3,7 +3,7 @@ package com.justinqle.refresh.retrofit;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.justinqle.refresh.MainActivity;
+import com.justinqle.refresh.activities.MainActivity;
 
 import okhttp3.Authenticator;
 import okhttp3.OkHttpClient;
