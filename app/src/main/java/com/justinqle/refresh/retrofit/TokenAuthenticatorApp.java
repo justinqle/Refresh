@@ -88,7 +88,7 @@ public class TokenAuthenticatorApp implements Authenticator {
 
             // Store access token in shared preferences for later retrieval
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
-            sharedPreferences.edit().putString("access_token", accessToken);
+            sharedPreferences.edit().putString("access_token", accessToken).commit();
         } catch (IOException io) {
             Log.e(TAG, "IOException attempting to retrieve application-only access token");
             io.printStackTrace();
