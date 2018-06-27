@@ -1,4 +1,4 @@
-package com.justinqle.refresh.architecture;
+package com.justinqle.refresh;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -35,6 +35,8 @@ import com.google.gson.Gson;
 import com.justinqle.refresh.AccountLogin;
 import com.justinqle.refresh.ExpandCollapseAnimations;
 import com.justinqle.refresh.R;
+import com.justinqle.refresh.architecture.PostAdapter;
+import com.justinqle.refresh.architecture.PostViewModel;
 import com.justinqle.refresh.retrofit.NetworkService;
 
 import org.json.JSONObject;

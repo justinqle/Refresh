@@ -7,12 +7,12 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.justinqle.refresh.MainActivity;
 import com.justinqle.refresh.models.Child;
 import com.justinqle.refresh.models.Data;
 import com.justinqle.refresh.models.Listing;
 import com.justinqle.refresh.models.Post;
 import com.justinqle.refresh.retrofit.RedditApi;
-import com.justinqle.refresh.retrofit.TokenAuthenticatorApp;
 
 import java.util.ArrayList;
 import java.util.List;

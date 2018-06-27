@@ -3,7 +3,7 @@ package com.justinqle.refresh.retrofit;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.justinqle.refresh.architecture.MainActivity;
+import com.justinqle.refresh.MainActivity;
 
 import okhttp3.Authenticator;
 import okhttp3.OkHttpClient;
@@ -44,7 +44,7 @@ public class NetworkService {
                             .build();
                     return chain.proceed(request);
                 }).authenticator(authenticator)
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                 .build();
 
         mRetrofit = new Retrofit.Builder()
