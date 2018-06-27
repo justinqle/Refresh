@@ -31,11 +31,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.justinqle.refresh.animations.ExpandCollapseAnimations;
 import com.justinqle.refresh.R;
+import com.justinqle.refresh.animations.ExpandCollapseAnimations;
 import com.justinqle.refresh.architecture.PostAdapter;
 import com.justinqle.refresh.architecture.PostViewModel;
+import com.justinqle.refresh.models.user.User;
 import com.justinqle.refresh.retrofit.NetworkService;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
@@ -127,15 +127,15 @@ public class MainActivity extends AppCompatActivity
         }
         // Request the user's handle to put on header
         else {
-            NetworkService.getInstance().getJSONApi().getUser().enqueue(new Callback<Void>() {
+            NetworkService.getInstance().getJSONApi().getUser().enqueue(new Callback<User>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    Log.d(TAG, new Gson().toJson(response.body()));
+                public void onResponse(Call<User> call, Response<User> response) {
+                    headerTitle.setText(response.body().getName());
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-
+                public void onFailure(Call<User> call, Throwable t) {
+                    t.printStackTrace();
                 }
             });
         }
