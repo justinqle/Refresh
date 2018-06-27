@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity
         header.setOnClickListener((view) -> {
             if (dropdown.getVisibility() == View.GONE) {
                 ExpandCollapseAnimations.expand(dropdown);
-                expandArrow.animate().rotation(180).setDuration(250).start();
+                expandArrow.animate().rotation(180).setDuration(200).start();
             } else {
                 ExpandCollapseAnimations.collapse(dropdown);
-                expandArrow.animate().rotation(0).setDuration(250).start();
+                expandArrow.animate().rotation(0).setDuration(200).start();
             }
         });
         // Set title of header and add header submenu items based on logged in/out status and different account options
