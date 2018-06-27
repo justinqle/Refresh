@@ -8,10 +8,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.justinqle.refresh.activities.MainActivity;
-import com.justinqle.refresh.models.Child;
-import com.justinqle.refresh.models.Data;
-import com.justinqle.refresh.models.Listing;
-import com.justinqle.refresh.models.Post;
+import com.justinqle.refresh.models.listing.Child;
+import com.justinqle.refresh.models.listing.Data;
+import com.justinqle.refresh.models.listing.Listing;
+import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.retrofit.RedditApi;
 
 import java.util.ArrayList;

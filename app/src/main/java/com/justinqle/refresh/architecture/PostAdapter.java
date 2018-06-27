@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justinqle.refresh.R;
-import com.justinqle.refresh.models.Post;
-import com.justinqle.refresh.models.Preview;
+import com.justinqle.refresh.models.listing.Post;
+import com.justinqle.refresh.models.listing.Preview;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;

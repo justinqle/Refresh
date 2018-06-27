@@ -2,7 +2,7 @@ package com.justinqle.refresh.architecture;
 
 import android.arch.paging.DataSource;
 
-import com.justinqle.refresh.models.Post;
+import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.retrofit.RedditApi;
 
 public class PostDataSourceFactory extends PostDataSource.Factory<String, Post> {

@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
-import com.justinqle.refresh.models.Post;
+import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.retrofit.NetworkService;
 
 public class PostViewModel extends ViewModel {
