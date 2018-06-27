@@ -42,7 +42,7 @@ public class ExpandCollapseAnimations {
             public void onAnimationRepeat(Animator animation) {
             }
         });
-        va.setDuration(300);
+        va.setDuration(200);
         va.setInterpolator(new OvershootInterpolator());
         va.start();
     }
@@ -75,7 +75,7 @@ public class ExpandCollapseAnimations {
             public void onAnimationRepeat(Animator animation) {
             }
         });
-        va.setDuration(300);
+        va.setDuration(200);
         va.setInterpolator(new DecelerateInterpolator());
         va.start();
     }

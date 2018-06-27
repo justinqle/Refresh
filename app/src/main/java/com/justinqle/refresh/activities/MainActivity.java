@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity
 
         // Initial animation / refresh
         SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
-        slideInUpAnimator.setRemoveDuration(250);
-        slideInUpAnimator.setAddDuration(250);
+        slideInUpAnimator.setRemoveDuration(200);
+        slideInUpAnimator.setAddDuration(200);
         slideInUpAnimator.setInterpolator(null);
         mRecyclerView.setItemAnimator(slideInUpAnimator);
 
