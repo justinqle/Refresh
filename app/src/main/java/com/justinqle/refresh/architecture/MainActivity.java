@@ -31,12 +31,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.justinqle.refresh.AccountLogin;
 import com.justinqle.refresh.ExpandCollapseAnimations;
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.retrofit.NetworkService;
 
+import org.json.JSONObject;
+
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,6 +70,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         contextOfApplication = getApplicationContext();
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
+        Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
+        Log.d(TAG, "Logged In: " + sharedPreferences.getBoolean("logged_in", false));
 
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setRefreshing(true);
@@ -109,14 +120,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
         // Set title of header and add header submenu items based on logged in/out status and different account options
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         loggedIn = sharedPreferences.getBoolean("logged_in", false);
         TextView headerTitle = header.findViewById(R.id.header_title);
         // "Guest" if logged out
         if (!loggedIn) {
             headerTitle.setText(R.string.guest_user);
-        } else {
-            //NetworkService.getInstance().getJSONApi().getUser();
+        }
+        // Request the user's handle to put on header
+        else {
+            NetworkService.getInstance().getJSONApi().getUser().enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Log.d(TAG, new Gson().toJson(response.body()));
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+
+                }
+            });
         }
         // Always an add account menu option
         addHeaderMenuItem(R.id.add_account, getString(R.string.add_account), getDrawable(R.drawable.add_account_light)).setOnClickListener(v -> {
@@ -236,7 +258,6 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == ADD_ACCOUNT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Log.d(TAG, "Login succeeded");
-                sharedPreferences.edit().putBoolean("logged_in", true).commit();
                 finish();
                 startActivity(getIntent());
                 Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();

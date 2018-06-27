@@ -27,21 +27,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     // pass whatever dependencies are needed to make the network call
     private RedditApi redditApi;
-    private String accessToken;
 
     // define the type of data that will be emitted by this datasource
     PostDataSource(RedditApi redditApi) {
         this.redditApi = redditApi;
-        this.accessToken = TokenAuthenticatorApp.getApplicationAccessTokenFromStorage();
-
-        if (accessToken == null) {
-            // Synchronous
-            Log.d(TAG, "accessToken is null (first time opening app)");
-            Log.d(TAG, "Getting new application-only access token and writing it to SharedPreferences");
-            accessToken = TokenAuthenticatorApp.getApplicationAccessTokenSync();
-        } else {
-            Log.d(TAG, "accessToken retrieved from SharedPreferences (may be expired, taken care of by Authenticator)");
-        }
     }
 
     private static void backgroundThreadLongToast(final String msg) {
@@ -52,8 +41,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
-        Log.d(TAG, "(Load Initial) Access Token = " + accessToken);
-        redditApi.getListing("bearer " + accessToken, params.requestedLoadSize).enqueue(new Callback<Listing>() {
+        redditApi.getListing(params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 MainActivity.loading(false);
@@ -91,8 +79,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     // TODO Use rxJava, as this all runs on the main thread
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
-        Log.d(TAG, "(Load After) Access Token = " + accessToken);
-        redditApi.getListingAfter("bearer " + accessToken, params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
+        redditApi.getListingAfter(params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 MainActivity.loading(false);

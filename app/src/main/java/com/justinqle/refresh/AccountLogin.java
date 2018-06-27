@@ -1,10 +1,12 @@
 package com.justinqle.refresh;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -15,6 +17,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import com.justinqle.refresh.architecture.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +54,7 @@ public class AccountLogin extends AppCompatActivity {
     private static final String STATE = UUID.randomUUID().toString();
     private static final String REDIRECT_URI = "https://example.com";
     private static final String DURATION = "permanent";
-    private static final String SCOPE = "read";
+    private static final String SCOPE = "read,identity";
 
     private static final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
@@ -124,7 +128,6 @@ public class AccountLogin extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                 }
             }
-            finish();
             return true;
         }
     }
@@ -162,11 +165,9 @@ public class AccountLogin extends AppCompatActivity {
                     Log.d(TAG, "(Account Login) Access Token retrieved = " + accessToken);
                     Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
 
-                    SharedPreferences sharedPref = getSharedPreferences("oauth_user", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("access_token", accessToken);
-                    editor.putString("refresh_token", refreshToken);
-                    editor.commit();
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+                    sharedPreferences.edit().putBoolean("logged_in", true).putString("access_token", accessToken).putString("refresh_token", refreshToken).commit();
+                    finish();
                 } catch (JSONException e) {
                     Log.e(TAG, "JSONException attempting to retrieve user access token");
                     e.printStackTrace();

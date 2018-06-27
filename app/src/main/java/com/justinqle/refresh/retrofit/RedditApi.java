@@ -11,20 +11,16 @@ public interface RedditApi {
 
     @GET("/best")
     Call<Listing> getListing(
-            @Header("Authorization") String token,
             @Query("limit") int limit
     );
 
     @GET("/best")
     Call<Listing> getListingAfter(
-            @Header("Authorization") String token,
             @Query("after") String nextKey,
             @Query("limit") int limit
     );
 
     @GET("/api/v1/me")
-    Call<Void> getUser(
-            @Header("Authorization") String token
-    );
+    Call<Void> getUser();
 
 }

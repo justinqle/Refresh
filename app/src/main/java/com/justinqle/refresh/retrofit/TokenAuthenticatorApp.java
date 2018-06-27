@@ -1,6 +1,7 @@
 package com.justinqle.refresh.retrofit;
 
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -19,8 +20,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Route;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class TokenAuthenticatorApp implements Authenticator {
 
     private static final String TAG = "TokenAuthenticatorApp";
@@ -38,7 +37,7 @@ public class TokenAuthenticatorApp implements Authenticator {
         }
 
         // Refresh access_token using a synchronous api request
-        accessToken = getApplicationAccessTokenSync();
+        accessToken = getApplicationAccessToken();
 
         Log.d(TAG, "Request URL: " + response.request().url());
 
@@ -50,11 +49,10 @@ public class TokenAuthenticatorApp implements Authenticator {
 
     /**
      * Synchronously returns application-only access token and writes it to storage (SharedPreferences).
-     * Static, so it can also be used in PostDataSource to retrieve initial token.
      *
      * @return application-only access token
      */
-    public static String getApplicationAccessTokenSync() {
+    private String getApplicationAccessToken() {
         OkHttpClient client = new OkHttpClient();
 
         final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
@@ -89,7 +87,8 @@ public class TokenAuthenticatorApp implements Authenticator {
             Log.d(TAG, "Access Token retrieved = " + accessToken);
 
             // Store access token in shared preferences for later retrieval
-            setApplicationAccessTokenIntoStorage(accessToken);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+            sharedPreferences.edit().putString("access_token", accessToken);
         } catch (IOException io) {
             Log.e(TAG, "IOException attempting to retrieve application-only access token");
             io.printStackTrace();
@@ -97,20 +96,6 @@ public class TokenAuthenticatorApp implements Authenticator {
             Log.e(TAG, "JSONException attempting to retrieve application-only access token");
             e.printStackTrace();
         }
-
         return accessToken;
     }
-
-    private static void setApplicationAccessTokenIntoStorage(String accessToken) {
-        SharedPreferences sharedPreferences = MainActivity.getContextOfApplication().getSharedPreferences("oauth_app", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("access_token", accessToken);
-        editor.commit();
-    }
-
-    public static String getApplicationAccessTokenFromStorage() {
-        SharedPreferences sharedPreferences = MainActivity.getContextOfApplication().getSharedPreferences("oauth_app", MODE_PRIVATE);
-        return sharedPreferences.getString("access_token", null);
-    }
-
 }
