@@ -129,7 +129,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
             }
         });
         holder.downvote.setOnClickListener(v -> {
-            if (PreferenceManager.getDefaultSharedPreferences(holder.upvote.getContext()).getBoolean("logged_in", false)) {
+            if (PreferenceManager.getDefaultSharedPreferences(holder.downvote.getContext()).getBoolean("logged_in", false)) {
                 if (holder.upvote.isActivated()) {
                     holder.upvote.setActivated(false);
                     // Resets color of upvote button
