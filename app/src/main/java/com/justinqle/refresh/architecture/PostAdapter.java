@@ -108,6 +108,16 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
             Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
             holder.points.startAnimation(expand);
         });
+        holder.downvote.setOnClickListener(v -> {
+            int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
+            // Sets color of downvote button
+            holder.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+            // Sets color of points
+            holder.points.setTextColor(highlight);
+            // Animate points
+            Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
+            holder.points.startAnimation(expand);
+        });
     }
 
     // TODO Could modfiy a bit for numbers >= 100,0000
