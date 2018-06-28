@@ -6,11 +6,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -62,10 +60,7 @@ public class AccountLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_login);
 
-        ActionBar toolbar = getSupportActionBar();
-        toolbar.setTitle("Log into Reddit");
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setDisplayShowHomeEnabled(true);
+        getSupportActionBar().hide();
 
         webView = findViewById(R.id.login);
         webView.setWebViewClient(new LoginWebViewClient());
@@ -188,18 +183,6 @@ public class AccountLogin extends AppCompatActivity {
         super.onDestroy();
         webView.clearCache(true);
         CookieManager.getInstance().removeAllCookies(null);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
-        if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
-            overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
