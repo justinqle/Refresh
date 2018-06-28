@@ -160,6 +160,20 @@ public class MainActivity extends AppCompatActivity
         slideInUpAnimator.setInterpolator(null);
         mRecyclerView.setItemAnimator(slideInUpAnimator);
 
+        // Hide FAB on scroll
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
+
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
         // Adapter
         mAdapter = new PostAdapter();
         mRecyclerView.setAdapter(mAdapter);
