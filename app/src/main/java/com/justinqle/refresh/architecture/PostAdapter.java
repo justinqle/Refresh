@@ -99,24 +99,52 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
 
         // OnClickListeners
         holder.upvote.setOnClickListener(v -> {
-            int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
-            // Sets color of upvote button
-            holder.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
-            // Sets color of points
-            holder.points.setTextColor(highlight);
-            // Animate points
-            Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
-            holder.points.startAnimation(expand);
+            if (holder.downvote.isActivated()) {
+                holder.downvote.setActivated(false);
+                // Resets color of upvote button
+                holder.downvote.clearColorFilter();
+            }
+            if (!holder.upvote.isActivated()) {
+                holder.upvote.setActivated(true);
+                int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
+                // Sets color of upvote button
+                holder.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+                // Sets color of points
+                holder.points.setTextColor(highlight);
+                // Animate points
+                Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
+                holder.points.startAnimation(expand);
+            } else {
+                holder.upvote.setActivated(false);
+                // Resets color of upvote button
+                holder.upvote.clearColorFilter();
+                // Resets color of points
+                holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+            }
         });
         holder.downvote.setOnClickListener(v -> {
-            int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
-            // Sets color of downvote button
-            holder.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
-            // Sets color of points
-            holder.points.setTextColor(highlight);
-            // Animate points
-            Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
-            holder.points.startAnimation(expand);
+            if (holder.upvote.isActivated()) {
+                holder.upvote.setActivated(false);
+                // Resets color of upvote button
+                holder.upvote.clearColorFilter();
+            }
+            if (!holder.downvote.isActivated()) {
+                holder.downvote.setActivated(true);
+                int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
+                // Sets color of upvote button
+                holder.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+                // Sets color of points
+                holder.points.setTextColor(highlight);
+                // Animate points
+                Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
+                holder.points.startAnimation(expand);
+            } else {
+                holder.downvote.setActivated(false);
+                // Resets color of upvote button
+                holder.downvote.clearColorFilter();
+                // Resets color of points
+                holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+            }
         });
     }
 
