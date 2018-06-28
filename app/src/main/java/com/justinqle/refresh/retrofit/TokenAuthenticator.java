@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import okhttp3.Authenticator;
 import okhttp3.MediaType;
@@ -19,9 +20,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Route;
 
-public class TokenAuthenticatorUser implements Authenticator {
+public class TokenAuthenticator implements Authenticator {
 
-    private static final String TAG = "TokenAuthenticatorUser";
+    private static final String TAG = "TokenAuthenticator";
 
     private String accessToken;
 
@@ -36,7 +37,7 @@ public class TokenAuthenticatorUser implements Authenticator {
         }
 
         // Refresh access_token using a synchronous api request
-        accessToken = getUserAccessToken();
+        accessToken = getAccessToken(PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication()).getBoolean("logged_in", false));
 
         Log.d(TAG, "Request URL: " + response.request().url());
 
@@ -47,18 +48,30 @@ public class TokenAuthenticatorUser implements Authenticator {
     }
 
     /**
-     * Synchronously returns user access token and writes it to storage (SharedPreferences).
+     * Synchronously returns access token and writes it to storage (SharedPreferences).
      *
-     * @return user access token
+     * @param loggedIn If the user is not logged in, retrieve an application-only access token. If they are logged in, retrieve a new user access token using the refresh token stored.
+     * @return new access token
      */
-    private String getUserAccessToken() {
+    private String getAccessToken(boolean loggedIn) {
         OkHttpClient client = new OkHttpClient();
 
         final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
-        final String GRANT_TYPE_VALUE = "refresh_token";
-        final String REFRESH_TOKEN = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication()).getString("refresh_token", null);
+        final String GRANT_TYPE_VALUE;
+        final String SECOND_PARAM_KEY;
+        final String SECOND_PARAM_VALUE;
+        if (!loggedIn) {
+            GRANT_TYPE_VALUE = "https://oauth.reddit.com/grants/installed_client";
+            SECOND_PARAM_KEY = "&device_id=";
+            // Device ID
+            SECOND_PARAM_VALUE = UUID.randomUUID().toString();
+        } else {
+            GRANT_TYPE_VALUE = "refresh_token";
+            // Refresh Token
+            SECOND_PARAM_KEY = "&refresh_token=";
+            SECOND_PARAM_VALUE = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication()).getString("refresh_token", null);
+        }
         final String CLIENT_ID = "tyVAE3jn8OsMlg";
-
         final String authString = CLIENT_ID + ":";
         final String encodedAuthString = Base64.encodeToString(authString.getBytes(),
                 Base64.NO_WRAP);
@@ -69,16 +82,16 @@ public class TokenAuthenticatorUser implements Authenticator {
                 .url(ACCESS_TOKEN_URL)
                 .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),
                         "grant_type=" + GRANT_TYPE_VALUE +
-                                "&refresh_token=" + REFRESH_TOKEN))
+                                SECOND_PARAM_KEY + SECOND_PARAM_VALUE))
                 .build();
 
-        Log.d(TAG, "Request for user access token: " + request.toString());
+        Log.d(TAG, "Request for access token: " + request.toString());
 
         String accessToken = null;
         // Synchronous http request (wait for it to finish before moving on to another task)
         try {
             String json = client.newCall(request).execute().body().string();
-            Log.d(TAG, "JSON response of retrieving user access token: " + json);
+            Log.d(TAG, "JSON response of retrieving access token: " + json);
 
             JSONObject data = new JSONObject(json);
             accessToken = data.optString("access_token");
@@ -89,12 +102,13 @@ public class TokenAuthenticatorUser implements Authenticator {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
             sharedPreferences.edit().putString("access_token", accessToken).commit();
         } catch (IOException io) {
-            Log.e(TAG, "IOException attempting to retrieve user access token");
+            Log.e(TAG, "IOException attempting to retrieve access token");
             io.printStackTrace();
         } catch (JSONException e) {
-            Log.e(TAG, "JSONException attempting to retrieve user access token");
+            Log.e(TAG, "JSONException attempting to retrieve access token");
             e.printStackTrace();
         }
         return accessToken;
     }
+
 }

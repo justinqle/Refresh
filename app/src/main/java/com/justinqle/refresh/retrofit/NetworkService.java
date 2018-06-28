@@ -5,7 +5,6 @@ import android.preference.PreferenceManager;
 
 import com.justinqle.refresh.activities.MainActivity;
 
-import okhttp3.Authenticator;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,14 +24,6 @@ public class NetworkService {
 
     private NetworkService() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
-        // Setting up respective authenticator
-        Authenticator authenticator;
-        boolean loggedIn = sharedPreferences.getBoolean("logged_in", false);
-        if (!loggedIn) {
-            authenticator = new TokenAuthenticatorApp();
-        } else {
-            authenticator = new TokenAuthenticatorUser();
-        }
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor((chain) -> {
@@ -43,7 +34,7 @@ public class NetworkService {
                             .addHeader("Accept", "application/json")
                             .build();
                     return chain.proceed(request);
-                }).authenticator(authenticator)
+                }).authenticator(new TokenAuthenticator())
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
 
