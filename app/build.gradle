@@ -41,20 +41,13 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:exifinterface:27.1.1'
     // Paging
-    implementation 'android.arch.paging:runtime:1.0.0'
-    implementation 'android.arch.paging:rxjava2:1.0.0-rc1'
+    implementation 'android.arch.paging:runtime:1.0.1'
     // Lifecycle, including LiveData and ViewModel
     implementation "android.arch.lifecycle:extensions:1.1.1"
-    // RxAndroid & RxJava & RxJava-Adapter
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     // javax.annotation library
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     // wasabeef recyclerview animators
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
-    // Apache Commons Lang
-    implementation 'org.apache.commons:commons-lang3:3.7'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
