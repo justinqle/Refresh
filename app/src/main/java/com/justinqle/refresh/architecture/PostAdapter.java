@@ -1,11 +1,16 @@
 package com.justinqle.refresh.architecture;
 
 import android.arch.paging.PagedListAdapter;
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,8 +46,9 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         private TextView created_utc;
         private TextView num_comments;
         private TextView points;
-
         private ImageView thumbnail;
+        private ImageButton upvote;
+        private ImageButton downvote;
 
         public ViewHolder(View v) {
             super(v);
@@ -52,8 +58,9 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
             created_utc = (TextView) v.findViewById(R.id.created_utc);
             num_comments = (TextView) v.findViewById(R.id.num_comments);
             points = (TextView) v.findViewById(R.id.points);
-
             thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
+            upvote = v.findViewById(R.id.upvote);
+            downvote = v.findViewById(R.id.downvote);
         }
     }
 
@@ -81,7 +88,6 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         holder.created_utc.setText(unixTimeToElapsed(post.getCreatedUtc()));
         holder.num_comments.setText(post.getNumComments() + " comments");
         holder.points.setText(toConciseThousands(post.getUps()));
-
         // TODO: Show thumbnail for gifs and videos(?)
         Preview preview = post.getPreview();
         if (preview == null) {
@@ -90,6 +96,18 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
             String url = preview.getImages().get(0).getSource().getUrl();
             Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
         }
+
+        // OnClickListeners
+        holder.upvote.setOnClickListener(v -> {
+            int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
+            // Sets color of upvote button
+            holder.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+            // Sets color of points
+            holder.points.setTextColor(highlight);
+            // Animate points
+            Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
+            holder.points.startAnimation(expand);
+        });
     }
 
     // TODO Could modfiy a bit for numbers >= 100,0000

@@ -10,4 +10,6 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="light_gray">#d3d3d3</color>
+    <color name="upvote">#FF5722</color>
+    <color name="downvote">#7C4DFF</color>
 </resources>
