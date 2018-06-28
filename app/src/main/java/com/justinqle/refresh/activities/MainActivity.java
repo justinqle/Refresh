@@ -124,7 +124,11 @@ public class MainActivity extends AppCompatActivity
         TextView headerTitle = header.findViewById(R.id.header_title);
         // "Guest" if logged out
         if (!loggedIn) {
-            headerTitle.setText(R.string.guest_user);
+            headerTitle.setText(R.string.log_in);
+            addHeaderMenuItem(R.id.add_account, getString(R.string.add_account), getDrawable(R.drawable.add_account_light)).setOnClickListener(v -> {
+                startActivityForResult(new Intent(this, AccountLogin.class), ADD_ACCOUNT_REQUEST);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+            });
         }
         // Request the user's handle to put on header
         else {
@@ -139,12 +143,15 @@ public class MainActivity extends AppCompatActivity
                     t.printStackTrace();
                 }
             });
+            addHeaderMenuItem(R.id.log_out, getString(R.string.log_out), getDrawable(R.drawable.logout)).setOnClickListener(v -> {
+                Log.d(TAG, "Logout");
+                // TODO: Revoke access and refresh token
+                PreferenceManager.getDefaultSharedPreferences(getContextOfApplication()).edit().remove("logged_in").remove("access_token").remove("refresh_token").apply();
+                finish();
+                startActivity(getIntent());
+                Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_SHORT).show();
+            });
         }
-        // Always an add account menu option
-        addHeaderMenuItem(R.id.add_account, getString(R.string.add_account), getDrawable(R.drawable.add_account_light)).setOnClickListener(v -> {
-            startActivityForResult(new Intent(this, AccountLogin.class), ADD_ACCOUNT_REQUEST);
-            overridePendingTransition(R.anim.enter, R.anim.exit);
-        });
 
         // RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
