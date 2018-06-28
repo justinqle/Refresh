@@ -136,8 +136,8 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
                 // Sets color of points
                 holder.points.setTextColor(highlight);
                 // Animate points
-                Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
-                holder.points.startAnimation(expand);
+                Animation conract = AnimationUtils.loadAnimation(v.getContext(), R.anim.contract);
+                holder.points.startAnimation(conract);
             } else {
                 holder.downvote.setActivated(false);
                 // Resets color of upvote button
