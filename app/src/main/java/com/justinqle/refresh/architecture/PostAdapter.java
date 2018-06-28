@@ -2,6 +2,7 @@ package com.justinqle.refresh.architecture;
 
 import android.arch.paging.PagedListAdapter;
 import android.graphics.PorterDuff;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.models.listing.Post;
@@ -99,51 +101,59 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
 
         // OnClickListeners
         holder.upvote.setOnClickListener(v -> {
-            if (holder.downvote.isActivated()) {
-                holder.downvote.setActivated(false);
-                // Resets color of upvote button
-                holder.downvote.clearColorFilter();
-            }
-            if (!holder.upvote.isActivated()) {
-                holder.upvote.setActivated(true);
-                int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
-                // Sets color of upvote button
-                holder.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
-                // Sets color of points
-                holder.points.setTextColor(highlight);
-                // Animate points
-                Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
-                holder.points.startAnimation(expand);
+            if (PreferenceManager.getDefaultSharedPreferences(holder.upvote.getContext()).getBoolean("logged_in", false)) {
+                if (holder.downvote.isActivated()) {
+                    holder.downvote.setActivated(false);
+                    // Resets color of upvote button
+                    holder.downvote.clearColorFilter();
+                }
+                if (!holder.upvote.isActivated()) {
+                    holder.upvote.setActivated(true);
+                    int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
+                    // Sets color of upvote button
+                    holder.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+                    // Sets color of points
+                    holder.points.setTextColor(highlight);
+                    // Animate points
+                    Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
+                    holder.points.startAnimation(expand);
+                } else {
+                    holder.upvote.setActivated(false);
+                    // Resets color of upvote button
+                    holder.upvote.clearColorFilter();
+                    // Resets color of points
+                    holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+                }
             } else {
-                holder.upvote.setActivated(false);
-                // Resets color of upvote button
-                holder.upvote.clearColorFilter();
-                // Resets color of points
-                holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+                Toast.makeText(holder.upvote.getContext(), R.string.logged_out, Toast.LENGTH_LONG).show();
             }
         });
         holder.downvote.setOnClickListener(v -> {
-            if (holder.upvote.isActivated()) {
-                holder.upvote.setActivated(false);
-                // Resets color of upvote button
-                holder.upvote.clearColorFilter();
-            }
-            if (!holder.downvote.isActivated()) {
-                holder.downvote.setActivated(true);
-                int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
-                // Sets color of upvote button
-                holder.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
-                // Sets color of points
-                holder.points.setTextColor(highlight);
-                // Animate points
-                Animation conract = AnimationUtils.loadAnimation(v.getContext(), R.anim.contract);
-                holder.points.startAnimation(conract);
+            if (PreferenceManager.getDefaultSharedPreferences(holder.upvote.getContext()).getBoolean("logged_in", false)) {
+                if (holder.upvote.isActivated()) {
+                    holder.upvote.setActivated(false);
+                    // Resets color of upvote button
+                    holder.upvote.clearColorFilter();
+                }
+                if (!holder.downvote.isActivated()) {
+                    holder.downvote.setActivated(true);
+                    int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
+                    // Sets color of upvote button
+                    holder.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+                    // Sets color of points
+                    holder.points.setTextColor(highlight);
+                    // Animate points
+                    Animation conract = AnimationUtils.loadAnimation(v.getContext(), R.anim.contract);
+                    holder.points.startAnimation(conract);
+                } else {
+                    holder.downvote.setActivated(false);
+                    // Resets color of upvote button
+                    holder.downvote.clearColorFilter();
+                    // Resets color of points
+                    holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+                }
             } else {
-                holder.downvote.setActivated(false);
-                // Resets color of upvote button
-                holder.downvote.clearColorFilter();
-                // Resets color of points
-                holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+                Toast.makeText(holder.downvote.getContext(), R.string.logged_out, Toast.LENGTH_LONG).show();
             }
         });
     }
