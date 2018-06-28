@@ -16,4 +16,5 @@
     <string name="menu_icon">Icon for dropdown item</string>
     <string name="logged_out">Log in to perform this action</string>
     <string name="log_out">Log Out</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>
