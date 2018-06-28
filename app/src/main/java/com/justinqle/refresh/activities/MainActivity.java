@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -304,8 +303,8 @@ public class MainActivity extends AppCompatActivity
         menuItem.setId(id);
         TextView textView = menuItem.findViewById(R.id.account_text);
         textView.setText(text);
-        ImageButton imageButton = menuItem.findViewById(R.id.account_icon);
-        imageButton.setImageDrawable(icon);
+        ImageView imageView = menuItem.findViewById(R.id.account_icon);
+        imageView.setImageDrawable(icon);
 
         dropdown.addView(menuItem);
         return menuItem;
