@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity
                 expandArrow.animate().rotation(0).setDuration(200).start();
             }
         });
+        // TODO: Multi-account functionality
         // Set title of header and add header submenu items based on logged in/out status and different account options
         loggedIn = sharedPreferences.getBoolean("logged_in", false);
         TextView headerTitle = header.findViewById(R.id.header_title);
