@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
+    // TODO Get rid of this, could lead to memory leaks
     private static Context contextOfApplication;
 
     private RecyclerView mRecyclerView;
