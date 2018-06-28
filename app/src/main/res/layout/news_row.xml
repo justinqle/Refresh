@@ -63,6 +63,7 @@
         android:layout_marginTop="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/primary_text"
         app:layout_constraintBottom_toTopOf="@+id/subreddit"
         app:layout_constraintEnd_toStartOf="@+id/thumbnail"
