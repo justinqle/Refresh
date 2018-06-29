@@ -10,15 +10,15 @@
         android:title="@string/profile" />
 
     <item
-        android:id="@+id/settings"
-        android:icon="@drawable/settings"
-        android:title="@string/settings" />
-
-    <item
         android:icon="@drawable/night"
         android:title="@string/dark_mode"
         app:actionLayout="@layout/menu_switch"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/settings"
+        android:title="@string/settings" />
 
     <item android:title="Subreddits">
         <menu>
