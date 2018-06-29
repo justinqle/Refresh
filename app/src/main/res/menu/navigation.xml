@@ -24,10 +24,6 @@
 
     <item android:title="@string/subreddits">
         <menu>
-            <group android:checkableBehavior="single">
-                <item android:title="Android" />
-                <item android:title="UMD" />
-            </group>
         </menu>
     </item>
 

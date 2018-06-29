@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,8 +35,12 @@ import com.justinqle.refresh.R;
 import com.justinqle.refresh.animations.ExpandCollapseAnimations;
 import com.justinqle.refresh.architecture.PostAdapter;
 import com.justinqle.refresh.architecture.PostViewModel;
+import com.justinqle.refresh.models.listing.Child;
+import com.justinqle.refresh.models.listing.Listing;
 import com.justinqle.refresh.models.user.User;
 import com.justinqle.refresh.retrofit.NetworkService;
+
+import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import retrofit2.Call;
@@ -156,6 +161,27 @@ public class MainActivity extends AppCompatActivity
         // Add User-specific menu items to NavigationView when logged in
         if (loggedIn) {
             navigationView.getMenu().findItem(R.id.profile).setVisible(true);
+        }
+
+        // Add Subreddits to NavigationView submenu (default for logged out, user-specific for logged in)
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.getItem(menu.size() - 1);
+        SubMenu subMenu = menuItem.getSubMenu();
+        if (!loggedIn) {
+            NetworkService.getInstance().getJSONApi().getDefaultSubreddits(100).enqueue(new Callback<Listing>() {
+                @Override
+                public void onResponse(Call<Listing> call, Response<Listing> response) {
+                    List<Child> children = response.body().getData().getChildren();
+                    for (Child child : children) {
+                        subMenu.add(child.getSubreddit().getDisplayName()).setCheckable(true);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Listing> call, Throwable t) {
+
+                }
+            });
         }
 
         // RecyclerView

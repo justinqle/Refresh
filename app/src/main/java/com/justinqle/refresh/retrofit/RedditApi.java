@@ -23,4 +23,8 @@ public interface RedditApi {
     @GET("/api/v1/me")
     Call<User> getUser();
 
+    @GET("/subreddits/default")
+    Call<Listing> getDefaultSubreddits(
+            @Query("limit") int limit
+    );
 }
