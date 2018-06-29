@@ -153,6 +153,13 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
+        // Navigation Menu depending on logged in/out status
+        if (!loggedIn) {
+            navigationView.inflateMenu(R.menu.navigation_with_logout);
+        } else {
+            navigationView.inflateMenu(R.menu.navigation_with_login);
+        }
+
         // RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // Changes in content does not change layout size
