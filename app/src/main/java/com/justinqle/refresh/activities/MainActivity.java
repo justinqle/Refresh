@@ -153,11 +153,9 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
-        // Navigation Menu depending on logged in/out status
-        if (!loggedIn) {
-            navigationView.inflateMenu(R.menu.navigation_with_logout);
-        } else {
-            navigationView.inflateMenu(R.menu.navigation_with_login);
+        // Add User-specific menu items to NavigationView when logged in
+        if (loggedIn) {
+            navigationView.getMenu().findItem(R.id.profile).setVisible(true);
         }
 
         // RecyclerView
@@ -267,6 +265,8 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.profile:
+
+            case R.id.dark_mode:
 
             case R.id.settings:
 

@@ -7,9 +7,11 @@
     <item
         android:id="@+id/profile"
         android:icon="@drawable/account_circle"
-        android:title="@string/profile" />
+        android:title="@string/profile"
+        android:visible="false" />
 
     <item
+        android:id="@+id/dark_mode"
         android:icon="@drawable/night"
         android:title="@string/dark_mode"
         app:actionLayout="@layout/menu_switch"
