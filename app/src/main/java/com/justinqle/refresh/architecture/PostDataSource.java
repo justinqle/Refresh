@@ -76,7 +76,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         // ignored, since we only ever append to our initial load
     }
 
-    // TODO Use rxJava, as this all runs on the main thread
+    // TODO Use rxJava, as this all runs on the overflow thread
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
         redditApi.getListingAfter(params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
