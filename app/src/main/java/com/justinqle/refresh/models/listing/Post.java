@@ -7,280 +7,279 @@ import com.google.gson.annotations.SerializedName;
 public class Post {
 
     @SerializedName("approved_at_utc")
-    @Expose
     private Object approvedAtUtc;
+
     @SerializedName("subreddit")
-    @Expose
     private String subreddit;
+
     @SerializedName("selftext")
-    @Expose
     private String selftext;
+
     @SerializedName("user_reports")
-    @Expose
     private List<Object> userReports = null;
+
     @SerializedName("saved")
-    @Expose
     private boolean saved;
+
     @SerializedName("mod_reason_title")
-    @Expose
     private Object modReasonTitle;
+
     @SerializedName("gilded")
-    @Expose
     private int gilded;
+
     @SerializedName("clicked")
-    @Expose
     private boolean clicked;
+
     @SerializedName("title")
-    @Expose
     private String title;
+
     @SerializedName("link_flair_richtext")
-    @Expose
     private List<LinkFlairRichtext> linkFlairRichtext = null;
+
     @SerializedName("subreddit_name_prefixed")
-    @Expose
     private String subredditNamePrefixed;
+
     @SerializedName("hidden")
-    @Expose
     private boolean hidden;
+
     @SerializedName("pwls")
-    @Expose
     private int pwls;
+
     @SerializedName("link_flair_css_class")
-    @Expose
     private String linkFlairCssClass;
+
     @SerializedName("downs")
-    @Expose
     private int downs;
+
     @SerializedName("thumbnail_height")
-    @Expose
     private int thumbnailHeight;
+
     @SerializedName("parent_whitelist_status")
-    @Expose
     private String parentWhitelistStatus;
+
     @SerializedName("hide_score")
-    @Expose
     private boolean hideScore;
+
     @SerializedName("name")
-    @Expose
     private String name;
+
     @SerializedName("quarantine")
-    @Expose
     private boolean quarantine;
+
     @SerializedName("link_flair_text_color")
-    @Expose
     private String linkFlairTextColor;
+
     @SerializedName("author_flair_background_color")
-    @Expose
     private Object authorFlairBackgroundColor;
+
     @SerializedName("subreddit_type")
-    @Expose
     private String subredditType;
+
     @SerializedName("ups")
-    @Expose
     private int ups;
+
     @SerializedName("domain")
-    @Expose
     private String domain;
+
     @SerializedName("media_embed")
-    @Expose
     private MediaEmbed mediaEmbed;
+
     @SerializedName("thumbnail_width")
-    @Expose
     private int thumbnailWidth;
+
     @SerializedName("author_flair_template_id")
-    @Expose
     private Object authorFlairTemplateId;
+
     @SerializedName("is_original_content")
-    @Expose
     private boolean isOriginalContent;
+
     @SerializedName("secure_media")
-    @Expose
     private Object secureMedia;
+
     @SerializedName("is_reddit_media_domain")
-    @Expose
     private boolean isRedditMediaDomain;
+
     @SerializedName("category")
-    @Expose
     private Object category;
+
     @SerializedName("secure_media_embed")
-    @Expose
     private SecureMediaEmbed secureMediaEmbed;
+
     @SerializedName("link_flair_text")
-    @Expose
     private String linkFlairText;
+
     @SerializedName("can_mod_post")
-    @Expose
     private boolean canModPost;
+
     @SerializedName("score")
-    @Expose
     private int score;
+
     @SerializedName("approved_by")
-    @Expose
     private Object approvedBy;
+
     @SerializedName("thumbnail")
-    @Expose
     private String thumbnail;
+
 //    @SerializedName("edited")
-//    @Expose
 //    private boolean edited;
+
     @SerializedName("author_flair_css_class")
-    @Expose
     private Object authorFlairCssClass;
+
     @SerializedName("author_flair_richtext")
-    @Expose
     private List<Object> authorFlairRichtext = null;
+
     @SerializedName("post_hint")
-    @Expose
     private String postHint;
+
     @SerializedName("content_categories")
-    @Expose
     private Object contentCategories;
+
     @SerializedName("is_self")
-    @Expose
     private boolean isSelf;
+
     @SerializedName("mod_note")
-    @Expose
     private Object modNote;
+
     @SerializedName("created")
-    @Expose
     private int created;
+
     @SerializedName("link_flair_type")
-    @Expose
     private String linkFlairType;
+
     @SerializedName("wls")
-    @Expose
     private int wls;
+
     @SerializedName("post_categories")
-    @Expose
     private Object postCategories;
+
     @SerializedName("banned_by")
-    @Expose
     private Object bannedBy;
+
     @SerializedName("author_flair_type")
-    @Expose
     private String authorFlairType;
+
     @SerializedName("contest_mode")
-    @Expose
     private boolean contestMode;
+
     @SerializedName("selftext_html")
-    @Expose
     private Object selftextHtml;
+
     @SerializedName("likes")
-    @Expose
     private Object likes;
+
     @SerializedName("suggested_sort")
-    @Expose
     private Object suggestedSort;
+
     @SerializedName("banned_at_utc")
-    @Expose
     private Object bannedAtUtc;
+
     @SerializedName("view_count")
-    @Expose
     private Object viewCount;
+
     @SerializedName("archived")
-    @Expose
     private boolean archived;
+
     @SerializedName("no_follow")
-    @Expose
     private boolean noFollow;
+
     @SerializedName("is_crosspostable")
-    @Expose
     private boolean isCrosspostable;
+
     @SerializedName("pinned")
-    @Expose
     private boolean pinned;
+
     @SerializedName("over_18")
-    @Expose
     private boolean over18;
+
     @SerializedName("preview")
-    @Expose
     private Preview preview;
+
     @SerializedName("media_only")
-    @Expose
     private boolean mediaOnly;
+
     @SerializedName("can_gild")
-    @Expose
     private boolean canGild;
+
     @SerializedName("spoiler")
-    @Expose
     private boolean spoiler;
+
     @SerializedName("locked")
-    @Expose
     private boolean locked;
+
     @SerializedName("author_flair_text")
-    @Expose
     private Object authorFlairText;
+
     @SerializedName("rte_mode")
-    @Expose
     private String rteMode;
+
     @SerializedName("visited")
-    @Expose
     private boolean visited;
+
     @SerializedName("num_reports")
-    @Expose
     private Object numReports;
+
     @SerializedName("distinguished")
-    @Expose
     private Object distinguished;
+
     @SerializedName("subreddit_id")
-    @Expose
     private String subredditId;
+
     @SerializedName("mod_reason_by")
-    @Expose
     private Object modReasonBy;
+
     @SerializedName("removal_reason")
-    @Expose
     private Object removalReason;
+
     @SerializedName("link_flair_background_color")
-    @Expose
     private String linkFlairBackgroundColor;
+
     @SerializedName("id")
-    @Expose
     private String id;
+
     @SerializedName("report_reasons")
-    @Expose
     private Object reportReasons;
+
     @SerializedName("author")
-    @Expose
     private String author;
+
     @SerializedName("num_crossposts")
-    @Expose
     private int numCrossposts;
+
     @SerializedName("num_comments")
-    @Expose
     private int numComments;
+
     @SerializedName("send_replies")
-    @Expose
     private boolean sendReplies;
+
     @SerializedName("mod_reports")
-    @Expose
     private List<Object> modReports = null;
+
     @SerializedName("author_flair_text_color")
-    @Expose
     private Object authorFlairTextColor;
+
     @SerializedName("permalink")
-    @Expose
     private String permalink;
+
     @SerializedName("whitelist_status")
-    @Expose
     private String whitelistStatus;
+
     @SerializedName("stickied")
-    @Expose
     private boolean stickied;
+
     @SerializedName("url")
-    @Expose
     private String url;
+
     @SerializedName("subreddit_subscribers")
-    @Expose
     private int subredditSubscribers;
+
     @SerializedName("created_utc")
-    @Expose
     private int createdUtc;
+
     @SerializedName("media")
-    @Expose
     private Object media;
+
     @SerializedName("is_video")
-    @Expose
     private boolean isVideo;
 
     public Object getApprovedAtUtc() {

@@ -7,10 +7,9 @@ import com.google.gson.annotations.SerializedName;
 public class Preview {
 
     @SerializedName("images")
-    @Expose
     private List<Image> images = null;
+
     @SerializedName("enabled")
-    @Expose
     private boolean enabled;
 
     public List<Image> getImages() {

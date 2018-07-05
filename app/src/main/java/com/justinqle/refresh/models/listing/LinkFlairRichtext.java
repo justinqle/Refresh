@@ -6,10 +6,9 @@ import com.google.gson.annotations.SerializedName;
 public class LinkFlairRichtext {
 
     @SerializedName("e")
-    @Expose
     private String e;
+
     @SerializedName("t")
-    @Expose
     private String t;
 
     public String getE() {

@@ -6,10 +6,9 @@ import com.google.gson.annotations.SerializedName;
 public class Child {
 
     @SerializedName("kind")
-    @Expose
     private String kind;
+
     @SerializedName("data")
-    @Expose
     private Post post;
 
     public String getKind() {

@@ -7,16 +7,15 @@ import com.google.gson.annotations.SerializedName;
 public class Image {
 
     @SerializedName("source")
-    @Expose
     private Source source;
+
     @SerializedName("resolutions")
-    @Expose
     private List<Resolution> resolutions = null;
+
     @SerializedName("variants")
-    @Expose
     private Variants variants;
+
     @SerializedName("id")
-    @Expose
     private String id;
 
     public Source getSource() {
