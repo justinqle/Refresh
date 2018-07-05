@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity
                 public void onResponse(Call<Listing> call, Response<Listing> response) {
                     List<Child> children = response.body().getData().getChildren();
                     for (Child child : children) {
-                        subMenu.add(child.getSubreddit().getDisplayName()).setCheckable(true);
+                        //subMenu.add(child.getSubreddit().getDisplayName()).setCheckable(true);
+                        subMenu.add("Android").setCheckable(true);
                     }
                 }
 
