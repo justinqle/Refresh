@@ -1,7 +1,6 @@
 package com.justinqle.refresh.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -53,13 +52,10 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
-    // TODO Get rid of this, could lead to memory leaks
-    private static Context contextOfApplication;
-
     private PostAdapter mAdapter;
 
     private PostViewModel postViewModel;
-    private static SwipeRefreshLayout swipeContainer;
+    private SwipeRefreshLayout swipeContainer;
 
     private LinearLayout dropdown;
 
@@ -70,9 +66,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        contextOfApplication = getApplicationContext();
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // TODO Different access tokens are retrieved twice on Authentication, due to data race between thread retrieving posts and thread retrieving subreddit items for nav menu
         Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
         Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
@@ -146,10 +140,10 @@ public class MainActivity extends AppCompatActivity
             addHeaderMenuItem(R.id.log_out, getString(R.string.log_out), getDrawable(R.drawable.logout)).setOnClickListener(v -> {
                 Log.d(TAG, "Logout");
                 // TODO: Revoke access and refresh token
-                PreferenceManager.getDefaultSharedPreferences(getContextOfApplication()).edit().remove("logged_in").remove("access_token").remove("refresh_token").apply();
+                PreferenceManager.getDefaultSharedPreferences(this).edit().remove("logged_in").remove("access_token").remove("refresh_token").apply();
                 finish();
                 startActivity(getIntent());
-                Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
             });
         }
 
@@ -228,7 +222,11 @@ public class MainActivity extends AppCompatActivity
         });
 
         // submit new set of data and set refreshing false
-        postViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
+        postViewModel.getPosts().observe(this, posts -> {
+            // TODO Immediately sets refreshing false for some reason
+            swipeContainer.setRefreshing(false);
+            mAdapter.submitList(posts);
+        });
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {
@@ -238,14 +236,6 @@ public class MainActivity extends AppCompatActivity
                 navigationMenuView.setVerticalScrollBarEnabled(false);
             }
         }
-    }
-
-    public static void loading(boolean show) {
-        swipeContainer.setRefreshing(show);
-    }
-
-    public static Context getContextOfApplication() {
-        return contextOfApplication;
     }
 
     @Override
@@ -311,7 +301,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "Login succeeded");
                 finish();
                 startActivity(getIntent());
-                Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d(TAG, "Login failed");
                 Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();

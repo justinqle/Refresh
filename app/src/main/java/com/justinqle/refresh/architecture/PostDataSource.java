@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.justinqle.refresh.activities.MainActivity;
+import com.justinqle.refresh.MyApplication;
 import com.justinqle.refresh.models.listing.Child;
 import com.justinqle.refresh.models.listing.Data;
 import com.justinqle.refresh.models.listing.Listing;
@@ -37,7 +37,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
      * Notify Main thread of failed Network request.
      */
     private static void backgroundThreadLongToast() {
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.getContextOfApplication(), "Network request failed", Toast.LENGTH_LONG).show());
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MyApplication.getContext(), "Network request failed", Toast.LENGTH_LONG).show());
     }
 
     @Override
@@ -45,7 +45,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         redditApi.getListing(params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
-                MainActivity.loading(false);
                 Log.i(TAG, "Successfully connected to server");
                 if (response.isSuccessful()) {
                     Log.i(TAG, "HTTP Response Code between 200-300");
@@ -66,7 +65,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                MainActivity.loading(false);
                 Log.e(TAG, "Load Initial: Network request failed");
                 t.printStackTrace();
                 backgroundThreadLongToast();
@@ -85,7 +83,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         redditApi.getListingAfter(params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
-                MainActivity.loading(false);
                 Log.i(TAG, "Successfully connected to server");
                 if (response.isSuccessful()) {
                     Log.i(TAG, "HTTP Response Code between 200-300");
@@ -106,7 +103,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
             @Override
             public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                MainActivity.loading(false);
                 Log.e(TAG, "Load After: Network request failed");
                 t.printStackTrace();
                 backgroundThreadLongToast();

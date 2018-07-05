@@ -167,7 +167,7 @@ public class AccountLogin extends AppCompatActivity {
                     Log.d(TAG, "(Account Login) Access Token retrieved = " + accessToken);
                     Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
 
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AccountLogin.this);
                     sharedPreferences.edit().putBoolean("logged_in", true).putString("access_token", accessToken).putString("refresh_token", refreshToken).apply();
                     finish();
                 } catch (JSONException e) {

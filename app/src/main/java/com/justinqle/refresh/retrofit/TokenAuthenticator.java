@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 
-import com.justinqle.refresh.activities.MainActivity;
+import com.justinqle.refresh.MyApplication;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +43,7 @@ public class TokenAuthenticator implements Authenticator {
         }
 
         // Refresh access_token using a synchronous api request
-        accessToken = getAccessToken(PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication()).getBoolean("logged_in", false));
+        accessToken = getAccessToken(PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).getBoolean("logged_in", false));
 
         Log.d(TAG, "Request URL: " + response.request().url());
 
@@ -75,7 +75,7 @@ public class TokenAuthenticator implements Authenticator {
             GRANT_TYPE_VALUE = "refresh_token";
             // Refresh Token
             SECOND_PARAM_KEY = "&refresh_token=";
-            SECOND_PARAM_VALUE = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication()).getString("refresh_token", null);
+            SECOND_PARAM_VALUE = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).getString("refresh_token", null);
         }
         final String CLIENT_ID = "tyVAE3jn8OsMlg";
         final String authString = CLIENT_ID + ":";
@@ -108,7 +108,7 @@ public class TokenAuthenticator implements Authenticator {
                 Log.d(TAG, "Access Token retrieved = " + accessToken);
 
                 // Store access token in shared preferences for later retrieval
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
                 sharedPreferences.edit().putString("access_token", accessToken).apply();
             }
         } catch (IOException io) {

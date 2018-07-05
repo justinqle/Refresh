@@ -3,7 +3,7 @@ package com.justinqle.refresh.retrofit;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.justinqle.refresh.activities.MainActivity;
+import com.justinqle.refresh.MyApplication;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,7 +21,7 @@ public class NetworkService {
     private static Retrofit mRetrofit;
 
     private NetworkService() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor((chain) -> {
