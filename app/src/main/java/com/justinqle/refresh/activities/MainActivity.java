@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity
         contextOfApplication = getApplicationContext();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        // TODO Different access tokens are retrieved twice on Authentication, due to data race between thread retrieving posts and thread retrieving subreddit items for nav menu
         Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
         Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
         Log.d(TAG, "Logged In: " + sharedPreferences.getBoolean("logged_in", false));
