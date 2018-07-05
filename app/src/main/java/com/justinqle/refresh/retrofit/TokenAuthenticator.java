@@ -2,6 +2,7 @@ package com.justinqle.refresh.retrofit;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okhttp3.Route;
 
 public class TokenAuthenticator implements Authenticator {
@@ -27,13 +29,17 @@ public class TokenAuthenticator implements Authenticator {
     private String accessToken;
 
     @Override
-    public Request authenticate(Route route, okhttp3.Response response) {
+    public Request authenticate(@NonNull Route route, @NonNull okhttp3.Response response) {
         Log.d(TAG, "Authenticating after HTTP error");
         Log.d(TAG, "HTTP error 401: Token expired");
 
-        if (response.request().header("Authorization").equals(accessToken)) {
-            Log.d(TAG, "Retry with this access token failed already");
-            return null; // If we already failed with this access token, don't retry.
+        Request request = response.request();
+        String header = request.header("Authorization");
+        if (header != null) {
+            if (header.equals(accessToken)) {
+                Log.d(TAG, "Retry with this access token failed already");
+                return null; // If we already failed with this access token, don't retry.
+            }
         }
 
         // Refresh access_token using a synchronous api request
@@ -42,7 +48,7 @@ public class TokenAuthenticator implements Authenticator {
         Log.d(TAG, "Request URL: " + response.request().url());
 
         // Add new header to rejected request and retry it
-        return response.request().newBuilder()
+        return request.newBuilder()
                 .header("Authorization", "bearer " + accessToken)
                 .build();
     }
@@ -90,17 +96,21 @@ public class TokenAuthenticator implements Authenticator {
         String accessToken = null;
         // Synchronous http request (wait for it to finish before moving on to another task)
         try {
-            String json = client.newCall(request).execute().body().string();
-            Log.d(TAG, "JSON response of retrieving access token: " + json);
 
-            JSONObject data = new JSONObject(json);
-            accessToken = data.optString("access_token");
+            ResponseBody responseBody = client.newCall(request).execute().body();
+            if (responseBody != null) {
+                String json = responseBody.string();
+                Log.d(TAG, "JSON response of retrieving access token: " + json);
 
-            Log.d(TAG, "Access Token retrieved = " + accessToken);
+                JSONObject data = new JSONObject(json);
+                accessToken = data.optString("access_token");
 
-            // Store access token in shared preferences for later retrieval
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
-            sharedPreferences.edit().putString("access_token", accessToken).commit();
+                Log.d(TAG, "Access Token retrieved = " + accessToken);
+
+                // Store access token in shared preferences for later retrieval
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+                sharedPreferences.edit().putString("access_token", accessToken).apply();
+            }
         } catch (IOException io) {
             Log.e(TAG, "IOException attempting to retrieve access token");
             io.printStackTrace();

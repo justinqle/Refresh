@@ -10,7 +10,7 @@ public class PostDataSourceFactory extends PostDataSource.Factory<String, Post> 
     private RedditApi redditApi;
     private PostDataSource postDataSource;
 
-    public PostDataSourceFactory(RedditApi redditApi) {
+    PostDataSourceFactory(RedditApi redditApi) {
         this.redditApi = redditApi;
     }
 

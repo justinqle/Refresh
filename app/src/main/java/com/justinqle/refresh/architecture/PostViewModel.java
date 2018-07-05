@@ -29,7 +29,7 @@ public class PostViewModel extends ViewModel {
         // initial page size to fetch can also be configured here too
         PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(25).build();
         factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi());
-        posts = new LivePagedListBuilder(factory, config).build();
+        posts = new LivePagedListBuilder<>(factory, config).build();
     }
 
     public void invalidateDataSource() {

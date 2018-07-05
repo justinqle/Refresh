@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.FloatingActionButton;
@@ -55,15 +56,11 @@ public class MainActivity extends AppCompatActivity
     // TODO Get rid of this, could lead to memory leaks
     private static Context contextOfApplication;
 
-    private RecyclerView mRecyclerView;
     private PostAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private PostViewModel postViewModel;
     private static SwipeRefreshLayout swipeContainer;
 
-    private SharedPreferences sharedPreferences;
-    private boolean loggedIn;
     private LinearLayout dropdown;
 
     private static final int ADD_ACCOUNT_REQUEST = 1;
@@ -75,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         contextOfApplication = getApplicationContext();
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         // TODO Different access tokens are retrieved twice on Authentication, due to data race between thread retrieving posts and thread retrieving subreddit items for nav menu
         Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
         Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
@@ -85,28 +82,22 @@ public class MainActivity extends AppCompatActivity
         swipeContainer.setRefreshing(true);
 
         // Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Floating Action Button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show());
 
         // Drawer (Container)
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         // Widget that can be used inside Drawer
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         disableNavigationViewScrollbars(navigationView);
 
@@ -126,7 +117,7 @@ public class MainActivity extends AppCompatActivity
         });
         // TODO: Multi-account functionality
         // Set title of header and add header submenu items based on logged in/out status and different account options
-        loggedIn = sharedPreferences.getBoolean("logged_in", false);
+        boolean loggedIn = sharedPreferences.getBoolean("logged_in", false);
         TextView headerTitle = header.findViewById(R.id.header_title);
         // "Guest" if logged out
         if (!loggedIn) {
@@ -140,12 +131,15 @@ public class MainActivity extends AppCompatActivity
         else {
             NetworkService.getInstance().getJSONApi().getUser().enqueue(new Callback<User>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    headerTitle.setText(response.body().getName());
+                public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                    User user = response.body();
+                    if (user != null) {
+                        headerTitle.setText(user.getName());
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                     t.printStackTrace();
                 }
             });
@@ -171,27 +165,30 @@ public class MainActivity extends AppCompatActivity
         if (!loggedIn) {
             NetworkService.getInstance().getJSONApi().getDefaultSubreddits(100).enqueue(new Callback<Listing>() {
                 @Override
-                public void onResponse(Call<Listing> call, Response<Listing> response) {
-                    List<Child> children = response.body().getData().getChildren();
-                    for (Child child : children) {
-                        //subMenu.add(child.getSubreddit().getDisplayName()).setCheckable(true);
-                        subMenu.add("Android").setCheckable(true);
+                public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
+                    Listing listing = response.body();
+                    if (listing != null) {
+                        List<Child> children = listing.getData().getChildren();
+                        for (Child child : children) {
+                            //subMenu.add(child.getSubreddit().getDisplayName()).setCheckable(true);
+                            subMenu.add("Android").setCheckable(true);
+                        }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<Listing> call, Throwable t) {
+                public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
 
                 }
             });
         }
 
         // RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);
         // Changes in content does not change layout size
         mRecyclerView.setHasFixedSize(true);
         // LinearLayout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Initial animation / refresh
@@ -231,9 +228,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         // submit new set of data and set refreshing false
-        postViewModel.getPosts().observe(this, posts -> {
-            mAdapter.submitList(posts);
-        });
+        postViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {
@@ -255,7 +250,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -287,7 +282,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -302,7 +297,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -319,7 +314,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d(TAG, "Login failed");
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -327,10 +322,10 @@ public class MainActivity extends AppCompatActivity
     /**
      * Adds item to header menu while also returning the view to set click event
      *
-     * @param id
-     * @param text
-     * @param icon
-     * @return
+     * @param id   ID of menu item
+     * @param text Text of menu item
+     * @param icon Corresponding icon of menu item
+     * @return The inflated view
      */
     private View addHeaderMenuItem(int id, String text, Drawable icon) {
         View menuItem = LayoutInflater.from(this).inflate(R.layout.account_menu_item, dropdown, false);

@@ -33,10 +33,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.redditApi = redditApi;
     }
 
-    private static void backgroundThreadLongToast(final String msg) {
-        if (msg != null) {
-            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.getContextOfApplication(), msg, Toast.LENGTH_LONG).show());
-        }
+    /**
+     * Notify Main thread of failed Network request.
+     */
+    private static void backgroundThreadLongToast() {
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.getContextOfApplication(), "Network request failed", Toast.LENGTH_LONG).show());
     }
 
     @Override
@@ -49,13 +50,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "HTTP Response Code between 200-300");
                     Listing listing = response.body();
-                    Data data = listing.getData();
-                    List<Child> children = data.getChildren();
-                    List<Post> posts = new ArrayList<>();
-                    for (Child child : children) {
-                        posts.add(child.getData());
+                    if (listing != null) {
+                        Data data = listing.getData();
+                        List<Child> children = data.getChildren();
+                        List<Post> posts = new ArrayList<>();
+                        for (Child child : children) {
+                            posts.add(child.getData());
+                        }
+                        callback.onResult(posts, data.getBefore(), data.getAfter());
                     }
-                    callback.onResult(posts, data.getBefore(), data.getAfter());
                 } else {
                     Log.e(TAG, "HTTP Response Error " + response.code());
                 }
@@ -66,7 +69,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 MainActivity.loading(false);
                 Log.e(TAG, "Load Initial: Network request failed");
                 t.printStackTrace();
-                backgroundThreadLongToast("Network request failed");
+                backgroundThreadLongToast();
             }
         });
     }
@@ -87,13 +90,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "HTTP Response Code between 200-300");
                     Listing listing = response.body();
-                    Data data = listing.getData();
-                    List<Child> children = data.getChildren();
-                    List<Post> posts = new ArrayList<>();
-                    for (Child child : children) {
-                        posts.add(child.getData());
+                    if (listing != null) {
+                        Data data = listing.getData();
+                        List<Child> children = data.getChildren();
+                        List<Post> posts = new ArrayList<>();
+                        for (Child child : children) {
+                            posts.add(child.getData());
+                        }
+                        callback.onResult(posts, data.getAfter());
                     }
-                    callback.onResult(posts, data.getAfter());
                 } else {
                     Log.e(TAG, "HTTP Response Error " + response.code());
                 }
@@ -104,7 +109,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 MainActivity.loading(false);
                 Log.e(TAG, "Load After: Network request failed");
                 t.printStackTrace();
-                backgroundThreadLongToast("Network request failed");
+                backgroundThreadLongToast();
             }
         });
     }

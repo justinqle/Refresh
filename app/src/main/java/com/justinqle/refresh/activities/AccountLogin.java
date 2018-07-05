@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -30,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class AccountLogin extends AppCompatActivity {
 
@@ -60,7 +62,9 @@ public class AccountLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_login);
 
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         webView = findViewById(R.id.login);
         webView.setWebViewClient(new LoginWebViewClient());
@@ -145,12 +149,16 @@ public class AccountLogin extends AppCompatActivity {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                ResponseBody responseBody = response.body();
+                String json = null;
+                if (responseBody != null) {
+                    json = responseBody.string();
+                }
 
                 Log.d(TAG, json);
 
-                JSONObject data = null;
+                JSONObject data;
                 try {
                     data = new JSONObject(json);
                     String accessToken = data.optString("access_token");
@@ -160,7 +168,7 @@ public class AccountLogin extends AppCompatActivity {
                     Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
 
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
-                    sharedPreferences.edit().putBoolean("logged_in", true).putString("access_token", accessToken).putString("refresh_token", refreshToken).commit();
+                    sharedPreferences.edit().putBoolean("logged_in", true).putString("access_token", accessToken).putString("refresh_token", refreshToken).apply();
                     finish();
                 } catch (JSONException e) {
                     Log.e(TAG, "JSONException attempting to retrieve user access token");
@@ -170,7 +178,7 @@ public class AccountLogin extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(TAG, "IOException attempting to retrieve application-only access token");
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();

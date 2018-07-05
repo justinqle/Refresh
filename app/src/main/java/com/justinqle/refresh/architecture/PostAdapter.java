@@ -3,6 +3,7 @@ package com.justinqle.refresh.architecture;
 import android.arch.paging.PagedListAdapter;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +26,6 @@ import java.math.BigDecimal;
 
 public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> {
 
-    private static final String TAG = "PostAdapter";
-
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Post>() {
                 @Override
@@ -40,7 +39,99 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
                 }
             };
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public PostAdapter() {
+        super(DIFF_CALLBACK);
+    }
+
+    @Override
+    @NonNull
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.news_row_card, parent, false);
+        ViewHolder vh = new ViewHolder(view);
+        // OnClickListeners
+        vh.upvote.setOnClickListener(v -> {
+            if (PreferenceManager.getDefaultSharedPreferences(vh.upvote.getContext()).getBoolean("logged_in", false)) {
+                if (vh.downvote.isActivated()) {
+                    vh.downvote.setActivated(false);
+                    // Resets color of upvote button
+                    vh.downvote.clearColorFilter();
+                }
+                if (!vh.upvote.isActivated()) {
+                    vh.upvote.setActivated(true);
+                    int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
+                    // Sets color of upvote button
+                    vh.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+                    // Sets color of points
+                    vh.points.setTextColor(highlight);
+                    // Animate points
+                    Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
+                    vh.points.startAnimation(expand);
+                } else {
+                    vh.upvote.setActivated(false);
+                    // Resets color of upvote button
+                    vh.upvote.clearColorFilter();
+                    // Resets color of points
+                    vh.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+                }
+            } else {
+                Toast.makeText(vh.upvote.getContext(), R.string.logged_out, Toast.LENGTH_LONG).show();
+            }
+        });
+        vh.downvote.setOnClickListener(v -> {
+            if (PreferenceManager.getDefaultSharedPreferences(vh.downvote.getContext()).getBoolean("logged_in", false)) {
+                if (vh.upvote.isActivated()) {
+                    vh.upvote.setActivated(false);
+                    // Resets color of upvote button
+                    vh.upvote.clearColorFilter();
+                }
+                if (!vh.downvote.isActivated()) {
+                    vh.downvote.setActivated(true);
+                    int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
+                    // Sets color of upvote button
+                    vh.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
+                    // Sets color of points
+                    vh.points.setTextColor(highlight);
+                    // Animate points
+                    Animation conract = AnimationUtils.loadAnimation(v.getContext(), R.anim.contract);
+                    vh.points.startAnimation(conract);
+                } else {
+                    vh.downvote.setActivated(false);
+                    // Resets color of upvote button
+                    vh.downvote.clearColorFilter();
+                    // Resets color of points
+                    vh.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
+                }
+            } else {
+                Toast.makeText(vh.downvote.getContext(), R.string.logged_out, Toast.LENGTH_LONG).show();
+            }
+        });
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Post post = getItem(position);
+
+        if (post != null) {
+            holder.title.setText(post.getTitle());
+            holder.subreddit.setText(post.getSubreddit());
+            holder.user.setText(post.getAuthor());
+            holder.created_utc.setText(unixTimeToElapsed(post.getCreatedUtc()));
+            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, post.getNumComments()));
+            holder.points.setText(toConciseThousands(post.getUps()));
+            // TODO: Show thumbnail for gifs and videos(?)
+            Preview preview = post.getPreview();
+            if (preview == null) {
+                holder.thumbnail.setVisibility(View.GONE);
+            } else {
+                String url = preview.getImages().get(0).getSource().getUrl();
+                Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
+            }
+        }
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title;
         private TextView subreddit;
@@ -52,110 +143,18 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         private ImageButton upvote;
         private ImageButton downvote;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.title);
-            subreddit = (TextView) v.findViewById(R.id.subreddit);
-            user = (TextView) v.findViewById(R.id.user);
-            created_utc = (TextView) v.findViewById(R.id.created_utc);
-            num_comments = (TextView) v.findViewById(R.id.num_comments);
-            points = (TextView) v.findViewById(R.id.points);
-            thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
+            title = v.findViewById(R.id.title);
+            subreddit = v.findViewById(R.id.subreddit);
+            user = v.findViewById(R.id.user);
+            created_utc = v.findViewById(R.id.created_utc);
+            num_comments = v.findViewById(R.id.num_comments);
+            points = v.findViewById(R.id.points);
+            thumbnail = v.findViewById(R.id.thumbnail);
             upvote = v.findViewById(R.id.upvote);
             downvote = v.findViewById(R.id.downvote);
         }
-    }
-
-    public PostAdapter() {
-        super(DIFF_CALLBACK);
-    }
-
-    @Override
-    public PostAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.news_row_card, parent, false);
-
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Post post = getItem(position);
-
-        holder.title.setText(post.getTitle());
-        holder.subreddit.setText(post.getSubreddit());
-        holder.user.setText(post.getAuthor());
-        holder.created_utc.setText(unixTimeToElapsed(post.getCreatedUtc()));
-        holder.num_comments.setText(post.getNumComments() + " comments");
-        holder.points.setText(toConciseThousands(post.getUps()));
-        // TODO: Show thumbnail for gifs and videos(?)
-        Preview preview = post.getPreview();
-        if (preview == null) {
-            holder.thumbnail.setVisibility(View.GONE);
-        } else {
-            String url = preview.getImages().get(0).getSource().getUrl();
-            Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
-        }
-
-        // OnClickListeners
-        holder.upvote.setOnClickListener(v -> {
-            if (PreferenceManager.getDefaultSharedPreferences(holder.upvote.getContext()).getBoolean("logged_in", false)) {
-                if (holder.downvote.isActivated()) {
-                    holder.downvote.setActivated(false);
-                    // Resets color of upvote button
-                    holder.downvote.clearColorFilter();
-                }
-                if (!holder.upvote.isActivated()) {
-                    holder.upvote.setActivated(true);
-                    int highlight = ContextCompat.getColor(v.getContext(), R.color.upvote);
-                    // Sets color of upvote button
-                    holder.upvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
-                    // Sets color of points
-                    holder.points.setTextColor(highlight);
-                    // Animate points
-                    Animation expand = AnimationUtils.loadAnimation(v.getContext(), R.anim.expand);
-                    holder.points.startAnimation(expand);
-                } else {
-                    holder.upvote.setActivated(false);
-                    // Resets color of upvote button
-                    holder.upvote.clearColorFilter();
-                    // Resets color of points
-                    holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
-                }
-            } else {
-                Toast.makeText(holder.upvote.getContext(), R.string.logged_out, Toast.LENGTH_LONG).show();
-            }
-        });
-        holder.downvote.setOnClickListener(v -> {
-            if (PreferenceManager.getDefaultSharedPreferences(holder.downvote.getContext()).getBoolean("logged_in", false)) {
-                if (holder.upvote.isActivated()) {
-                    holder.upvote.setActivated(false);
-                    // Resets color of upvote button
-                    holder.upvote.clearColorFilter();
-                }
-                if (!holder.downvote.isActivated()) {
-                    holder.downvote.setActivated(true);
-                    int highlight = ContextCompat.getColor(v.getContext(), R.color.downvote);
-                    // Sets color of upvote button
-                    holder.downvote.setColorFilter(highlight, PorterDuff.Mode.SRC_ATOP);
-                    // Sets color of points
-                    holder.points.setTextColor(highlight);
-                    // Animate points
-                    Animation conract = AnimationUtils.loadAnimation(v.getContext(), R.anim.contract);
-                    holder.points.startAnimation(conract);
-                } else {
-                    holder.downvote.setActivated(false);
-                    // Resets color of upvote button
-                    holder.downvote.clearColorFilter();
-                    // Resets color of points
-                    holder.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
-                }
-            } else {
-                Toast.makeText(holder.downvote.getContext(), R.string.logged_out, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     // TODO Could modfiy a bit for numbers >= 100,0000
