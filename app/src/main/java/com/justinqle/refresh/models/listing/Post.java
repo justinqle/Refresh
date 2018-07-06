@@ -112,7 +112,7 @@ public class Post {
     private boolean canModPost;
 
     @SerializedName("score")
-    private int score;
+    private long score;
 
     @SerializedName("approved_by")
     private Object approvedBy;
@@ -562,11 +562,11 @@ public class Post {
         this.canModPost = canModPost;
     }
 
-    public int getScore() {
+    public long getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(long score) {
         this.score = score;
     }
 

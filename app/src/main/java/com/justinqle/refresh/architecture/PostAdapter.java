@@ -31,9 +31,9 @@ import com.justinqle.refresh.activities.AccountLogin;
 import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.models.listing.Preview;
 
-import java.math.BigDecimal;
-
 public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> {
+
+    private static final char[] SUFFIXES = {'k', 'm', 'g', 't', 'p', 'e'};
 
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Post>() {
@@ -122,31 +122,31 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         return vh;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Post post = getItem(position);
-        if (post != null) {
-            holder.title.setText(post.getTitle());
-
-            // Adding various description text info
-            String description = post.getSubreddit() + "  " +
-                    post.getAuthor() + "  " +
-                    getAbbreviatedTimeSpan(post.getCreatedUtc() * 1000L);
-            Spannable spannable = new SpannableString(description);
-            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(holder.description.getContext(), R.color.primary_dark)), 0, post.getSubreddit().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.description.setText(spannable, TextView.BufferType.SPANNABLE);
-
-            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, post.getNumComments()));
-            holder.points.setText(toConciseThousands(post.getUps()));
-            // TODO: Show thumbnail for gifs and videos(?)
-            Preview preview = post.getPreview();
-            if (preview == null) {
-                holder.thumbnail.setVisibility(View.GONE);
-            } else {
-                String url = preview.getImages().get(0).getSource().getUrl();
-                GlideApp.with(holder.thumbnail.getContext()).load(url).centerCrop().transition(DrawableTransitionOptions.withCrossFade()).into(holder.thumbnail);
-            }
+    private static String format(long number) {
+        if (number < 1000) {
+            // No need to format this
+            return String.valueOf(number);
         }
+        // Convert to a string
+        final String string = String.valueOf(number);
+        // The suffix we're using, 1-based
+        final int magnitude = (string.length() - 1) / 3;
+        // The number of digits we must show before the prefix
+        final int digits = (string.length() - 1) % 3 + 1;
+
+        // Build the string
+        char[] value = new char[4];
+        for (int i = 0; i < digits; i++) {
+            value[i] = string.charAt(i);
+        }
+        int valueLength = digits;
+        // Can and should we add a decimal point and an additional number?
+        if (digits == 1 && string.charAt(1) != '0') {
+            value[valueLength++] = '.';
+            value[valueLength++] = string.charAt(1);
+        }
+        value[valueLength++] = SUFFIXES[magnitude - 1];
+        return new String(value, 0, valueLength);
     }
 
     private static String getAbbreviatedTimeSpan(long timeMillis) {
@@ -168,14 +168,30 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         }
     }
 
-    // TODO Could modfiy a bit for numbers >= 100,0000
-    private static String toConciseThousands(int number) {
-        if (number >= 10000) {
-            number /= 100;
-            BigDecimal bigDecimal = new BigDecimal(number);
-            return bigDecimal.movePointLeft(1).toString() + "k";
-        } else {
-            return String.valueOf(number);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Post post = getItem(position);
+        if (post != null) {
+            holder.title.setText(post.getTitle());
+
+            // Adding various description text info
+            String description = post.getSubreddit() + "  " +
+                    post.getAuthor() + "  " +
+                    getAbbreviatedTimeSpan(post.getCreatedUtc() * 1000L);
+            Spannable spannable = new SpannableString(description);
+            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(holder.description.getContext(), R.color.primary_dark)), 0, post.getSubreddit().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.description.setText(spannable, TextView.BufferType.SPANNABLE);
+
+            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, post.getNumComments()));
+            holder.points.setText(format(post.getScore()));
+            // TODO: Show thumbnail for gifs and videos(?)
+            Preview preview = post.getPreview();
+            if (preview == null) {
+                holder.thumbnail.setVisibility(View.GONE);
+            } else {
+                String url = preview.getImages().get(0).getSource().getUrl();
+                GlideApp.with(holder.thumbnail.getContext()).load(url).centerCrop().transition(DrawableTransitionOptions.withCrossFade()).into(holder.thumbnail);
+            }
         }
     }
 
