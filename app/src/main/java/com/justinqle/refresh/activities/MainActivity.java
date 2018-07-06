@@ -37,6 +37,7 @@ import com.justinqle.refresh.architecture.PostAdapter;
 import com.justinqle.refresh.architecture.PostViewModel;
 import com.justinqle.refresh.models.listing.Child;
 import com.justinqle.refresh.models.listing.Listing;
+import com.justinqle.refresh.models.listing.Subreddit;
 import com.justinqle.refresh.models.user.User;
 import com.justinqle.refresh.retrofit.NetworkService;
 
@@ -164,8 +165,7 @@ public class MainActivity extends AppCompatActivity
                     if (listing != null) {
                         List<Child> children = listing.getData().getChildren();
                         for (Child child : children) {
-                            //subMenu.add(child.getSubreddit().getDisplayName()).setCheckable(true);
-                            subMenu.add("Android").setCheckable(true);
+                            subMenu.add(((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
                         }
                     }
                 }

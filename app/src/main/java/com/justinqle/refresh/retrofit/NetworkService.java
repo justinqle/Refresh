@@ -3,7 +3,16 @@ package com.justinqle.refresh.retrofit;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.justinqle.refresh.MyApplication;
+import com.justinqle.refresh.models.listing.Post;
+import com.justinqle.refresh.models.listing.Subreddit;
+import com.justinqle.refresh.models.listing.Type;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,7 +47,7 @@ public class NetworkService {
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().registerTypeAdapter(Type.class, new TypeDeserializer()).create()))
                 .client(okHttpClient)
                 .build();
     }
@@ -52,6 +61,28 @@ public class NetworkService {
 
     public RedditApi getJSONApi() {
         return mRetrofit.create(RedditApi.class);
+    }
+
+    private static class TypeDeserializer implements JsonDeserializer<Type> {
+
+        @Override
+        public Type deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject jsonObject = json.getAsJsonObject();
+            String name = jsonObject.get("name").getAsString();
+            // Link
+            if (name.startsWith("t3")) {
+                return context.deserialize(json, Post.class);
+            }
+            // Subreddit
+            else if (name.startsWith("t5")) {
+                return context.deserialize(json, Subreddit.class);
+            }
+            // None of the above
+            else {
+                return null;
+            }
+        }
+
     }
 
 }

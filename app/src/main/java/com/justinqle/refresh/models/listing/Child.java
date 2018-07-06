@@ -8,7 +8,7 @@ public class Child {
     private String kind;
 
     @SerializedName("data")
-    private Post post;
+    private Type data;
 
     public String getKind() {
         return kind;
@@ -18,12 +18,12 @@ public class Child {
         this.kind = kind;
     }
 
-    public Post getData() {
-        return post;
+    public Type getData() {
+        return data;
     }
 
-    public void setData(Post post) {
-        this.post = post;
+    public void setData(Type data) {
+        this.data = data;
     }
 
 }

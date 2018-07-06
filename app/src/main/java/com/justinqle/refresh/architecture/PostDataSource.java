@@ -54,7 +54,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                         List<Child> children = data.getChildren();
                         List<Post> posts = new ArrayList<>();
                         for (Child child : children) {
-                            posts.add(child.getData());
+                            posts.add((Post) child.getData());
                         }
                         callback.onResult(posts, data.getBefore(), data.getAfter());
                     }
@@ -92,7 +92,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                         List<Child> children = data.getChildren();
                         List<Post> posts = new ArrayList<>();
                         for (Child child : children) {
-                            posts.add(child.getData());
+                            posts.add((Post) child.getData());
                         }
                         callback.onResult(posts, data.getAfter());
                     }

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("com.robohorse.robopojogenerator")
-public class Subreddit {
+public class Subreddit implements Type {
 
     @SerializedName("user_flair_position")
     private String userFlairPosition;

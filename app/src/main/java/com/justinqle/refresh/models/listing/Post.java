@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Post {
+public class Post implements Type {
 
     @SerializedName("approved_at_utc")
     private Object approvedAtUtc;
