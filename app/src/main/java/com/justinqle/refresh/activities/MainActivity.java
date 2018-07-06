@@ -42,7 +42,7 @@ import com.justinqle.refresh.retrofit.NetworkService;
 
 import java.util.List;
 
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -186,11 +186,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Initial animation / refresh
-        SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
-        slideInUpAnimator.setRemoveDuration(200);
-        slideInUpAnimator.setAddDuration(200);
-        slideInUpAnimator.setInterpolator(null);
-        mRecyclerView.setItemAnimator(slideInUpAnimator);
+        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
 
         // Hide FAB on scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
