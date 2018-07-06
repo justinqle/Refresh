@@ -10,6 +10,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.format.DateUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,9 +127,14 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         Post post = getItem(position);
         if (post != null) {
             holder.title.setText(post.getTitle());
-            holder.subreddit.setText(post.getSubreddit());
-            holder.user.setText(post.getAuthor());
-            holder.created_utc.setText(unixTimeToElapsed(post.getCreatedUtc()));
+
+            String description = post.getSubreddit() + "  " +
+                    post.getAuthor() + "  " +
+                    getAbbreviatedTimeSpan(post.getCreatedUtc() * 1000L);
+            Spannable spannable = new SpannableString(description);
+            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(holder.description.getContext(), R.color.primary_dark)), 0, post.getSubreddit().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.description.setText(spannable, TextView.BufferType.SPANNABLE);
+
             holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, post.getNumComments()));
             holder.points.setText(toConciseThousands(post.getUps()));
             // TODO: Show thumbnail for gifs and videos(?)
@@ -138,29 +148,22 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView title;
-        private TextView subreddit;
-        private TextView user;
-        private TextView created_utc;
-        private TextView num_comments;
-        private TextView points;
-        private ImageView thumbnail;
-        private ImageButton upvote;
-        private ImageButton downvote;
-
-        ViewHolder(View v) {
-            super(v);
-            title = v.findViewById(R.id.title);
-            subreddit = v.findViewById(R.id.subreddit);
-            user = v.findViewById(R.id.user);
-            created_utc = v.findViewById(R.id.created_utc);
-            num_comments = v.findViewById(R.id.num_comments);
-            points = v.findViewById(R.id.points);
-            thumbnail = v.findViewById(R.id.thumbnail);
-            upvote = v.findViewById(R.id.upvote);
-            downvote = v.findViewById(R.id.downvote);
+    private String getAbbreviatedTimeSpan(long timeMillis) {
+        long span = System.currentTimeMillis() - timeMillis;
+        if (span < DateUtils.MINUTE_IN_MILLIS) {
+            return "Just Now";
+        } else if (span < DateUtils.HOUR_IN_MILLIS) {
+            return (span / DateUtils.MINUTE_IN_MILLIS) + "m";
+        } else if (span < DateUtils.DAY_IN_MILLIS) {
+            return (span / DateUtils.HOUR_IN_MILLIS) + "h";
+        } else if (span < DateUtils.WEEK_IN_MILLIS) {
+            return (span / DateUtils.DAY_IN_MILLIS) + "d";
+        } else if (span < (DateUtils.YEAR_IN_MILLIS / 12)) {
+            return (span / DateUtils.WEEK_IN_MILLIS) + "w";
+        } else if (span < DateUtils.YEAR_IN_MILLIS) {
+            return (span / DateUtils.MINUTE_IN_MILLIS) + "mo";
+        } else {
+            return (span / DateUtils.YEAR_IN_MILLIS) + "y";
         }
     }
 
@@ -175,24 +178,26 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         }
     }
 
-    // TODO Could use some optimization
-    private String unixTimeToElapsed(long unixTime) {
-        long currentUnixTime = System.currentTimeMillis() / 1000;
-        long elapsedTime = currentUnixTime - unixTime;
-        if (elapsedTime < 60) {
-            return elapsedTime + "s";
-        } else if (elapsedTime < 3600) {
-            return (elapsedTime / 60) + "m";
-        } else if (elapsedTime < 86400) {
-            return (elapsedTime / 3600) + "h";
-        } else if (elapsedTime < 604800) {
-            return (elapsedTime / 86400) + "d";
-        } else if (elapsedTime < 2628000) {
-            return (elapsedTime / 604800) + "w";
-        } else if (elapsedTime < 31540000) {
-            return (elapsedTime / 2628000) + "m";
-        } else {
-            return (elapsedTime / 31540000) + "y";
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView title;
+        private TextView description;
+        private TextView num_comments;
+        private TextView points;
+        private ImageView thumbnail;
+        private ImageButton upvote;
+        private ImageButton downvote;
+
+        ViewHolder(View v) {
+            super(v);
+            title = v.findViewById(R.id.title);
+            description = v.findViewById(R.id.description);
+            num_comments = v.findViewById(R.id.num_comments);
+            points = v.findViewById(R.id.points);
+            thumbnail = v.findViewById(R.id.thumbnail);
+            upvote = v.findViewById(R.id.upvote);
+            downvote = v.findViewById(R.id.downvote);
         }
     }
+
 }

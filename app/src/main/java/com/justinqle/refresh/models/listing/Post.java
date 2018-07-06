@@ -1,8 +1,8 @@
 package com.justinqle.refresh.models.listing;
 
-import java.util.List;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Post {
 
@@ -274,7 +274,7 @@ public class Post {
     private int subredditSubscribers;
 
     @SerializedName("created_utc")
-    private int createdUtc;
+    private long createdUtc;
 
     @SerializedName("media")
     private Object media;
@@ -994,11 +994,11 @@ public class Post {
         this.subredditSubscribers = subredditSubscribers;
     }
 
-    public int getCreatedUtc() {
+    public long getCreatedUtc() {
         return createdUtc;
     }
 
-    public void setCreatedUtc(int createdUtc) {
+    public void setCreatedUtc(long createdUtc) {
         this.createdUtc = createdUtc;
     }
 

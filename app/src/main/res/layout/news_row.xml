@@ -65,7 +65,7 @@
         android:textAppearance="@android:style/TextAppearance.Material"
         android:textColor="@color/primary_text"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/subreddit"
+        app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintEnd_toStartOf="@+id/thumbnail"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/left"
@@ -73,40 +73,18 @@
         tools:text="Title" />
 
     <TextView
-        android:id="@+id/subreddit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/primary_dark"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/num_comments"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="Subreddit" />
-
-    <TextView
-        android:id="@+id/user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/secondary_text"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/subreddit"
-        app:layout_constraintStart_toEndOf="@+id/subreddit"
-        tools:text="User" />
-
-    <TextView
-        android:id="@+id/created_utc"
+        android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:textColor="@color/secondary_text"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/subreddit"
+        app:layout_constraintBottom_toTopOf="@+id/num_comments"
         app:layout_constraintEnd_toStartOf="@+id/thumbnail"
-        app:layout_constraintStart_toEndOf="@+id/user"
-        tools:text="Time" />
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="Description" />
 
     <TextView
         android:id="@+id/num_comments"
@@ -121,7 +99,7 @@
         app:layout_constraintEnd_toStartOf="@+id/thumbnail"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/subreddit"
+        app:layout_constraintTop_toBottomOf="@+id/description"
         app:layout_constraintVertical_bias="0.0"
         tools:text="#### comments" />
 
