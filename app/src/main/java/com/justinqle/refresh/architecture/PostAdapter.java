@@ -17,10 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.justinqle.refresh.GlideApp;
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.models.listing.Preview;
-import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 
@@ -112,7 +113,6 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Post post = getItem(position);
-
         if (post != null) {
             holder.title.setText(post.getTitle());
             holder.subreddit.setText(post.getSubreddit());
@@ -126,7 +126,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
                 holder.thumbnail.setVisibility(View.GONE);
             } else {
                 String url = preview.getImages().get(0).getSource().getUrl();
-                Picasso.get().load(url).fit().centerCrop().into(holder.thumbnail);
+                GlideApp.with(holder.thumbnail.getContext()).load(url).centerCrop().transition(DrawableTransitionOptions.withCrossFade()).into(holder.thumbnail);
             }
         }
     }

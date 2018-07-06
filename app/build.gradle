@@ -37,9 +37,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
-    // Picasso (for Images)
-    implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.support:exifinterface:27.1.1'
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     // Paging
     implementation 'android.arch.paging:runtime:1.0.1'
     // Lifecycle, including LiveData and ViewModel
