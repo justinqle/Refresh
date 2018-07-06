@@ -128,6 +128,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         if (post != null) {
             holder.title.setText(post.getTitle());
 
+            // Adding various description text info
             String description = post.getSubreddit() + "  " +
                     post.getAuthor() + "  " +
                     getAbbreviatedTimeSpan(post.getCreatedUtc() * 1000L);
@@ -158,7 +159,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
             return (span / DateUtils.HOUR_IN_MILLIS) + "h";
         } else if (span < DateUtils.WEEK_IN_MILLIS) {
             return (span / DateUtils.DAY_IN_MILLIS) + "d";
-        } else if (span < (DateUtils.YEAR_IN_MILLIS / 12)) {
+        } else if (span < (DateUtils.YEAR_IN_MILLIS / 12L)) {
             return (span / DateUtils.WEEK_IN_MILLIS) + "w";
         } else if (span < DateUtils.YEAR_IN_MILLIS) {
             return (span / DateUtils.MINUTE_IN_MILLIS) + "mo";
