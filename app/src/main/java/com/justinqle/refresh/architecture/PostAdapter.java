@@ -123,7 +123,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
     }
 
     private static String format(long number) {
-        if (number < 1000) {
+        if (number < 10000) {
             // No need to format this
             return String.valueOf(number);
         }

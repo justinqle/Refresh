@@ -7,11 +7,11 @@
 
     <ImageButton
         android:id="@+id/upvote"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:adjustViewBounds="false"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/upvote"
         app:layout_constraintBottom_toTopOf="@+id/points"
@@ -37,10 +37,11 @@
 
     <ImageButton
         android:id="@+id/downvote"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/downvote"
         app:layout_constraintEnd_toStartOf="@+id/left"
@@ -61,7 +62,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-light"
         android:textAppearance="@android:style/TextAppearance.Material"
         android:textColor="@color/primary_text"
         android:textSize="16sp"
