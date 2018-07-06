@@ -149,7 +149,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         }
     }
 
-    private String getAbbreviatedTimeSpan(long timeMillis) {
+    private static String getAbbreviatedTimeSpan(long timeMillis) {
         long span = System.currentTimeMillis() - timeMillis;
         if (span < DateUtils.MINUTE_IN_MILLIS) {
             return "Just Now";
@@ -169,7 +169,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
     }
 
     // TODO Could modfiy a bit for numbers >= 100,0000
-    private String toConciseThousands(int number) {
+    private static String toConciseThousands(int number) {
         if (number >= 10000) {
             number /= 100;
             BigDecimal bigDecimal = new BigDecimal(number);
