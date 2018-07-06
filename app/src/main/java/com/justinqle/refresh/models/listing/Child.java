@@ -1,6 +1,5 @@
 package com.justinqle.refresh.models.listing;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Child {
