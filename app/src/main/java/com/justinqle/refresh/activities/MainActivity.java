@@ -41,6 +41,7 @@ import com.justinqle.refresh.models.listing.Subreddit;
 import com.justinqle.refresh.models.user.User;
 import com.justinqle.refresh.retrofit.NetworkService;
 
+import java.util.Collections;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -164,7 +165,10 @@ public class MainActivity extends AppCompatActivity
                     Listing listing = response.body();
                     if (listing != null) {
                         List<Child> children = listing.getData().getChildren();
+                        // TODO Could improve GSON deserialization structure to prevent incessant casting and utilize a more logical compareTo method within the class itself
+                        Collections.sort(children, (o1, o2) -> ((Subreddit) o1.getData()).getDisplayName().compareToIgnoreCase(((Subreddit) o2.getData()).getDisplayName()));
                         for (Child child : children) {
+                            Log.d(TAG, ((Subreddit) child.getData()).getDisplayName());
                             subMenu.add(((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
                         }
                     }
