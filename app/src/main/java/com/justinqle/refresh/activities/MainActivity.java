@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-
+                    t.printStackTrace();
                 }
             });
         }
