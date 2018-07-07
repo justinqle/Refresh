@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.justinqle.refresh.R;
-import com.justinqle.refresh.animations.ExpandCollapseAnimations;
+import com.justinqle.refresh.animations.ExpandCollapse;
 import com.justinqle.refresh.architecture.PostAdapter;
 import com.justinqle.refresh.architecture.PostViewModel;
 import com.justinqle.refresh.models.listing.Child;
@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity
         ImageView expandArrow = header.findViewById(R.id.header_icon);
         header.setOnClickListener((view) -> {
             if (dropdown.getVisibility() == View.GONE) {
-                ExpandCollapseAnimations.expand(dropdown);
+                ExpandCollapse.expand(dropdown);
                 expandArrow.animate().rotation(180).setDuration(200).start();
             } else {
-                ExpandCollapseAnimations.collapse(dropdown);
+                ExpandCollapse.collapse(dropdown);
                 expandArrow.animate().rotation(0).setDuration(200).start();
             }
         });
