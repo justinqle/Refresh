@@ -59,7 +59,7 @@ public class TokenAuthenticator implements Authenticator {
      * @param loggedIn If the user is not logged in, retrieve an application-only access token. If they are logged in, retrieve a new user access token using the refresh token stored.
      * @return new access token
      */
-    private String getAccessToken(boolean loggedIn) {
+    private static String getAccessToken(boolean loggedIn) {
         OkHttpClient client = new OkHttpClient();
 
         final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
