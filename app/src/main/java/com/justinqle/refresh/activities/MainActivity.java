@@ -39,7 +39,7 @@ import com.justinqle.refresh.models.listing.Child;
 import com.justinqle.refresh.models.listing.Listing;
 import com.justinqle.refresh.models.listing.Subreddit;
 import com.justinqle.refresh.models.user.User;
-import com.justinqle.refresh.retrofit.NetworkService;
+import com.justinqle.refresh.networking.NetworkService;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.justinqle.refresh.retrofit;
+package com.justinqle.refresh.networking;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

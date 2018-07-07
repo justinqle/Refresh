@@ -1,4 +1,4 @@
-package com.justinqle.refresh.retrofit;
+package com.justinqle.refresh.networking;
 
 import com.justinqle.refresh.models.listing.Listing;
 import com.justinqle.refresh.models.user.User;

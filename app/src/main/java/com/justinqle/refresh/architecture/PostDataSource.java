@@ -12,7 +12,7 @@ import com.justinqle.refresh.models.listing.Child;
 import com.justinqle.refresh.models.listing.Data;
 import com.justinqle.refresh.models.listing.Listing;
 import com.justinqle.refresh.models.listing.Post;
-import com.justinqle.refresh.retrofit.RedditApi;
+import com.justinqle.refresh.networking.RedditApi;
 
 import java.util.ArrayList;
 import java.util.List;
