@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Collections.sort(subredditMenuItems, (o1, o2) -> ((Subreddit) o1.getData()).getDisplayName().compareToIgnoreCase(((Subreddit) o2.getData()).getDisplayName()));
         for (Child child : subredditMenuItems) {
             Log.d(TAG, ((Subreddit) child.getData()).getDisplayName());
+            // TODO User can interact with UI and see that menu items haven't been added quite yet
             subMenu.add(((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
         }
     }
