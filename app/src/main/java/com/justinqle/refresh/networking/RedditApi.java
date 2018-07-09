@@ -5,6 +5,7 @@ import com.justinqle.refresh.models.user.User;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RedditApi {
@@ -23,8 +24,10 @@ public interface RedditApi {
     @GET("/api/v1/me")
     Call<User> getUser();
 
-    @GET("/subreddits/default")
-    Call<Listing> getDefaultSubreddits(
-            @Query("limit") int limit
+    @GET("/subreddits/{type}")
+    Call<Listing> getSubreddits(
+            @Path("type") String type,
+            @Query("limit") int limit,
+            @Query("after") String nextKey
     );
 }

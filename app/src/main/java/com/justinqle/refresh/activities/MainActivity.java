@@ -42,6 +42,7 @@ import com.justinqle.refresh.models.user.User;
 import com.justinqle.refresh.networking.NetworkService;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private PostViewModel postViewModel;
     private SwipeRefreshLayout swipeContainer;
     private LinearLayout dropdown;
+    private SubMenu subMenu;
+    private List<Child> subredditMenuItems = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,29 +160,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Add Subreddits to NavigationView submenu (default for logged out, user-specific for logged in)
         Menu menu = navigationView.getMenu();
         MenuItem menuItem = menu.getItem(menu.size() - 1);
-        SubMenu subMenu = menuItem.getSubMenu();
-        if (!loggedIn) {
-            NetworkService.getInstance().getJSONApi().getDefaultSubreddits(100).enqueue(new Callback<Listing>() {
-                @Override
-                public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
-                    Listing listing = response.body();
-                    if (listing != null) {
-                        List<Child> children = listing.getData().getChildren();
-                        // TODO Could improve GSON deserialization structure to prevent incessant casting and utilize a more logical compareTo method within the class itself
-                        Collections.sort(children, (o1, o2) -> ((Subreddit) o1.getData()).getDisplayName().compareToIgnoreCase(((Subreddit) o2.getData()).getDisplayName()));
-                        for (Child child : children) {
-                            Log.d(TAG, ((Subreddit) child.getData()).getDisplayName());
-                            subMenu.add(((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
-                        }
+        subMenu = menuItem.getSubMenu();
+        String subredditsType = loggedIn ? "mine/subscriber" : "default";
+        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 25, null).enqueue(new Callback<Listing>() {
+            @Override
+            public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
+                Listing listing = response.body();
+                if (listing != null) {
+                    List<Child> children = listing.getData().getChildren();
+                    subredditMenuItems.addAll(children);
+                    // More items? Page using key
+                    if (listing.getData().getAfter() != null) {
+                        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 25, listing.getData().getAfter()).enqueue(this);
+                    } else {
+                        addSubredditMenuItemsCallback();
                     }
                 }
+            }
 
-                @Override
-                public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-        }
+            @Override
+            public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
+                t.printStackTrace();
+            }
+        });
 
         // RecyclerView
         RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);
@@ -227,6 +230,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             swipeContainer.setRefreshing(false);
             mAdapter.submitList(posts);
         });
+    }
+
+    private void addSubredditMenuItemsCallback() {
+        // TODO Could improve GSON deserialization structure to prevent incessant casting and utilize a more logical compareTo method within the class itself
+        Collections.sort(subredditMenuItems, (o1, o2) -> ((Subreddit) o1.getData()).getDisplayName().compareToIgnoreCase(((Subreddit) o2.getData()).getDisplayName()));
+        for (Child child : subredditMenuItems) {
+            Log.d(TAG, ((Subreddit) child.getData()).getDisplayName());
+            subMenu.add(((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
+        }
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {
