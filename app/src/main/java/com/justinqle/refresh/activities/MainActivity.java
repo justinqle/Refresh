@@ -49,31 +49,30 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
 
-    private PostAdapter mAdapter;
+    private static final int ADD_ACCOUNT_REQUEST = 1;
 
+    private PostAdapter mAdapter;
     private PostViewModel postViewModel;
     private SwipeRefreshLayout swipeContainer;
-
     private LinearLayout dropdown;
-
-    private static final int ADD_ACCOUNT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Shared Preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // TODO Different access tokens are retrieved twice on Authentication, due to data race between thread retrieving posts and thread retrieving subreddit items for nav menu
         Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
         Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
         Log.d(TAG, "Logged In: " + sharedPreferences.getBoolean("logged_in", false));
 
+        // Swipe Container
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setRefreshing(true);
 
@@ -111,6 +110,7 @@ public class MainActivity extends AppCompatActivity
                 expandArrow.animate().rotation(0).setDuration(200).start();
             }
         });
+
         // TODO: Multi-account functionality
         // Set title of header and add header submenu items based on logged in/out status and different account options
         boolean loggedIn = sharedPreferences.getBoolean("logged_in", false);

@@ -25,8 +25,9 @@ Singleton
  */
 public class NetworkService {
 
-    private static NetworkService mInstance;
     private static final String BASE_URL = "https://oauth.reddit.com";
+
+    private static NetworkService mInstance;
     private static Retrofit mRetrofit;
 
     private NetworkService() {

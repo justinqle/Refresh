@@ -20,7 +20,8 @@ public class PostDataSourceFactory extends PostDataSource.Factory<String, Post> 
         return postDataSource;
     }
 
-    public PostDataSource getPostDataSource() {
-        return postDataSource;
+    public void invalidate() {
+        postDataSource.invalidate();
     }
+
 }

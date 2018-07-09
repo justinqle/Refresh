@@ -71,6 +71,62 @@ public class AccountLogin extends AppCompatActivity {
         webView.loadUrl(String.format(AUTH_URL, CLIENT_ID, RESPONSE_TYPE, STATE, REDIRECT_URI, DURATION, SCOPE));
     }
 
+    private void getUserAccessToken(String code) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        String authString = CLIENT_ID + ":";
+        String encodedAuthString = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
+
+        Request request = new Request.Builder()
+                .addHeader("User-Agent", "android:com.justinqle.refresh:v1.0.0 (by /u/doctor_re)")
+                .addHeader("Authorization", "Basic " + encodedAuthString)
+                .url(ACCESS_TOKEN_URL)
+                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),
+                        "grant_type=authorization_code&code=" + code +
+                                "&redirect_uri=" + REDIRECT_URI))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                ResponseBody responseBody = response.body();
+                String json = null;
+                if (responseBody != null) {
+                    json = responseBody.string();
+                }
+
+                Log.d(TAG, json);
+
+                JSONObject data;
+                try {
+                    data = new JSONObject(json);
+                    String accessToken = data.optString("access_token");
+                    String refreshToken = data.optString("refresh_token");
+
+                    Log.d(TAG, "(Account Login) Access Token retrieved = " + accessToken);
+                    Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
+
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AccountLogin.this);
+                    sharedPreferences.edit().putBoolean("logged_in", true).putString("access_token", accessToken).putString("refresh_token", refreshToken).apply();
+                    setResult(RESULT_OK);
+                    finish();
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSONException attempting to retrieve user access token");
+                    e.printStackTrace();
+                    Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "IOException attempting to retrieve user access token");
+                e.printStackTrace();
+                Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private class LoginWebViewClient extends WebViewClient {
 
         @SuppressWarnings("deprecation")
@@ -104,13 +160,14 @@ public class AccountLogin extends AppCompatActivity {
                 Log.e(TAG, "A login error has occurred : " + error);
                 switch (error) {
                     case "access_denied":
-                        Toast.makeText(getApplicationContext(), "Cannot login without user approval", Toast.LENGTH_LONG).show();
+                        // TODO Denying access doesn't close activity
+                        Toast.makeText(AccountLogin.this, "Cannot login without user approval", Toast.LENGTH_LONG).show();
                     case "unsupported_response_type":
-                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
                     case "invalid_scope":
-                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
                     case "invalid_request":
-                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
                     default:
                         break;
                 }
@@ -120,70 +177,13 @@ public class AccountLogin extends AppCompatActivity {
                     Log.i(TAG, "STATE matches one in initial authorization request");
                     String code = uri.getQueryParameter("code");
                     getUserAccessToken(code);
-                    setResult(RESULT_OK);
                 } else {
                     Log.e(TAG, "STATE does not match one in initial authorization request");
-                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
                 }
             }
             return true;
         }
-    }
-
-    private void getUserAccessToken(String code) {
-
-        OkHttpClient client = new OkHttpClient();
-
-        String authString = CLIENT_ID + ":";
-        String encodedAuthString = Base64.encodeToString(authString.getBytes(),
-                Base64.NO_WRAP);
-
-        Request request = new Request.Builder()
-                .addHeader("User-Agent", "android:com.justinqle.refresh:v1.0.0 (by /u/doctor_re)")
-                .addHeader("Authorization", "Basic " + encodedAuthString)
-                .url(ACCESS_TOKEN_URL)
-                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),
-                        "grant_type=authorization_code&code=" + code +
-                                "&redirect_uri=" + REDIRECT_URI))
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                ResponseBody responseBody = response.body();
-                String json = null;
-                if (responseBody != null) {
-                    json = responseBody.string();
-                }
-
-                Log.d(TAG, json);
-
-                JSONObject data;
-                try {
-                    data = new JSONObject(json);
-                    String accessToken = data.optString("access_token");
-                    String refreshToken = data.optString("refresh_token");
-
-                    Log.d(TAG, "(Account Login) Access Token retrieved = " + accessToken);
-                    Log.d(TAG, "(Account Login) Refresh Token retrieved = " + refreshToken);
-
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AccountLogin.this);
-                    sharedPreferences.edit().putBoolean("logged_in", true).putString("access_token", accessToken).putString("refresh_token", refreshToken).apply();
-                    finish();
-                } catch (JSONException e) {
-                    Log.e(TAG, "JSONException attempting to retrieve user access token");
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(TAG, "IOException attempting to retrieve application-only access token");
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override

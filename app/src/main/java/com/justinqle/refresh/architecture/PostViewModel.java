@@ -33,7 +33,7 @@ public class PostViewModel extends ViewModel {
     }
 
     public void invalidateDataSource() {
-        factory.getPostDataSource().invalidate();
+        factory.invalidate();
     }
 
 }
