@@ -14,7 +14,6 @@ import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.justinqle.refresh.R;
 
@@ -114,7 +113,6 @@ public class AccountLogin extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e(TAG, "JSONException attempting to retrieve user access token");
                     e.printStackTrace();
-                    Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -122,7 +120,6 @@ public class AccountLogin extends AppCompatActivity {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(TAG, "IOException attempting to retrieve user access token");
                 e.printStackTrace();
-                Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -133,7 +130,7 @@ public class AccountLogin extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.startsWith(REDIRECT_URI)) {
-                Log.i(TAG, "Account Login Successful (redirected to specified URI)");
+                Log.i(TAG, "Redirected to specified URI");
                 final Uri uri = Uri.parse(url);
                 return handleUri(uri);
             } else {
@@ -146,7 +143,7 @@ public class AccountLogin extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             final Uri uri = request.getUrl();
             if (uri.toString().startsWith(REDIRECT_URI)) {
-                Log.i(TAG, "Account Login Successful (redirected to specified URI)");
+                Log.i(TAG, "Redirected to specified URI");
                 return handleUri(uri);
             } else {
                 return false;
@@ -160,17 +157,17 @@ public class AccountLogin extends AppCompatActivity {
                 Log.e(TAG, "A login error has occurred : " + error);
                 switch (error) {
                     case "access_denied":
-                        // TODO Denying access doesn't close activity
-                        Toast.makeText(AccountLogin.this, "Cannot login without user approval", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "Cannot login without user approval");
                     case "unsupported_response_type":
-                        Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
+
                     case "invalid_scope":
-                        Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
+
                     case "invalid_request":
-                        Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
+
                     default:
                         break;
                 }
+                finish();
             } else {
                 String state = uri.getQueryParameter("state");
                 if (state.equals(STATE)) {
@@ -179,7 +176,7 @@ public class AccountLogin extends AppCompatActivity {
                     getUserAccessToken(code);
                 } else {
                     Log.e(TAG, "STATE does not match one in initial authorization request");
-                    Toast.makeText(AccountLogin.this, "Login failed", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
             return true;
