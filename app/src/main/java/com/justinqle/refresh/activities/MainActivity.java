@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem menuItem = menu.getItem(menu.size() - 1);
         subMenu = menuItem.getSubMenu();
         String subredditsType = loggedIn ? "mine/subscriber" : "default";
-        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 25, null).enqueue(new Callback<Listing>() {
+        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 100, null).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 Listing listing = response.body();
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     subredditMenuItems.addAll(children);
                     // More items? Page using key
                     if (listing.getData().getAfter() != null) {
-                        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 25, listing.getData().getAfter()).enqueue(this);
+                        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 100, listing.getData().getAfter()).enqueue(this);
                     } else {
                         addSubredditMenuItemsCallback();
                     }
