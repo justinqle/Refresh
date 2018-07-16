@@ -43,7 +43,7 @@ public class NetworkService {
                             .build();
                     return chain.proceed(request);
                 }).authenticator(new TokenAuthenticator())
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
                 .build();
 
         mRetrofit = new Retrofit.Builder()
