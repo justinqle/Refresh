@@ -24,7 +24,9 @@
 
     <item android:title="@string/subreddits">
         <menu>
-            <group android:checkableBehavior="single">
+            <group
+                android:id="@+id/subreddits"
+                android:checkableBehavior="single">
                 <item
                     android:id="@+id/default_page"
                     android:title="@string/frontpage" />

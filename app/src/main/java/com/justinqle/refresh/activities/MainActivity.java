@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Child child : subredditMenuItems) {
             Log.d(TAG, ((Subreddit) child.getData()).getDisplayName());
             // TODO User can interact with UI and see that menu items haven't been added quite yet
-            subMenu.add(((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
+            subMenu.add(R.id.subreddits, Menu.NONE, Menu.NONE, ((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
         }
     }
 
@@ -290,17 +290,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        switch (id) {
-            case R.id.profile:
+        // If item is already checked, do nothing
+        if (!item.isChecked()) {
+            // If item is apart of subreddits group submenu
+            if (item.getGroupId() == R.id.subreddits) {
+                String string = item.getTitle().toString();
+                //postViewModel.invalidateDataSource();
+            }
+            // Apart of regular menu
+            else {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.profile:
 
-            case R.id.dark_mode:
+                    case R.id.dark_mode:
 
-            case R.id.settings:
+                    case R.id.settings:
 
-            default:
-                break;
+                    default:
+                        break;
+                }
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
