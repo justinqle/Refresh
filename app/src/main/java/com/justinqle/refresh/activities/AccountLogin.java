@@ -52,7 +52,7 @@ public class AccountLogin extends AppCompatActivity {
     private static final String STATE = UUID.randomUUID().toString();
     private static final String REDIRECT_URI = "https://example.com";
     private static final String DURATION = "permanent";
-    private static final String SCOPE = "read,identity,mysubreddits";
+    private static final String SCOPE = "read,identity,mysubreddits,vote";
 
     private static final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
