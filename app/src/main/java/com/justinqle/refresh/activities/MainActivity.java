@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Add Subreddits to NavigationView submenu (default for logged out, user-specific for logged in)
+        // TODO: Clicking on Navigation SubMenu items initially isn't smooth
         Menu menu = navigationView.getMenu();
         MenuItem menuItem = menu.getItem(menu.size() - 1);
         subMenu = menuItem.getSubMenu();
@@ -183,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 t.printStackTrace();
             }
         });
+        // Set the default submenu item ("frontpage") to be selected
+        navigationView.setCheckedItem(R.id.default_page);
 
         // RecyclerView
         RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);

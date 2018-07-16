@@ -20,4 +20,7 @@
     <string name="subreddits">Subreddits</string>
     <string name="comments">%1$d comments</string>
     <string name="dropdown">Dropdown button</string>
+    <string name="frontpage">Frontpage</string>
+    <string name="all">All</string>
+    <string name="popular">Popular</string>
 </resources>
