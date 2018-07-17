@@ -162,7 +162,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
         } else if (span < (DateUtils.YEAR_IN_MILLIS / 12L)) {
             return (span / DateUtils.WEEK_IN_MILLIS) + "w";
         } else if (span < DateUtils.YEAR_IN_MILLIS) {
-            return (span / DateUtils.MINUTE_IN_MILLIS) + "mo";
+            return (span / (DateUtils.YEAR_IN_MILLIS / 12L)) + "mo";
         } else {
             return (span / DateUtils.YEAR_IN_MILLIS) + "y";
         }
