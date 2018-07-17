@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.NavigationMenuView;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -299,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 postViewModel.getNewPosts(subreddit).observe(this, posts -> {
                     swipeContainer.setRefreshing(false);
                     mAdapter.submitList(posts);
+                    ((AppBarLayout) findViewById(R.id.toolbar).getParent()).setExpanded(true, true);
                 });
             }
             // Apart of regular menu
