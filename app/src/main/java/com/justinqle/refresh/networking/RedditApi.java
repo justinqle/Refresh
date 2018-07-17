@@ -11,7 +11,14 @@ import retrofit2.http.Query;
 public interface RedditApi {
 
     @GET("/best")
-    Call<Listing> getListing(
+    Call<Listing> getFrontpageListing(
+            @Query("limit") int limit,
+            @Query("after") String nextKey
+    );
+
+    @GET("/r/{subreddit}")
+    Call<Listing> getSubredditListing(
+            @Path("subreddit") String subreddit,
             @Query("limit") int limit,
             @Query("after") String nextKey
     );

@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         swipeContainer.setOnRefreshListener(() -> {
             swipeContainer.setRefreshing(true);
             // invalidate data source to force refresh
-            postViewModel.invalidateDataSource();
+            postViewModel.refreshPosts();
         });
 
         // submit new set of data and set refreshing false
@@ -295,8 +295,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!item.isChecked()) {
             // If item is apart of subreddits group submenu
             if (item.getGroupId() == R.id.subreddits) {
-                String string = item.getTitle().toString();
-                //postViewModel.invalidateDataSource();
+                String subreddit = item.getTitle().toString();
+                postViewModel.getNewPosts(subreddit).observe(this, posts -> {
+                    swipeContainer.setRefreshing(false);
+                    mAdapter.submitList(posts);
+                });
             }
             // Apart of regular menu
             else {
