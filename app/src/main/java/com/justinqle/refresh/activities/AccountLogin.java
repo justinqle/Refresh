@@ -89,16 +89,15 @@ public class AccountLogin extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                ResponseBody responseBody = response.body();
-                String json = null;
-                if (responseBody != null) {
-                    json = responseBody.string();
-                }
+                try (ResponseBody responseBody = response.body()) {
+                    String json = null;
+                    if (responseBody != null) {
+                        json = responseBody.string();
+                    }
 
-                Log.d(TAG, json);
+                    Log.d(TAG, json);
 
-                JSONObject data;
-                try {
+                    JSONObject data;
                     data = new JSONObject(json);
                     String accessToken = data.optString("access_token");
                     String refreshToken = data.optString("refresh_token");

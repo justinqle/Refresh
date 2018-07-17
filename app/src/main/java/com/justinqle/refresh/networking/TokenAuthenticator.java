@@ -15,10 +15,12 @@ import java.io.IOException;
 import java.util.UUID;
 
 import okhttp3.Authenticator;
+import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.Route;
 
@@ -95,9 +97,9 @@ public class TokenAuthenticator implements Authenticator {
 
         String accessToken = null;
         // Synchronous http request (wait for it to finish before moving on to another task)
-        try {
-
-            ResponseBody responseBody = client.newCall(request).execute().body();
+        Call call = client.newCall(request);
+        try (Response response = call.execute()) {
+            ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String json = responseBody.string();
                 Log.d(TAG, "JSON response of retrieving access token: " + json);
