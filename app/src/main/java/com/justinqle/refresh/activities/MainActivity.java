@@ -234,6 +234,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             swipeContainer.setRefreshing(false);
             mAdapter.submitList(posts);
         });
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.frontpage);
+        }
     }
 
     private void addSubredditMenuItemsCallback() {
@@ -302,6 +306,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mAdapter.submitList(posts);
                     ((AppBarLayout) findViewById(R.id.toolbar).getParent()).setExpanded(true, true);
                 });
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(subreddit);
+                }
             }
             // Apart of regular menu
             else {
