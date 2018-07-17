@@ -42,7 +42,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
-        redditApi.getListing(params.requestedLoadSize).enqueue(new Callback<Listing>() {
+        redditApi.getListing(params.requestedLoadSize, null).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 Log.i(TAG, "Successfully connected to server");
@@ -80,7 +80,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     // TODO Use rxJava, as this all runs on the overflow thread
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
-        redditApi.getListingAfter(params.key, params.requestedLoadSize).enqueue(new Callback<Listing>() {
+        redditApi.getListing(params.requestedLoadSize, params.key).enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
                 Log.i(TAG, "Successfully connected to server");

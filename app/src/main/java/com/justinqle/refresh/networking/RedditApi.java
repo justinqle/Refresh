@@ -12,13 +12,8 @@ public interface RedditApi {
 
     @GET("/best")
     Call<Listing> getListing(
-            @Query("limit") int limit
-    );
-
-    @GET("/best")
-    Call<Listing> getListingAfter(
-            @Query("after") String nextKey,
-            @Query("limit") int limit
+            @Query("limit") int limit,
+            @Query("after") String nextKey
     );
 
     @GET("/api/v1/me")
