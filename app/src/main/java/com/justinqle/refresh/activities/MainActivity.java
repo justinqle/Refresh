@@ -223,8 +223,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // invalidate to loadInitial() again
         swipeContainer.setOnRefreshListener(() -> {
-            swipeContainer.setRefreshing(true);
             // invalidate data source to force refresh
+            // TODO Below method should somewhere set refreshing false once Network request is done and data is being loaded
             postViewModel.refreshPosts();
         });
 
