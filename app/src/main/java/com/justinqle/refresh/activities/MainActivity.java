@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout dropdown;
     private SubMenu subMenu;
     private List<Child> subredditMenuItems = new LinkedList<>();
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         swipeContainer.setRefreshing(true);
 
         // Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -300,9 +301,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // If item is apart of subreddits group submenu
             if (item.getGroupId() == R.id.subreddits) {
                 String subreddit = item.getTitle().toString();
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().setTitle(subreddit);
-                }
+                ((TextView) toolbar.findViewById(R.id.current_subreddit)).setText(subreddit);
                 // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
                 if (subreddit.equals(getString(R.string.frontpage))) {
                     // Not a subreddit, or null
@@ -311,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 postViewModel.getNewPosts(subreddit).observe(this, posts -> {
                     swipeContainer.setRefreshing(false);
                     mAdapter.submitList(posts);
-                    ((AppBarLayout) findViewById(R.id.toolbar).getParent()).setExpanded(true, true);
+                    ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
                 });
             }
             // Apart of regular menu
