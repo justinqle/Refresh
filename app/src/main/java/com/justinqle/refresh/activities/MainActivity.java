@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         // Floating Action Button
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -234,10 +237,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             swipeContainer.setRefreshing(false);
             mAdapter.submitList(posts);
         });
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.frontpage);
-        }
     }
 
     private void addSubredditMenuItemsCallback() {
