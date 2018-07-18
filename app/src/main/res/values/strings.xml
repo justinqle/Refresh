@@ -23,4 +23,7 @@
     <string name="frontpage">Frontpage</string>
     <string name="all">All</string>
     <string name="popular">Popular</string>
+    <string name="change_view">Change View</string>
+    <string name="search">Search</string>
+    <string name="sort">Sort</string>
 </resources>

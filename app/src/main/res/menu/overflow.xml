@@ -2,6 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:orderInCategory="97"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/sort"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:orderInCategory="98"
+        android:title="@string/sort"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/change_view"
+        android:orderInCategory="99"
+        android:title="@string/change_view"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
