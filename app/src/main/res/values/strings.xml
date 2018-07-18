@@ -26,4 +26,9 @@
     <string name="change_view">Change View</string>
     <string name="search">Search</string>
     <string name="sort">Sort</string>
+    <string name="compact">Compact</string>
+    <string name="cards">Cards</string>
+    <string name="small_cards">Small Cards</string>
+    <string name="list">List</string>
+    <string name="gallery">Gallery</string>
 </resources>

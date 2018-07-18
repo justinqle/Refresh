@@ -17,7 +17,19 @@
         android:id="@+id/change_view"
         android:orderInCategory="99"
         android:title="@string/change_view"
-        app:showAsAction="never" />
+        app:showAsAction="never">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item android:title="@string/cards" />
+                <item android:title="@string/small_cards" />
+                <item
+                    android:checked="true"
+                    android:title="@string/compact" />
+                <item android:title="@string/list" />
+                <item android:title="@string/gallery" />
+            </group>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
