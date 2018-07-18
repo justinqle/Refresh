@@ -88,7 +88,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         // ignored, since we only ever append to our initial load
     }
 
-    // TODO Use rxJava, as this all runs on the overflow thread
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
         Callback<Listing> retrofitCallback = new Callback<Listing>() {
