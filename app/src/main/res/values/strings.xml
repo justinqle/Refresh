@@ -31,4 +31,9 @@
     <string name="small_cards">Small Cards</string>
     <string name="list">List</string>
     <string name="gallery">Gallery</string>
+    <string name="hot">Hot</string>
+    <string name="sort_new">New</string>
+    <string name="rising">Rising</string>
+    <string name="top">Top</string>
+    <string name="controversial">Controversial</string>
 </resources>

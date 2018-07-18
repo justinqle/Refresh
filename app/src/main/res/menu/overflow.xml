@@ -12,7 +12,25 @@
         android:icon="@drawable/ic_sort_white_24dp"
         android:orderInCategory="98"
         android:title="@string/sort"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:icon="@drawable/hot"
+                android:title="@string/hot" />
+            <item
+                android:icon="@drawable/ic_new_releases_black_24dp"
+                android:title="@string/sort_new" />
+            <item
+                android:icon="@drawable/controversial"
+                android:title="@string/controversial" />
+            <item
+                android:icon="@drawable/top"
+                android:title="@string/top" />
+            <item
+                android:icon="@drawable/rising"
+                android:title="@string/rising" />
+        </menu>
+    </item>
     <item
         android:id="@+id/change_view"
         android:orderInCategory="99"
