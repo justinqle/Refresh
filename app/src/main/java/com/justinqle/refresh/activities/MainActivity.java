@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SubMenu subMenu;
     private List<Child> subredditMenuItems = new LinkedList<>();
     private Toolbar toolbar;
+    private TextView currentSubreddit;
+    private TextView currentSort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
+        currentSubreddit = findViewById(R.id.current_subreddit);
+        currentSort = findViewById(R.id.current_sort);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -277,6 +281,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (currentSubreddit.getText().equals(getString(R.string.frontpage))) {
+            menu.findItem(R.id.sort).getSubMenu().findItem(0).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -301,12 +313,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // If item is apart of subreddits group submenu
             if (item.getGroupId() == R.id.subreddits) {
                 String subreddit = item.getTitle().toString();
-                ((TextView) toolbar.findViewById(R.id.current_subreddit)).setText(subreddit);
+                currentSubreddit.setText(subreddit);
+                // Calls onPrepareOptionsMenu()
+                invalidateOptionsMenu();
+                String sort;
                 // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
                 if (subreddit.equals(getString(R.string.frontpage))) {
+                    // Sets default sort of Frontpage to "Best"
+                    sort = getString(R.string.best);
                     // Not a subreddit, or null
                     subreddit = null;
+                } else {
+                    sort = getString(R.string.hot);
                 }
+                currentSort.setText(sort);
                 postViewModel.getNewPosts(subreddit).observe(this, posts -> {
                     swipeContainer.setRefreshing(false);
                     mAdapter.submitList(posts);
