@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (currentSubreddit.getText().equals(getString(R.string.frontpage))) {
-            menu.findItem(R.id.sort).getSubMenu().findItem(0).setVisible(true);
+            menu.findItem(R.id.sort).getSubMenu().findItem(R.id.best).setVisible(true);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -295,12 +295,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.search) {
+
+        } else if (id == R.id.best ||
+                id == R.id.hot ||
+                id == R.id.sort_new ||
+                id == R.id.controversial ||
+                id == R.id.top ||
+                id == R.id.rising) {
+            // If current sort is different from selected, change sort
+            if (!currentSort.getText().equals(item.getTitle().toString())) {
+                changeListing(currentSubreddit.getText().toString(), item.getTitle().toString());
+            }
+        } else if (id == R.id.change_view) {
+
+        } else if (id == R.id.action_settings) {
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void changeListing(String subreddit, String sort) {
+        // Updates Toolbar
+        currentSubreddit.setText(subreddit);
+        currentSort.setText(sort);
+        // Special Cases
+        // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
+        if (subreddit.equals(getString(R.string.frontpage))) {
+            // Not a subreddit, or null
+            subreddit = null;
+        }
+        // Updates RecyclerView Listing
+        postViewModel.getNewPosts(subreddit, sort.toLowerCase()).observe(this, posts -> {
+            swipeContainer.setRefreshing(false);
+            mAdapter.submitList(posts);
+            ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
+        });
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -313,25 +344,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // If item is apart of subreddits group submenu
             if (item.getGroupId() == R.id.subreddits) {
                 String subreddit = item.getTitle().toString();
-                currentSubreddit.setText(subreddit);
-                // Calls onPrepareOptionsMenu()
-                invalidateOptionsMenu();
                 String sort;
-                // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
                 if (subreddit.equals(getString(R.string.frontpage))) {
-                    // Sets default sort of Frontpage to "Best"
+                    // Default sort of Frontpage is "Best"
                     sort = getString(R.string.best);
-                    // Not a subreddit, or null
-                    subreddit = null;
                 } else {
+                    // Default sort of Subreddits is "Hot"
                     sort = getString(R.string.hot);
                 }
-                currentSort.setText(sort);
-                postViewModel.getNewPosts(subreddit).observe(this, posts -> {
-                    swipeContainer.setRefreshing(false);
-                    mAdapter.submitList(posts);
-                    ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
-                });
+                changeListing(subreddit, sort);
+                // Calls onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
             // Apart of regular menu
             else {

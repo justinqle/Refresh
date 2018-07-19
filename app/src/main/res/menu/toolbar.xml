@@ -15,22 +15,28 @@
         app:showAsAction="ifRoom">
         <menu>
             <item
+                android:id="@+id/best"
                 android:icon="@drawable/best"
                 android:title="@string/best"
                 android:visible="false" />
             <item
+                android:id="@+id/hot"
                 android:icon="@drawable/hot"
                 android:title="@string/hot" />
             <item
+                android:id="@+id/sort_new"
                 android:icon="@drawable/ic_new_releases_black_24dp"
                 android:title="@string/sort_new" />
             <item
+                android:id="@+id/controversial"
                 android:icon="@drawable/controversial"
                 android:title="@string/controversial" />
             <item
+                android:id="@+id/top"
                 android:icon="@drawable/top"
                 android:title="@string/top" />
             <item
+                android:id="@+id/rising"
                 android:icon="@drawable/rising"
                 android:title="@string/rising" />
         </menu>

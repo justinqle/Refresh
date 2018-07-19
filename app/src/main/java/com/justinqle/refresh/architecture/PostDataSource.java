@@ -29,11 +29,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private RedditApi redditApi;
     // null if frontpage listing
     private String subreddit;
+    private String sort;
 
     // define the type of data that will be emitted by this datasource
-    PostDataSource(RedditApi redditApi, String subreddit) {
+    PostDataSource(RedditApi redditApi, String subreddit, String sort) {
         this.redditApi = redditApi;
         this.subreddit = subreddit;
+        this.sort = sort;
     }
 
     /**
@@ -75,11 +77,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         };
         // frontpage listing
         if (subreddit == null) {
-            redditApi.getFrontpageListing(params.requestedLoadSize, null).enqueue(retrofitCallback);
+            redditApi.getFrontpageListing(sort, params.requestedLoadSize, null).enqueue(retrofitCallback);
         }
         // subreddit listing
         else {
-            redditApi.getSubredditListing(subreddit, params.requestedLoadSize, null).enqueue(retrofitCallback);
+            redditApi.getSubredditListing(subreddit, sort, params.requestedLoadSize, null).enqueue(retrofitCallback);
         }
     }
 
@@ -120,11 +122,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         };
         // frontpage listing
         if (subreddit == null) {
-            redditApi.getFrontpageListing(params.requestedLoadSize, params.key).enqueue(retrofitCallback);
+            redditApi.getFrontpageListing(sort, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
         }
         // subreddit listing
         else {
-            redditApi.getSubredditListing(subreddit, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
+            redditApi.getSubredditListing(subreddit, sort, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
         }
     }
 }
