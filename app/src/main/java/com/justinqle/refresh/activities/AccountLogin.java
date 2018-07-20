@@ -50,7 +50,7 @@ public class AccountLogin extends AppCompatActivity {
     private static final String CLIENT_ID = "tyVAE3jn8OsMlg";
     private static final String RESPONSE_TYPE = "code";
     private static final String STATE = UUID.randomUUID().toString();
-    private static final String REDIRECT_URI = "https://example.com";
+    private static final String REDIRECT_URI = "https://github.com/justinqle/Refresh";
     private static final String DURATION = "permanent";
     private static final String SCOPE = "read,identity,mysubreddits,vote";
 
