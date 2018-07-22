@@ -28,13 +28,57 @@
                 android:icon="@drawable/ic_new_releases_black_24dp"
                 android:title="@string/sort_new" />
             <item
-                android:id="@+id/controversial"
                 android:icon="@drawable/controversial"
-                android:title="@string/controversial" />
+                android:title="@string/controversial">
+                <menu>
+                    <group android:id="@+id/controversial">
+                        <item
+                            android:id="@+id/controversial_hour"
+                            android:title="@string/hour" />
+                        <item
+                            android:id="@+id/controversial_day"
+                            android:title="@string/day" />
+                        <item
+                            android:id="@+id/controversial_week"
+                            android:title="@string/week" />
+                        <item
+                            android:id="@+id/controversial_month"
+                            android:title="@string/month" />
+                        <item
+                            android:id="@+id/controversial_year"
+                            android:title="@string/year" />
+                        <item
+                            android:id="@+id/controversial_all_time"
+                            android:title="@string/all_time" />
+                    </group>
+                </menu>
+            </item>
             <item
-                android:id="@+id/top"
                 android:icon="@drawable/top"
-                android:title="@string/top" />
+                android:title="@string/top">
+                <menu>
+                    <group android:id="@+id/top">
+                        <item
+                            android:id="@+id/top_hour"
+                            android:title="@string/hour" />
+                        <item
+                            android:id="@+id/top_day"
+                            android:title="@string/day" />
+                        <item
+                            android:id="@+id/top_week"
+                            android:title="@string/week" />
+                        <item
+                            android:id="@+id/top_month"
+                            android:title="@string/month" />
+                        <item
+                            android:id="@+id/top_year"
+                            android:title="@string/year" />
+                        <item
+                            android:id="@+id/top_all_time"
+                            android:title="@string/all_time" />
+                    </group>
+                </menu>
+            </item>
             <item
                 android:id="@+id/rising"
                 android:icon="@drawable/rising"

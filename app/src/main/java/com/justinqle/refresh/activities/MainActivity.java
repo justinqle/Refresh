@@ -297,16 +297,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.search) {
 
-        } else if (id == R.id.best ||
+        }
+        // No special time options
+        else if (id == R.id.best ||
                 id == R.id.hot ||
                 id == R.id.sort_new ||
-                id == R.id.controversial ||
-                id == R.id.top ||
                 id == R.id.rising) {
-            // If current sort is different from selected, change sort
-            if (!currentSort.getText().equals(item.getTitle().toString())) {
-                changeListing(currentSubreddit.getText().toString(), item.getTitle().toString());
-            }
+            changeListing(currentSubreddit.getText().toString(), item.getTitle().toString(), null);
+        }
+        // Special time options
+        else if (item.getGroupId() == R.id.controversial) {
+            changeListing(currentSubreddit.getText().toString(), "Controversial", item.getTitle().toString());
+        } else if (item.getGroupId() == R.id.top) {
+            changeListing(currentSubreddit.getText().toString(), "Top", item.getTitle().toString());
         } else if (id == R.id.change_view) {
 
         } else if (id == R.id.action_settings) {
@@ -316,10 +319,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeListing(String subreddit, String sort) {
+    private void changeListing(String subreddit, String sort, String time) {
         // Updates Toolbar
         currentSubreddit.setText(subreddit);
-        currentSort.setText(sort);
+        String sortAndTime = sort;
+        // If time is not null, append to time to sortAndTime string
+        if (time != null) {
+            sortAndTime += " " + getString(R.string.bullet) + " " + time;
+            // "All Time" string should be "all" for query
+            if (time.equals(getString(R.string.all_time))) {
+                time = "all";
+            }
+            time = time.toLowerCase();
+        }
+        currentSort.setText(sortAndTime);
         // Special Cases
         // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
         if (subreddit.equals(getString(R.string.frontpage))) {
@@ -327,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             subreddit = null;
         }
         // Updates RecyclerView Listing
-        postViewModel.getNewPosts(subreddit, sort.toLowerCase()).observe(this, posts -> {
+        postViewModel.getNewPosts(subreddit, sort.toLowerCase(), time).observe(this, posts -> {
             swipeContainer.setRefreshing(false);
             mAdapter.submitList(posts);
             ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
@@ -352,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // Default sort of Subreddits is "Hot"
                     sort = getString(R.string.hot);
                 }
-                changeListing(subreddit, sort);
+                changeListing(subreddit, sort, null);
                 // Calls onPrepareOptionsMenu()
                 invalidateOptionsMenu();
             }

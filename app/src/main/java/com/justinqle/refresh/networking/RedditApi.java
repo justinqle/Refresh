@@ -13,6 +13,7 @@ public interface RedditApi {
     @GET("/{sort}")
     Call<Listing> getFrontpageListing(
             @Path("sort") String sort,
+            @Query("t") String time,
             @Query("limit") int limit,
             @Query("after") String nextKey
     );
@@ -21,6 +22,7 @@ public interface RedditApi {
     Call<Listing> getSubredditListing(
             @Path("subreddit") String subreddit,
             @Path("sort") String sort,
+            @Query("t") String time,
             @Query("limit") int limit,
             @Query("after") String nextKey
     );

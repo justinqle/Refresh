@@ -19,22 +19,22 @@ public class PostViewModel extends ViewModel {
     public LiveData<PagedList<Post>> getPosts() {
         if (posts == null) {
             posts = new MutableLiveData<>();
-            loadPosts(null, "best");
+            loadPosts(null, "best", null);
         }
         return posts;
     }
 
-    public LiveData<PagedList<Post>> getNewPosts(String subreddit, String sort) {
+    public LiveData<PagedList<Post>> getNewPosts(String subreddit, String sort, String time) {
         posts = new MutableLiveData<>();
-        loadPosts(subreddit, sort);
+        loadPosts(subreddit, sort, time);
         return posts;
     }
 
-    private void loadPosts(String subreddit, String sort) {
+    private void loadPosts(String subreddit, String sort, String time) {
         // Do an asynchronous operation to fetch posts.
         // initial page size to fetch can also be configured here too
         PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(25).build();
-        factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi(), subreddit, sort);
+        factory = new PostDataSourceFactory(NetworkService.getInstance().getJSONApi(), subreddit, sort, time);
         posts = new LivePagedListBuilder<>(factory, config).build();
     }
 

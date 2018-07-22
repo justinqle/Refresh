@@ -30,12 +30,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     // null if frontpage listing
     private String subreddit;
     private String sort;
+    // null if "controversial" or "top" sort
+    private String time;
 
     // define the type of data that will be emitted by this datasource
-    PostDataSource(RedditApi redditApi, String subreddit, String sort) {
+    PostDataSource(RedditApi redditApi, String subreddit, String sort, String time) {
         this.redditApi = redditApi;
         this.subreddit = subreddit;
         this.sort = sort;
+        this.time = time;
     }
 
     /**
@@ -77,11 +80,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         };
         // frontpage listing
         if (subreddit == null) {
-            redditApi.getFrontpageListing(sort, params.requestedLoadSize, null).enqueue(retrofitCallback);
+            redditApi.getFrontpageListing(sort, time, params.requestedLoadSize, null).enqueue(retrofitCallback);
         }
         // subreddit listing
         else {
-            redditApi.getSubredditListing(subreddit, sort, params.requestedLoadSize, null).enqueue(retrofitCallback);
+            redditApi.getSubredditListing(subreddit, sort, time, params.requestedLoadSize, null).enqueue(retrofitCallback);
         }
     }
 
@@ -122,11 +125,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         };
         // frontpage listing
         if (subreddit == null) {
-            redditApi.getFrontpageListing(sort, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
+            redditApi.getFrontpageListing(sort, time, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
         }
         // subreddit listing
         else {
-            redditApi.getSubredditListing(subreddit, sort, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
+            redditApi.getSubredditListing(subreddit, sort, time, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
         }
     }
 }

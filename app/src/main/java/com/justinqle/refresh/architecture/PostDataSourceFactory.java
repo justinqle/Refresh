@@ -11,16 +11,18 @@ public class PostDataSourceFactory extends PostDataSource.Factory<String, Post> 
     private RedditApi redditApi;
     private String subreddit;
     private String sort;
+    private String time;
 
-    PostDataSourceFactory(RedditApi redditApi, String subreddit, String sort) {
+    PostDataSourceFactory(RedditApi redditApi, String subreddit, String sort, String time) {
         this.redditApi = redditApi;
         this.subreddit = subreddit;
         this.sort = sort;
+        this.time = time;
     }
 
     @Override
     public DataSource<String, Post> create() {
-        postDataSource = new PostDataSource(redditApi, subreddit, sort);
+        postDataSource = new PostDataSource(redditApi, subreddit, sort, time);
         return postDataSource;
     }
 
