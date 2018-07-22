@@ -68,6 +68,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                 } else {
                     Log.e(TAG, "HTTP Response Error " + response.code());
+                    backgroundThreadLongToast();
                 }
             }
 
@@ -113,6 +114,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     }
                 } else {
                     Log.e(TAG, "HTTP Response Error " + response.code());
+                    backgroundThreadLongToast();
                 }
             }
 
