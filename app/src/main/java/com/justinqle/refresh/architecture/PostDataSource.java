@@ -14,11 +14,10 @@ import com.justinqle.refresh.models.listing.Listing;
 import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.networking.RedditApi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PostDataSource extends PageKeyedDataSource<String, Post> {
@@ -44,48 +43,42 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     /**
      * Notify Main thread of failed Network request.
      */
-    private static void backgroundThreadLongToast() {
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MyApplication.getContext(), "Network request failed", Toast.LENGTH_LONG).show());
+    private static void backgroundThreadLongToast(String s) {
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MyApplication.getContext(), s, Toast.LENGTH_LONG).show());
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Post> callback) {
-        Callback<Listing> retrofitCallback = new Callback<Listing>() {
-            @Override
-            public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
-                Log.i(TAG, "Successfully connected to server");
-                if (response.isSuccessful()) {
-                    Log.i(TAG, "HTTP Response Code between 200-300");
-                    Listing listing = response.body();
-                    if (listing != null) {
-                        Data data = listing.getData();
-                        List<Child> children = data.getChildren();
-                        List<Post> posts = new ArrayList<>();
-                        for (Child child : children) {
-                            posts.add((Post) child.getData());
-                        }
-                        callback.onResult(posts, data.getBefore(), data.getAfter());
+        try {
+            Response<Listing> response;
+            // frontpage listing
+            if (subreddit == null) {
+                response = redditApi.getFrontpageListing(sort, time, params.requestedLoadSize, null).execute();
+            }
+            // subreddit listing
+            else {
+                response = redditApi.getSubredditListing(subreddit, sort, time, params.requestedLoadSize, null).execute();
+            }
+            if (response.isSuccessful()) {
+                Log.d(TAG, "HTTP Response Success: " + response.code());
+                Listing listing = response.body();
+                if (listing != null) {
+                    Data data = listing.getData();
+                    List<Child> children = data.getChildren();
+                    List<Post> posts = new ArrayList<>();
+                    for (Child child : children) {
+                        posts.add((Post) child.getData());
                     }
-                } else {
-                    Log.e(TAG, "HTTP Response Error " + response.code());
-                    backgroundThreadLongToast();
+                    callback.onResult(posts, data.getBefore(), data.getAfter());
                 }
+            } else {
+                Log.e(TAG, "HTTP Response Error: " + response.code());
+                backgroundThreadLongToast("HTTP Error " + response.code());
             }
-
-            @Override
-            public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                Log.e(TAG, "Load Initial: Network request failed");
-                t.printStackTrace();
-                backgroundThreadLongToast();
-            }
-        };
-        // frontpage listing
-        if (subreddit == null) {
-            redditApi.getFrontpageListing(sort, time, params.requestedLoadSize, null).enqueue(retrofitCallback);
-        }
-        // subreddit listing
-        else {
-            redditApi.getSubredditListing(subreddit, sort, time, params.requestedLoadSize, null).enqueue(retrofitCallback);
+        } catch (IOException e) {
+            Log.e(TAG, "Network request failed");
+            e.printStackTrace();
+            backgroundThreadLongToast("Failed to connect");
         }
     }
 
@@ -96,42 +89,36 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Post> callback) {
-        Callback<Listing> retrofitCallback = new Callback<Listing>() {
-            @Override
-            public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
-                Log.i(TAG, "Successfully connected to server");
-                if (response.isSuccessful()) {
-                    Log.i(TAG, "HTTP Response Code between 200-300");
-                    Listing listing = response.body();
-                    if (listing != null) {
-                        Data data = listing.getData();
-                        List<Child> children = data.getChildren();
-                        List<Post> posts = new ArrayList<>();
-                        for (Child child : children) {
-                            posts.add((Post) child.getData());
-                        }
-                        callback.onResult(posts, data.getAfter());
+        try {
+            Response<Listing> response;
+            // frontpage listing
+            if (subreddit == null) {
+                response = redditApi.getFrontpageListing(sort, time, params.requestedLoadSize, null).execute();
+            }
+            // subreddit listing
+            else {
+                response = redditApi.getSubredditListing(subreddit, sort, time, params.requestedLoadSize, null).execute();
+            }
+            if (response.isSuccessful()) {
+                Log.d(TAG, "HTTP Response Success: " + response.code());
+                Listing listing = response.body();
+                if (listing != null) {
+                    Data data = listing.getData();
+                    List<Child> children = data.getChildren();
+                    List<Post> posts = new ArrayList<>();
+                    for (Child child : children) {
+                        posts.add((Post) child.getData());
                     }
-                } else {
-                    Log.e(TAG, "HTTP Response Error " + response.code());
-                    backgroundThreadLongToast();
+                    callback.onResult(posts, data.getAfter());
                 }
+            } else {
+                Log.e(TAG, "HTTP Response Error: " + response.code());
+                backgroundThreadLongToast("HTTP Error " + response.code());
             }
-
-            @Override
-            public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                Log.e(TAG, "Load After: Network request failed");
-                t.printStackTrace();
-                backgroundThreadLongToast();
-            }
-        };
-        // frontpage listing
-        if (subreddit == null) {
-            redditApi.getFrontpageListing(sort, time, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
-        }
-        // subreddit listing
-        else {
-            redditApi.getSubredditListing(subreddit, sort, time, params.requestedLoadSize, params.key).enqueue(retrofitCallback);
+        } catch (IOException e) {
+            Log.e(TAG, "Network request failed");
+            e.printStackTrace();
+            backgroundThreadLongToast("Failed to connect");
         }
     }
 }
