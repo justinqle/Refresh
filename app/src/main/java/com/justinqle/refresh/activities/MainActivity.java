@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Swipe Container
         swipeContainer = findViewById(R.id.swipeContainer);
+        // Initial refreshing
         swipeContainer.setRefreshing(true);
 
         // Toolbar
@@ -232,15 +233,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // invalidate to loadInitial() again
         swipeContainer.setOnRefreshListener(() -> {
             // invalidate data source to force refresh
-            // TODO Below method should somewhere set refreshing false once Network request is done and data is being loaded
             postViewModel.refreshPosts();
         });
 
+        // Observer Pattern: Will be used to observe changes to the Posts
+        // Initially null, so loads posts and enacts observer
         // submit new set of data and set refreshing false
         postViewModel.getPosts().observe(this, posts -> {
-            // TODO Immediately sets refreshing false for some reason
-            swipeContainer.setRefreshing(false);
             mAdapter.submitList(posts);
+            swipeContainer.setRefreshing(false);
         });
     }
 
@@ -320,6 +321,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void changeListing(String subreddit, String sort, String time) {
+        // Refreshes until network request is finished
+        swipeContainer.setRefreshing(true);
         // Updates Toolbar
         currentSubreddit.setText(subreddit);
         String sortAndTime = sort;
@@ -339,10 +342,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Not a subreddit, or null
             subreddit = null;
         }
+        // Remove old Observers
+        postViewModel.getPosts().removeObservers(this);
         // Updates RecyclerView Listing
         postViewModel.getNewPosts(subreddit, sort.toLowerCase(), time).observe(this, posts -> {
-            swipeContainer.setRefreshing(false);
             mAdapter.submitList(posts);
+            swipeContainer.setRefreshing(false);
+            // Expand toolbar
             ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
         });
     }
