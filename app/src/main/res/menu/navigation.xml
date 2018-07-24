@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/profile"
-        android:icon="@drawable/account_circle"
+        android:icon="@drawable/account"
         android:title="@string/profile"
         android:visible="false" />
 
