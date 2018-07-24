@@ -321,13 +321,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id) {
             case R.id.profile:
-
+                break;
             case R.id.dark_mode:
                 isToggle = true;
                 ((Switch) item.getActionView()).toggle();
+                break;
             case R.id.settings:
-
-            default:
                 break;
         }
 
