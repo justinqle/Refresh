@@ -37,12 +37,9 @@ import com.justinqle.refresh.animations.ExpandCollapse;
 import com.justinqle.refresh.architecture.PostAdapter;
 import com.justinqle.refresh.architecture.PostViewModel;
 import com.justinqle.refresh.models.listing.Child;
-import com.justinqle.refresh.models.listing.Listing;
-import com.justinqle.refresh.models.listing.Subreddit;
 import com.justinqle.refresh.models.user.User;
 import com.justinqle.refresh.networking.NetworkService;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -167,36 +164,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().findItem(R.id.profile).setVisible(true);
         }
 
-        // Add Subreddits to NavigationView submenu (default for logged out, user-specific for logged in)
-        // TODO: Clicking on Navigation SubMenu items initially isn't smooth
-        Menu menu = navigationView.getMenu();
-        MenuItem menuItem = menu.getItem(menu.size() - 1);
-        subMenu = menuItem.getSubMenu();
-        String subredditsType = loggedIn ? "mine/subscriber" : "default";
-        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 100, null).enqueue(new Callback<Listing>() {
-            @Override
-            public void onResponse(@NonNull Call<Listing> call, @NonNull Response<Listing> response) {
-                Listing listing = response.body();
-                if (listing != null) {
-                    List<Child> children = listing.getData().getChildren();
-                    subredditMenuItems.addAll(children);
-                    // More items? Page using key
-                    if (listing.getData().getAfter() != null) {
-                        NetworkService.getInstance().getJSONApi().getSubreddits(subredditsType, 100, listing.getData().getAfter()).enqueue(this);
-                    } else {
-                        addSubredditMenuItemsCallback();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Listing> call, @NonNull Throwable t) {
-                t.printStackTrace();
-            }
-        });
-        // Set the default submenu item ("frontpage") to be selected
-        navigationView.setCheckedItem(R.id.default_page);
-
         // RecyclerView
         RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);
         // Changes in content does not change layout size
@@ -243,16 +210,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mAdapter.submitList(posts);
             swipeContainer.setRefreshing(false);
         });
-    }
-
-    private void addSubredditMenuItemsCallback() {
-        // TODO Could improve GSON deserialization structure to prevent incessant casting and utilize a more logical compareTo method within the class itself
-        Collections.sort(subredditMenuItems, (o1, o2) -> ((Subreddit) o1.getData()).getDisplayName().compareToIgnoreCase(((Subreddit) o2.getData()).getDisplayName()));
-        for (Child child : subredditMenuItems) {
-            Log.d(TAG, ((Subreddit) child.getData()).getDisplayName());
-            // TODO User can interact with UI and see that menu items haven't been added quite yet
-            subMenu.add(R.id.subreddits, Menu.NONE, Menu.NONE, ((Subreddit) child.getData()).getDisplayName()).setCheckable(true);
-        }
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {
@@ -360,34 +317,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // If item is already checked, do nothing
         if (!item.isChecked()) {
-            // If item is apart of subreddits group submenu
-            if (item.getGroupId() == R.id.subreddits) {
-                String subreddit = item.getTitle().toString();
-                String sort;
-                if (subreddit.equals(getString(R.string.frontpage))) {
-                    // Default sort of Frontpage is "Best"
-                    sort = getString(R.string.best);
-                } else {
-                    // Default sort of Subreddits is "Hot"
-                    sort = getString(R.string.hot);
-                }
-                changeListing(subreddit, sort, null);
-                // Calls onPrepareOptionsMenu()
-                invalidateOptionsMenu();
-            }
-            // Apart of regular menu
-            else {
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.profile:
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.profile:
 
-                    case R.id.dark_mode:
+                case R.id.dark_mode:
 
-                    case R.id.settings:
+                case R.id.settings:
 
-                    default:
-                        break;
-                }
+                default:
+                    break;
             }
         }
 
