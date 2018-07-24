@@ -29,6 +29,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -315,23 +316,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
 
-        // If item is already checked, do nothing
-        if (!item.isChecked()) {
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.profile:
+        boolean isToggle = false;
+        int id = item.getItemId();
 
-                case R.id.dark_mode:
+        switch (id) {
+            case R.id.profile:
 
-                case R.id.settings:
+            case R.id.dark_mode:
+                isToggle = true;
+                ((Switch) item.getActionView()).toggle();
+            case R.id.settings:
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (!isToggle) {
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
