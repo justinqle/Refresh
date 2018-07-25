@@ -160,10 +160,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
 
-        // Add User-specific menu items to NavigationView when logged in
+        // Set Account group and Saved listing to visible in NavigationView when logged in
         if (loggedIn) {
-            navigationView.getMenu().findItem(R.id.profile).setVisible(true);
+            navigationView.getMenu().setGroupVisible(R.id.account, true);
+            navigationView.getMenu().findItem(R.id.saved).setVisible(true);
         }
+        // Set default, checked item
+        navigationView.setCheckedItem(R.id.frontpage);
 
         // RecyclerView
         RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);

@@ -20,7 +20,7 @@
     <string name="subreddits">Subreddits</string>
     <string name="comments">%1$d comments</string>
     <string name="dropdown">Dropdown button</string>
-    <string name="frontpage">Frontpage</string>
+    <string name="frontpage">Front Page</string>
     <string name="all">All</string>
     <string name="popular">Popular</string>
     <string name="change_view">Change View</string>
@@ -46,4 +46,5 @@
     <string name="bullet">\u2022</string>
     <string name="home">Home</string>
     <string name="inbox">Inbox</string>
+    <string name="saved">Saved</string>
 </resources>

@@ -5,20 +5,41 @@
     tools:showIn="navigation_view">
 
     <group
-        android:id="@+id/checkable"
+        android:id="@+id/listings"
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/home"
-            android:checked="true"
+            android:id="@+id/frontpage"
             android:icon="@drawable/home"
-            android:title="@string/home" />
+            android:title="@string/frontpage" />
+
+        <item
+            android:id="@+id/popular"
+            android:icon="@drawable/rising"
+            android:title="@string/popular" />
+
+        <item
+            android:id="@+id/all"
+            android:icon="@drawable/top"
+            android:title="@string/all" />
+
+        <item
+            android:id="@+id/saved"
+            android:icon="@drawable/star"
+            android:title="@string/saved"
+            android:visible="false" />
+
+    </group>
+
+    <group
+        android:id="@+id/account"
+        android:checkableBehavior="single"
+        android:visible="false">
 
         <item
             android:id="@+id/profile"
             android:icon="@drawable/account"
-            android:title="@string/profile"
-            android:visible="false" />
+            android:title="@string/profile" />
 
         <item
             android:id="@+id/inbox"
@@ -27,7 +48,7 @@
 
     </group>
 
-    <group android:id="@+id/uncheckable">
+    <group android:id="@+id/other">
 
         <item
             android:id="@+id/dark_mode"
