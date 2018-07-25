@@ -64,4 +64,21 @@
 
     </group>
 
+    <item
+        android:id="@+id/pinned"
+        android:title="@string/pinned">
+        <menu>
+            <group
+                android:id="@+id/subreddits"
+                android:checkableBehavior="single">
+                <item android:title="androiddev" />
+                <item android:title="cscareerquestions" />
+                <item android:title="csMajors" />
+                <item android:title="PostHardCore" />
+                <item android:title="progmetal" />
+                <item android:title="UMD" />
+            </group>
+        </menu>
+    </item>
+
 </menu>

@@ -47,4 +47,6 @@
     <string name="home">Home</string>
     <string name="inbox">Inbox</string>
     <string name="saved">Saved</string>
+    <string name="pinned">Pinned</string>
+    <string name="favorites">Favorites</string>
 </resources>
