@@ -373,7 +373,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Apart of regular menu
             else {
                 switch (id) {
+                    case R.id.frontpage:
+                        changeListing(getString(R.string.frontpage), getString(R.string.best), null);
+                        break;
+                    case R.id.popular:
+                        changeListing(getString(R.string.popular), getString(R.string.hot), null);
+                        break;
+                    case R.id.all:
+                        changeListing(getString(R.string.all), getString(R.string.hot), null);
+                        break;
+                    case R.id.saved:
+                        break;
                     case R.id.profile:
+                        break;
+                    case R.id.inbox:
                         break;
                     case R.id.dark_mode:
                         isToggle = true;
