@@ -71,12 +71,24 @@
             <group
                 android:id="@+id/subreddits"
                 android:checkableBehavior="single">
-                <item android:title="androiddev" />
-                <item android:title="cscareerquestions" />
-                <item android:title="csMajors" />
-                <item android:title="PostHardcore" />
-                <item android:title="progmetal" />
-                <item android:title="UMD" />
+                <item
+                    android:icon="@drawable/pin"
+                    android:title="androiddev" />
+                <item
+                    android:icon="@drawable/pin"
+                    android:title="cscareerquestions" />
+                <item
+                    android:icon="@drawable/pin"
+                    android:title="csMajors" />
+                <item
+                    android:icon="@drawable/pin"
+                    android:title="PostHardcore" />
+                <item
+                    android:icon="@drawable/pin"
+                    android:title="progmetal" />
+                <item
+                    android:icon="@drawable/pin"
+                    android:title="UMD" />
             </group>
         </menu>
     </item>
