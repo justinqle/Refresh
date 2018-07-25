@@ -4,22 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item
-        android:id="@+id/profile"
-        android:icon="@drawable/account"
-        android:title="@string/profile"
-        android:visible="false" />
+    <group
+        android:id="@+id/checkable"
+        android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/dark_mode"
-        android:icon="@drawable/night"
-        android:title="@string/dark_mode"
-        app:actionLayout="@layout/menu_switch"
-        app:showAsAction="always" />
+        <item
+            android:id="@+id/home"
+            android:checked="true"
+            android:icon="@drawable/home"
+            android:title="@string/home" />
 
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/settings"
-        android:title="@string/settings" />
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/account"
+            android:title="@string/profile"
+            android:visible="false" />
+
+        <item
+            android:id="@+id/inbox"
+            android:icon="@drawable/inbox"
+            android:title="@string/inbox" />
+
+    </group>
+
+    <group android:id="@+id/uncheckable">
+
+        <item
+            android:id="@+id/dark_mode"
+            android:icon="@drawable/night"
+            android:title="@string/dark_mode"
+            app:actionLayout="@layout/menu_switch"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/settings"
+            android:title="@string/settings" />
+
+    </group>
 
 </menu>
