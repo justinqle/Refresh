@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Initially null, so loads posts and enacts observer
         // submit new set of data and set refreshing false
         postViewModel.getPosts().observe(this, posts -> {
+            // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
             mAdapter.submitList(posts);
             swipeContainer.setRefreshing(false);
         });
