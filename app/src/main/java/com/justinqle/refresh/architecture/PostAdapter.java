@@ -44,7 +44,12 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
 
                 @Override
                 public boolean areContentsTheSame(Post oldItem, Post newItem) {
-                    return oldItem.getTitle().equals(newItem.getTitle());
+                    return oldItem.getTitle().equals(newItem.getTitle()) &&
+                            oldItem.getSubreddit().equals(newItem.getSubreddit()) &&
+                            oldItem.getAuthor().equals(newItem.getAuthor()) &&
+                            oldItem.getCreatedUtc() == newItem.getCreatedUtc() &&
+                            oldItem.getNumComments() == newItem.getNumComments() &&
+                            oldItem.getScore() == newItem.getScore();
                 }
             };
 
