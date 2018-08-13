@@ -44,6 +44,9 @@ dependencies {
     implementation 'android.arch.paging:runtime:1.0.1'
     // Lifecycle, including LiveData and ViewModel
     implementation "android.arch.lifecycle:extensions:1.1.1"
+    // Navigation
+    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha05"
+    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha05"
     // javax.annotation library
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     // wasabeef recyclerview animators
