@@ -1,25 +1,19 @@
 package com.justinqle.refresh.activities;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.NavigationMenuView;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,8 +29,6 @@ import android.widget.Toast;
 
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.animations.ExpandCollapse;
-import com.justinqle.refresh.architecture.PostAdapter;
-import com.justinqle.refresh.architecture.PostViewModel;
 import com.justinqle.refresh.models.listing.Child;
 import com.justinqle.refresh.models.listing.Subreddit;
 import com.justinqle.refresh.models.user.User;
@@ -46,7 +38,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,32 +48,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int ADD_ACCOUNT_REQUEST = 1;
 
-    private PostAdapter mAdapter;
-    private PostViewModel postViewModel;
-    private SwipeRefreshLayout swipeContainer;
-    private LinearLayout dropdown;
-    private SubMenu subMenu;
-    private List<Child> subredditMenuItems = new LinkedList<>();
+    // Toolbar
     private Toolbar toolbar;
     private TextView currentSubreddit;
     private TextView currentSort;
+
+    // Nav Header
+    private LinearLayout dropdown;
+    private SubMenu subMenu;
+    private List<Child> subredditMenuItems = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Shared Preferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // TODO Different access tokens are retrieved twice on Authentication, due to data race between thread retrieving posts and thread retrieving subreddit items for nav menu
-        Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
-        Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
-        Log.d(TAG, "Logged In: " + sharedPreferences.getBoolean("logged_in", false));
-
-        // Swipe Container
-        swipeContainer = findViewById(R.id.swipeContainer);
-        // Initial refreshing
-        swipeContainer.setRefreshing(true);
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -126,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // TODO: Multi-account functionality
         // Set title of header and add header submenu items based on logged in/out status and different account options
-        boolean loggedIn = sharedPreferences.getBoolean("logged_in", false);
+        boolean loggedIn = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("logged_in", false);
         TextView headerTitle = header.findViewById(R.id.header_title);
         // "Guest" if logged out
         if (!loggedIn) {
@@ -196,54 +175,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                t.printStackTrace();
 //            }
 //        });
-
-        // RecyclerView
-        RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);
-        // Changes in content does not change layout size
-        mRecyclerView.setHasFixedSize(true);
-        // LinearLayout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // Initial animation / refresh
-        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-
-        // Hide FAB on scroll
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) {
-                    fab.hide();
-                } else {
-                    fab.show();
-                }
-
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-
-        // Adapter
-        mAdapter = new PostAdapter();
-        mRecyclerView.setAdapter(mAdapter);
-
-        // Create a ViewModel the first time the system calls an activity's onCreate() method.
-        // Re-created activities receive the same MyViewModel instance created by the first activity.
-        postViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
-
-        // invalidate to loadInitial() again
-        swipeContainer.setOnRefreshListener(() -> {
-            // invalidate data source to force refresh
-            postViewModel.refreshPosts();
-        });
-
-        // Observer Pattern: Will be used to observe changes to the Posts
-        // Initially null, so loads posts and enacts observer
-        // submit new set of data and set refreshing false
-        postViewModel.getPosts().observe(this, posts -> {
-            // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
-            mAdapter.submitList(posts);
-            swipeContainer.setRefreshing(false);
-        });
     }
 
     private void addSubredditMenuItemsCallback() {
@@ -305,13 +236,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 id == R.id.hot ||
                 id == R.id.sort_new ||
                 id == R.id.rising) {
-            changeListing(currentSubreddit.getText().toString(), item.getTitle().toString(), null);
+            //changeListing(currentSubreddit.getText().toString(), item.getTitle().toString(), null);
         }
         // Special time options
         else if (item.getGroupId() == R.id.controversial) {
-            changeListing(currentSubreddit.getText().toString(), "Controversial", item.getTitle().toString());
+            //changeListing(currentSubreddit.getText().toString(), "Controversial", item.getTitle().toString());
         } else if (item.getGroupId() == R.id.top) {
-            changeListing(currentSubreddit.getText().toString(), "Top", item.getTitle().toString());
+            //changeListing(currentSubreddit.getText().toString(), "Top", item.getTitle().toString());
         } else if (id == R.id.change_view) {
 
         } else if (id == R.id.action_settings) {
@@ -321,38 +252,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeListing(String subreddit, String sort, String time) {
-        // Refreshes until network request is finished
-        swipeContainer.setRefreshing(true);
-        // Updates Toolbar
-        currentSubreddit.setText(subreddit);
-        String sortAndTime = sort;
-        // If time is not null, append to time to sortAndTime string
-        if (time != null) {
-            sortAndTime += " " + getString(R.string.bullet) + " " + time;
-            // "All Time" string should be "all" for query
-            if (time.equals(getString(R.string.all_time))) {
-                time = "all";
-            }
-            time = time.toLowerCase();
-        }
-        currentSort.setText(sortAndTime);
-        // Special Cases
-        // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
-        if (subreddit.equals(getString(R.string.frontpage))) {
-            // Not a subreddit, or null
-            subreddit = null;
-        }
-        // Remove old Observers
-        postViewModel.getPosts().removeObservers(this);
-        // Updates RecyclerView Listing
-        postViewModel.getNewPosts(subreddit, sort.toLowerCase(), time).observe(this, posts -> {
-            mAdapter.submitList(posts);
-            swipeContainer.setRefreshing(false);
-            // Expand toolbar
-            ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
-        });
-    }
+//    private void changeListing(String subreddit, String sort, String time) {
+//        // Refreshes until network request is finished
+//        swipeContainer.setRefreshing(true);
+//        // Updates Toolbar
+//        currentSubreddit.setText(subreddit);
+//        String sortAndTime = sort;
+//        // If time is not null, append to time to sortAndTime string
+//        if (time != null) {
+//            sortAndTime += " " + getString(R.string.bullet) + " " + time;
+//            // "All Time" string should be "all" for query
+//            if (time.equals(getString(R.string.all_time))) {
+//                time = "all";
+//            }
+//            time = time.toLowerCase();
+//        }
+//        currentSort.setText(sortAndTime);
+//        // Special Cases
+//        // If Frontpage, get Frontpage listing (not /r/FrontPage listing)
+//        if (subreddit.equals(getString(R.string.frontpage))) {
+//            // Not a subreddit, or null
+//            subreddit = null;
+//        }
+//        // Remove old Observers
+//        postViewModel.getPosts().removeObservers(this);
+//        // Updates RecyclerView Listing
+//        postViewModel.getNewPosts(subreddit, sort.toLowerCase(), time).observe(this, posts -> {
+//            mAdapter.submitList(posts);
+//            swipeContainer.setRefreshing(false);
+//            // Expand toolbar
+//            ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
+//        });
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -367,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String subreddit = item.getTitle().toString();
                 // Default sort of Subreddits is "Hot"
                 String sort = getString(R.string.hot);
-                changeListing(subreddit, sort, null);
+                //changeListing(subreddit, sort, null);
                 // Calls onPrepareOptionsMenu()
                 invalidateOptionsMenu();
             }
@@ -375,13 +306,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             else {
                 switch (id) {
                     case R.id.frontpage:
-                        changeListing(getString(R.string.frontpage), getString(R.string.best), null);
+                        //changeListing(getString(R.string.frontpage), getString(R.string.best), null);
                         break;
                     case R.id.popular:
-                        changeListing(getString(R.string.popular), getString(R.string.hot), null);
+                        //changeListing(getString(R.string.popular), getString(R.string.hot), null);
                         break;
                     case R.id.all:
-                        changeListing(getString(R.string.all), getString(R.string.hot), null);
+                        //changeListing(getString(R.string.all), getString(R.string.hot), null);
                         break;
                     case R.id.saved:
                         break;
