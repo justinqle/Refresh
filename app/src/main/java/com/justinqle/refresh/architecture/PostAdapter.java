@@ -1,12 +1,9 @@
 package com.justinqle.refresh.architecture;
 
-import android.app.Activity;
 import android.arch.paging.PagedListAdapter;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +24,6 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.justinqle.refresh.GlideApp;
 import com.justinqle.refresh.R;
-import com.justinqle.refresh.activities.AccountLogin;
 import com.justinqle.refresh.models.listing.Post;
 import com.justinqle.refresh.models.listing.Preview;
 
@@ -89,9 +85,9 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
                     vh.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
                 }
             } else {
-                Snackbar.make(parent, R.string.logged_out, Snackbar.LENGTH_LONG).setAction(R.string.log_in,
-                        v1 -> ((Activity) parent.getContext()).startActivityForResult(new Intent(parent.getContext(), AccountLogin.class), 1))
-                        .show();
+//                Snackbar.make(parent, R.string.logged_out, Snackbar.LENGTH_LONG).setAction(R.string.log_in,
+//                        v1 -> ((Activity) parent.getContext()).startActivityForResult(new Intent(parent.getContext(), AccountLogin.class), 1))
+//                        .show();
             }
         });
         vh.downvote.setOnClickListener(v -> {
@@ -119,9 +115,9 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
                     vh.points.setTextColor(ContextCompat.getColor(v.getContext(), R.color.secondary_text));
                 }
             } else {
-                Snackbar.make(parent, R.string.logged_out, Snackbar.LENGTH_LONG).setAction(R.string.log_in,
-                        v1 -> ((Activity) parent.getContext()).startActivityForResult(new Intent(parent.getContext(), AccountLogin.class), 1))
-                        .show();
+//                Snackbar.make(parent, R.string.logged_out, Snackbar.LENGTH_LONG).setAction(R.string.log_in,
+//                        v1 -> ((Activity) parent.getContext()).startActivityForResult(new Intent(parent.getContext(), AccountLogin.class), 1))
+//                        .show();
             }
         });
         return vh;

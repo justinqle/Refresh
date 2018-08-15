@@ -7,6 +7,19 @@
     <fragment
         android:id="@+id/postsFragment"
         android:name="com.justinqle.refresh.fragments.PostsFragment"
-        android:label="fragment_posts"
-        tools:layout="@layout/fragment_posts" />
+        android:label="@string/home"
+        tools:layout="@layout/fragment_posts">
+        <action
+            android:id="@+id/action_postsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.justinqle.refresh.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
+    </fragment>
 </navigation>

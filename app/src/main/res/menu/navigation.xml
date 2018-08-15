@@ -1,40 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
     <group
-        android:id="@+id/listings"
-        android:checkableBehavior="single">
+        android:id="@+id/account_switcher"
+        android:visible="false">
 
         <item
-            android:id="@+id/frontpage"
-            android:icon="@drawable/home"
-            android:title="@string/frontpage" />
-
-        <item
-            android:id="@+id/popular"
-            android:icon="@drawable/rising"
-            android:title="@string/popular" />
-
-        <item
-            android:id="@+id/all"
-            android:icon="@drawable/top"
-            android:title="@string/all" />
-
-        <item
-            android:id="@+id/saved"
-            android:icon="@drawable/star"
-            android:title="@string/saved"
-            android:visible="false" />
+            android:id="@+id/loginFragment"
+            android:icon="@drawable/add_account_light"
+            android:title="@string/add_account" />
 
     </group>
 
-    <group
-        android:id="@+id/account"
-        android:checkableBehavior="single"
-        android:visible="false">
+    <group android:id="@+id/navigation">
+
+        <item
+            android:id="@+id/postsFragment"
+            android:icon="@drawable/home"
+            android:title="@string/home" />
 
         <item
             android:id="@+id/profile"
@@ -46,39 +31,11 @@
             android:icon="@drawable/inbox"
             android:title="@string/inbox" />
 
-    </group>
-
-    <group android:id="@+id/other">
-
-        <item
-            android:id="@+id/dark_mode"
-            android:icon="@drawable/night"
-            android:title="@string/dark_mode"
-            app:actionLayout="@layout/menu_switch"
-            app:showAsAction="always" />
-
         <item
             android:id="@+id/settings"
             android:icon="@drawable/settings"
             android:title="@string/settings" />
 
     </group>
-
-    <item
-        android:id="@+id/pinned"
-        android:title="@string/pinned">
-        <menu>
-            <group
-                android:id="@+id/subreddits"
-                android:checkableBehavior="single">
-                <item android:title="androiddev" />
-                <item android:title="cscareerquestions" />
-                <item android:title="csMajors" />
-                <item android:title="PostHardcore" />
-                <item android:title="progmetal" />
-                <item android:title="UMD" />
-            </group>
-        </menu>
-    </item>
 
 </menu>

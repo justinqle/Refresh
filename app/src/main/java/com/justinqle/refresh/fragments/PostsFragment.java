@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -94,7 +97,46 @@ public class PostsFragment extends Fragment {
             swipeContainer.setRefreshing(false);
         });
 
+        setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar, menu);
+
+//        if (currentSubreddit.getText().equals(getString(R.string.frontpage))) {
+//            menu.findItem(R.id.sort).getSubMenu().findItem(R.id.best).setVisible(true);
+//        }
+//        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.search) {
+
+        }
+        // No special time options
+        else if (id == R.id.best ||
+                id == R.id.hot ||
+                id == R.id.sort_new ||
+                id == R.id.rising) {
+            //changeListing(currentSubreddit.getText().toString(), item.getTitle().toString(), null);
+        }
+        // Special time options
+        else if (item.getGroupId() == R.id.controversial) {
+            //changeListing(currentSubreddit.getText().toString(), "Controversial", item.getTitle().toString());
+        } else if (item.getGroupId() == R.id.top) {
+            //changeListing(currentSubreddit.getText().toString(), "Top", item.getTitle().toString());
+        } else if (id == R.id.change_view) {
+
+        } else if (id == R.id.action_settings) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
