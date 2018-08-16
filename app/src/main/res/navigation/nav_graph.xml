@@ -8,18 +8,10 @@
         android:id="@+id/postsFragment"
         android:name="com.justinqle.refresh.fragments.PostsFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_posts">
-        <action
-            android:id="@+id/action_postsFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_posts" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.justinqle.refresh.fragments.LoginFragment"
         android:label="@string/log_in"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_loginFragment_to_postsFragment"
-            app:destination="@id/postsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_login" />
 </navigation>
