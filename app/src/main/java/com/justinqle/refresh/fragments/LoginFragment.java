@@ -39,6 +39,7 @@ import okhttp3.ResponseBody;
 public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginFragment";
+
     private static final String AUTH_URL =
             "https://www.reddit.com/api/v1/authorize.compact" +
                     "?client_id=%s" +
@@ -53,11 +54,13 @@ public class LoginFragment extends Fragment {
     private static final String REDIRECT_URI = "https://github.com/justinqle/Refresh";
     private static final String DURATION = "permanent";
     private static final String SCOPE = "read,identity,mysubreddits,vote";
+
     private static final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
+
     private WebView webView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 

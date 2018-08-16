@@ -1,9 +1,11 @@
 package com.justinqle.refresh.fragments;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,7 +34,7 @@ public class PostsFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
         // Shared Preferences
@@ -62,14 +64,15 @@ public class PostsFragment extends Fragment {
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-
-                if (dy > 0) {
-                    fab.hide();
-                } else {
-                    fab.show();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+                    if (dy > 0) {
+                        fab.hide();
+                    } else {
+                        fab.show();
+                    }
                 }
-
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
@@ -104,11 +107,6 @@ public class PostsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.toolbar, menu);
-
-//        if (currentSubreddit.getText().equals(getString(R.string.frontpage))) {
-//            menu.findItem(R.id.sort).getSubMenu().findItem(R.id.best).setVisible(true);
-//        }
-//        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
