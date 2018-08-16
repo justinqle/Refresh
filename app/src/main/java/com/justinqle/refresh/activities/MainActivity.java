@@ -63,8 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Navigation Component
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        // Since scrolling hides toolbar, ensures every navigation change reshows app bar
-        navController.addOnNavigatedListener((controller, destination) -> ((AppBarLayout) findViewById(R.id.app_bar)).setExpanded(true, true));
+        // Listener for every navigation change
+        navController.addOnNavigatedListener((controller, destination) -> {
+            // Since scrolling hides toolbar, ensures navigation changes reshows app bar
+            ((AppBarLayout) findViewById(R.id.app_bar)).setExpanded(true, true);
+            // Hides floating action button on fragments that don't utilize it
+            if (destination.getId() != R.id.postsFragment) {
+                fab.hide();
+            }
+        });
         // Sets up Toolbar with Navigation Component
         NavigationUI.setupActionBarWithNavController(this, navController, drawer);
         NavigationUI.setupWithNavController(toolbar, navController, drawer);
