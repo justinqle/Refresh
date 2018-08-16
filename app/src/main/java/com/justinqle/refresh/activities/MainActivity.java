@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.justinqle.refresh.R;
 
@@ -36,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Drawer (Container)
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -46,12 +46,15 @@ public class MainActivity extends AppCompatActivity {
         // Listener to swap between Nav Menu and Account Switcher
         View navHeader = navigationView.getHeaderView(0);
         navHeader.setOnClickListener(view -> {
+            ImageView arrow = navHeader.findViewById(R.id.header_icon);
             if (!view.isActivated()) {
                 view.setActivated(true);
+                arrow.animate().rotation(180).setDuration(200).start();
                 navigationView.getMenu().setGroupVisible(R.id.navigation, false);
                 navigationView.getMenu().setGroupVisible(R.id.account_switcher, true);
             } else {
                 view.setActivated(false);
+                arrow.animate().rotation(0).setDuration(200).start();
                 navigationView.getMenu().setGroupVisible(R.id.account_switcher, false);
                 navigationView.getMenu().setGroupVisible(R.id.navigation, true);
             }
