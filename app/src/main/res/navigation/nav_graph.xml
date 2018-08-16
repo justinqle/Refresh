@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.justinqle.refresh.fragments.LoginFragment"
-        android:label="fragment_login"
+        android:label="@string/log_in"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_postsFragment"
