@@ -1,6 +1,7 @@
 package com.justinqle.refresh.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Navigation Component
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        // Since scrolling hides toolbar, ensures every navigation change reshows app bar
+        navController.addOnNavigatedListener((controller, destination) -> ((AppBarLayout) findViewById(R.id.app_bar)).setExpanded(true, true));
         // Sets up Toolbar with Navigation Component
         NavigationUI.setupActionBarWithNavController(this, navController, drawer);
         NavigationUI.setupWithNavController(toolbar, navController, drawer);
