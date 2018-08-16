@@ -2,16 +2,13 @@ package com.justinqle.refresh.fragments;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,13 +33,6 @@ public class PostsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
-
-        // Shared Preferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        // TODO Different access tokens are retrieved twice on Authentication, due to data race between thread retrieving posts and thread retrieving subreddit items for nav menu
-        Log.d(TAG, "Access Token: " + sharedPreferences.getString("access_token", null));
-        Log.d(TAG, "Refresh Token: " + sharedPreferences.getString("refresh_token", null));
-        Log.d(TAG, "Logged In: " + sharedPreferences.getBoolean("logged_in", false));
 
         // Swipe Container
         swipeContainer = view.findViewById(R.id.swipeContainer);
