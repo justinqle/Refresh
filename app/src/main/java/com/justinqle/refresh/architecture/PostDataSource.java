@@ -30,13 +30,6 @@ public class PostDataSource extends PageKeyedDataSource<DefaultPaginator<Submiss
         this.timePeriod = timePeriod;
     }
 
-//    /**
-//     * Notify Main thread of failed Network request.
-//     */
-//    private static void backgroundThreadLongToast(String s) {
-//        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MyApplication.getContext(), s, Toast.LENGTH_LONG).show());
-//    }
-
     @Override
     public void loadInitial(@NonNull LoadInitialParams<DefaultPaginator<Submission>> params, @NonNull LoadInitialCallback<DefaultPaginator<Submission>, Submission> callback) {
         DefaultPaginator<Submission> paginator = MyApplication.getAccountHelper().switchToUserless().frontPage().limit(params.requestedLoadSize).build();
