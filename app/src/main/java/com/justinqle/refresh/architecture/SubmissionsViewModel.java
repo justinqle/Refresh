@@ -13,32 +13,32 @@ import net.dean.jraw.models.TimePeriod;
 
 public class SubmissionsViewModel extends ViewModel {
 
-    private LiveData<PagedList<Submission>> posts;
+    private LiveData<PagedList<Submission>> submissions;
 
-    public LiveData<PagedList<Submission>> getPosts() {
-        // Initially null, so load posts and call Observers
-        if (posts == null) {
+    public LiveData<PagedList<Submission>> getSubmissions() {
+        // Initially null, so load submissions and call Observers
+        if (submissions == null) {
             loadPosts(null, null, null, null);
         }
-        return posts;
+        return submissions;
     }
 
 //    public LiveData<PagedList<Submission>> getNewPosts(String subreddit, String sort, String time) {
 //        loadPosts(subreddit, sort, time);
-//        return posts;
+//        return submissions;
 //    }
 
     private void loadPosts(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
-        // Do an asynchronous operation to fetch posts.
+        // Do an asynchronous operation to fetch submissions.
         // initial page size to fetch can also be configured here too
         PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(25).build();
         SubmissionsDataSourceFactory factory = new SubmissionsDataSourceFactory(redditClient, subreddit, sorting, timePeriod);
-        posts = new LivePagedListBuilder<>(factory, config).build();
+        submissions = new LivePagedListBuilder<>(factory, config).build();
     }
 
     public void refreshPosts() {
-        if (posts.getValue() != null) {
-            posts.getValue().getDataSource().invalidate();
+        if (submissions.getValue() != null) {
+            submissions.getValue().getDataSource().invalidate();
         }
     }
 
