@@ -28,7 +28,7 @@ import com.justinqle.refresh.R;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.SubmissionPreview;
 
-public class PostAdapter extends PagedListAdapter<Submission, PostAdapter.ViewHolder> {
+public class SubmissionAdapter extends PagedListAdapter<Submission, SubmissionAdapter.ViewHolder> {
 
     private static final char[] SUFFIXES = {'k', 'm', 'g', 't', 'p', 'e'};
 
@@ -50,7 +50,7 @@ public class PostAdapter extends PagedListAdapter<Submission, PostAdapter.ViewHo
                 }
             };
 
-    public PostAdapter() {
+    public SubmissionAdapter() {
         super(DIFF_CALLBACK);
     }
 

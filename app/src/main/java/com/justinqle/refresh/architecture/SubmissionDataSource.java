@@ -13,9 +13,9 @@ import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.models.TimePeriod;
 import net.dean.jraw.pagination.DefaultPaginator;
 
-public class PostDataSource extends PageKeyedDataSource<DefaultPaginator<Submission>, Submission> {
+public class SubmissionDataSource extends PageKeyedDataSource<DefaultPaginator<Submission>, Submission> {
 
-    private static final String TAG = "PostDataSource";
+    private static final String TAG = "SubmissionDataSource";
 
     private RedditClient redditClient;
     private Subreddit subreddit;
@@ -23,7 +23,7 @@ public class PostDataSource extends PageKeyedDataSource<DefaultPaginator<Submiss
     private TimePeriod timePeriod;
 
     // define the type of data that will be emitted by this datasource
-    PostDataSource(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
+    SubmissionDataSource(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
         this.redditClient = redditClient;
         this.subreddit = subreddit;
         this.sorting = sorting;

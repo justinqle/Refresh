@@ -17,22 +17,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.justinqle.refresh.R;
-import com.justinqle.refresh.architecture.PostAdapter;
-import com.justinqle.refresh.architecture.PostViewModel;
+import com.justinqle.refresh.architecture.SubmissionAdapter;
+import com.justinqle.refresh.architecture.SubmissionViewModel;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
-public class PostsFragment extends Fragment {
+public class SubmissionFragment extends Fragment {
 
-    private static final String TAG = "PostsFragment";
+    private static final String TAG = "SubmissionFragment";
 
-    private PostAdapter mAdapter;
-    private PostViewModel postViewModel;
+    private SubmissionAdapter mAdapter;
+    private SubmissionViewModel submissionViewModel;
     private SwipeRefreshLayout swipeContainer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_posts, container, false);
+        View view = inflater.inflate(R.layout.fragment_submission, container, false);
 
         // Swipe Container
         swipeContainer = view.findViewById(R.id.swipeContainer);
@@ -68,23 +68,23 @@ public class PostsFragment extends Fragment {
         });
 
         // Adapter
-        mAdapter = new PostAdapter();
+        mAdapter = new SubmissionAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         // Create a ViewModel the first time the system calls an activity's onCreate() method.
         // Re-created activities receive the same MyViewModel instance created by the first activity.
-        postViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
+        submissionViewModel = ViewModelProviders.of(this).get(SubmissionViewModel.class);
 
         // invalidate to loadInitial() again
         swipeContainer.setOnRefreshListener(() -> {
             // invalidate data source to force refresh
-            postViewModel.refreshPosts();
+            submissionViewModel.refreshPosts();
         });
 
         // Observer Pattern: Will be used to observe changes to the Posts
         // Initially null, so loads posts and enacts observer
         // submit new set of data and set refreshing false
-        postViewModel.getPosts().observe(this, submissions -> {
+        submissionViewModel.getPosts().observe(this, submissions -> {
             // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
             mAdapter.submitList(submissions);
             swipeContainer.setRefreshing(false);
