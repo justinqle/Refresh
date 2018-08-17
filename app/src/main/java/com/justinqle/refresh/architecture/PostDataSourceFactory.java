@@ -2,27 +2,31 @@ package com.justinqle.refresh.architecture;
 
 import android.arch.paging.DataSource;
 
-import com.justinqle.refresh.models.listing.Post;
-import com.justinqle.refresh.networking.RedditApi;
+import net.dean.jraw.RedditClient;
+import net.dean.jraw.models.Sorting;
+import net.dean.jraw.models.Submission;
+import net.dean.jraw.models.Subreddit;
+import net.dean.jraw.models.TimePeriod;
+import net.dean.jraw.pagination.DefaultPaginator;
 
-public class PostDataSourceFactory extends PostDataSource.Factory<String, Post> {
+public class PostDataSourceFactory extends PostDataSource.Factory<DefaultPaginator<Submission>, Submission> {
 
     private PostDataSource postDataSource;
-    private RedditApi redditApi;
-    private String subreddit;
-    private String sort;
-    private String time;
+    private RedditClient redditClient;
+    private Subreddit subreddit;
+    private Sorting sorting;
+    private TimePeriod timePeriod;
 
-    PostDataSourceFactory(RedditApi redditApi, String subreddit, String sort, String time) {
-        this.redditApi = redditApi;
+    public PostDataSourceFactory(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
+        this.redditClient = redditClient;
         this.subreddit = subreddit;
-        this.sort = sort;
-        this.time = time;
+        this.sorting = sorting;
+        this.timePeriod = timePeriod;
     }
 
     @Override
-    public DataSource<String, Post> create() {
-        postDataSource = new PostDataSource(redditApi, subreddit, sort, time);
+    public DataSource<DefaultPaginator<Submission>, Submission> create() {
+        postDataSource = new PostDataSource(redditClient, subreddit, sorting, timePeriod);
         return postDataSource;
     }
 

@@ -24,27 +24,28 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.justinqle.refresh.GlideApp;
 import com.justinqle.refresh.R;
-import com.justinqle.refresh.models.listing.Post;
-import com.justinqle.refresh.models.listing.Preview;
 
-public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> {
+import net.dean.jraw.models.Submission;
+import net.dean.jraw.models.SubmissionPreview;
+
+public class PostAdapter extends PagedListAdapter<Submission, PostAdapter.ViewHolder> {
 
     private static final char[] SUFFIXES = {'k', 'm', 'g', 't', 'p', 'e'};
 
-    private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Post>() {
+    private static final DiffUtil.ItemCallback<Submission> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Submission>() {
                 @Override
-                public boolean areItemsTheSame(Post oldItem, Post newItem) {
+                public boolean areItemsTheSame(Submission oldItem, Submission newItem) {
                     return oldItem.getId().equals(newItem.getId());
                 }
 
                 @Override
-                public boolean areContentsTheSame(Post oldItem, Post newItem) {
+                public boolean areContentsTheSame(Submission oldItem, Submission newItem) {
                     return oldItem.getTitle().equals(newItem.getTitle()) &&
                             oldItem.getSubreddit().equals(newItem.getSubreddit()) &&
                             oldItem.getAuthor().equals(newItem.getAuthor()) &&
-                            oldItem.getCreatedUtc() == newItem.getCreatedUtc() &&
-                            oldItem.getNumComments() == newItem.getNumComments() &&
+                            oldItem.getCreated().equals(newItem.getCreated()) &&
+                            oldItem.getCommentCount().equals(newItem.getCommentCount()) &&
                             oldItem.getScore() == newItem.getScore();
                 }
             };
@@ -171,22 +172,22 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Post post = getItem(position);
-        if (post != null) {
-            holder.title.setText(post.getTitle());
+        Submission submission = getItem(position);
+        if (submission != null) {
+            holder.title.setText(submission.getTitle());
 
             // Adding various description text info
-            String description = post.getSubreddit() + "  " +
-                    post.getAuthor() + "  " +
-                    getAbbreviatedTimeSpan(post.getCreatedUtc() * 1000L);
+            String description = submission.getSubreddit() + "  " +
+                    submission.getAuthor() + "  " +
+                    getAbbreviatedTimeSpan(submission.getCreated().getTime());
             Spannable spannable = new SpannableString(description);
-            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(holder.description.getContext(), R.color.primary_dark)), 0, post.getSubreddit().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(holder.description.getContext(), R.color.primary_dark)), 0, submission.getSubreddit().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.description.setText(spannable, TextView.BufferType.SPANNABLE);
 
-            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, post.getNumComments()));
-            holder.points.setText(format(post.getScore()));
+            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, submission.getCommentCount()));
+            holder.points.setText(format(submission.getScore()));
             // TODO: Show thumbnail for gifs and videos(?)
-            Preview preview = post.getPreview();
+            SubmissionPreview preview = submission.getPreview();
             if (preview == null) {
                 holder.thumbnail.setVisibility(View.GONE);
             } else {

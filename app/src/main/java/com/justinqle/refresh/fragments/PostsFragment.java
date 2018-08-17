@@ -84,9 +84,9 @@ public class PostsFragment extends Fragment {
         // Observer Pattern: Will be used to observe changes to the Posts
         // Initially null, so loads posts and enacts observer
         // submit new set of data and set refreshing false
-        postViewModel.getPosts().observe(this, posts -> {
+        postViewModel.getPosts().observe(this, submissions -> {
             // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
-            mAdapter.submitList(posts);
+            mAdapter.submitList(submissions);
             swipeContainer.setRefreshing(false);
         });
 
