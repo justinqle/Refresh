@@ -18,7 +18,7 @@ public class SubmissionsViewModel extends ViewModel {
     public LiveData<PagedList<Submission>> getSubmissions() {
         // Initially null, so load submissions and call Observers
         if (submissions == null) {
-            loadPosts(null, null, null, null);
+            loadSubmissions(null, null, null, null);
         }
         return submissions;
     }
@@ -28,7 +28,7 @@ public class SubmissionsViewModel extends ViewModel {
 //        return submissions;
 //    }
 
-    private void loadPosts(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
+    private void loadSubmissions(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
         // Do an asynchronous operation to fetch submissions.
         // initial page size to fetch can also be configured here too
         PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(25).build();
