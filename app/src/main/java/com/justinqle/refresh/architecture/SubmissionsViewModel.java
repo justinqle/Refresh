@@ -11,7 +11,7 @@ import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.models.TimePeriod;
 
-public class SubmissionViewModel extends ViewModel {
+public class SubmissionsViewModel extends ViewModel {
 
     private LiveData<PagedList<Submission>> posts;
 
@@ -32,7 +32,7 @@ public class SubmissionViewModel extends ViewModel {
         // Do an asynchronous operation to fetch posts.
         // initial page size to fetch can also be configured here too
         PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(25).build();
-        SubmissionDataSourceFactory factory = new SubmissionDataSourceFactory(redditClient, subreddit, sorting, timePeriod);
+        SubmissionsDataSourceFactory factory = new SubmissionsDataSourceFactory(redditClient, subreddit, sorting, timePeriod);
         posts = new LivePagedListBuilder<>(factory, config).build();
     }
 

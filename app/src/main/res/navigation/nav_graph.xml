@@ -6,7 +6,7 @@
     app:startDestination="@id/postsFragment">
     <fragment
         android:id="@+id/postsFragment"
-        android:name="com.justinqle.refresh.fragments.SubmissionFragment"
+        android:name="com.justinqle.refresh.fragments.SubmissionsFragment"
         android:label="@string/home"
         tools:layout="@layout/fragment_submission" />
     <fragment

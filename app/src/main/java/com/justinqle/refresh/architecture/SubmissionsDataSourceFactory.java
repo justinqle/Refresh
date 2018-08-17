@@ -9,15 +9,15 @@ import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.models.TimePeriod;
 import net.dean.jraw.pagination.DefaultPaginator;
 
-public class SubmissionDataSourceFactory extends SubmissionDataSource.Factory<DefaultPaginator<Submission>, Submission> {
+public class SubmissionsDataSourceFactory extends SubmissionsDataSource.Factory<DefaultPaginator<Submission>, Submission> {
 
-    private SubmissionDataSource submissionDataSource;
+    private SubmissionsDataSource submissionsDataSource;
     private RedditClient redditClient;
     private Subreddit subreddit;
     private Sorting sorting;
     private TimePeriod timePeriod;
 
-    public SubmissionDataSourceFactory(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
+    public SubmissionsDataSourceFactory(RedditClient redditClient, Subreddit subreddit, Sorting sorting, TimePeriod timePeriod) {
         this.redditClient = redditClient;
         this.subreddit = subreddit;
         this.sorting = sorting;
@@ -26,8 +26,8 @@ public class SubmissionDataSourceFactory extends SubmissionDataSource.Factory<De
 
     @Override
     public DataSource<DefaultPaginator<Submission>, Submission> create() {
-        submissionDataSource = new SubmissionDataSource(redditClient, subreddit, sorting, timePeriod);
-        return submissionDataSource;
+        submissionsDataSource = new SubmissionsDataSource(redditClient, subreddit, sorting, timePeriod);
+        return submissionsDataSource;
     }
 
 }
