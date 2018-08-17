@@ -32,7 +32,7 @@ public class SubmissionsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_submission, container, false);
+        View view = inflater.inflate(R.layout.fragment_submissions, container, false);
 
         // Swipe Container
         swipeContainer = view.findViewById(R.id.swipeContainer);
@@ -78,7 +78,7 @@ public class SubmissionsFragment extends Fragment {
         // invalidate to loadInitial() again
         swipeContainer.setOnRefreshListener(() -> {
             // invalidate data source to force refresh
-            submissionsViewModel.refreshPosts();
+            submissionsViewModel.invalidateDataSource();
         });
 
         // Observer Pattern: Will be used to observe changes to the Posts

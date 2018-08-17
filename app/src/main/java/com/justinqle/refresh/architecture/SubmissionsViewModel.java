@@ -36,7 +36,7 @@ public class SubmissionsViewModel extends ViewModel {
         submissions = new LivePagedListBuilder<>(factory, config).build();
     }
 
-    public void refreshPosts() {
+    public void invalidateDataSource() {
         if (submissions.getValue() != null) {
             submissions.getValue().getDataSource().invalidate();
         }
