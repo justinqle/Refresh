@@ -46,7 +46,8 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
                             oldItem.getAuthor().equals(newItem.getAuthor()) &&
                             oldItem.getCreated().equals(newItem.getCreated()) &&
                             oldItem.getCommentCount().equals(newItem.getCommentCount()) &&
-                            oldItem.getScore() == newItem.getScore();
+                            oldItem.getScore() == newItem.getScore() &&
+                            oldItem.getPreview() == newItem.getPreview();
                 }
             };
 
