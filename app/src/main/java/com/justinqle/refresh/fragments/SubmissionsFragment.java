@@ -28,7 +28,6 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 public class SubmissionsFragment extends Fragment {
 
@@ -54,9 +53,6 @@ public class SubmissionsFragment extends Fragment {
         // LinearLayout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // Initial animation / refresh
-        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
 
         // Hide FAB on scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
