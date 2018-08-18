@@ -190,7 +190,7 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
             // TODO: Show thumbnail for gifs and videos(?)
             SubmissionPreview preview = submission.getPreview();
             if (preview == null) {
-                holder.thumbnail.setVisibility(View.GONE);
+                //holder.thumbnail.setVisibility(View.GONE);
             } else {
                 String url = preview.getImages().get(0).getSource().getUrl();
                 // TODO: Glide logcat errors
