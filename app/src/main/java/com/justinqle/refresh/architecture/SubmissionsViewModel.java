@@ -20,7 +20,7 @@ public class SubmissionsViewModel extends ViewModel {
         // Initially null, so load submissions and call Observers
         if (submissions == null) {
             // Load default submissions on start up: frontpage
-            loadSubmissions(MyApplication.getAccountHelper().switchToUserless().frontPage());
+            loadSubmissions(MyApplication.getAccountHelper().getReddit().frontPage());
         }
         return submissions;
     }
