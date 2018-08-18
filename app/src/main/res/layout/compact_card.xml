@@ -7,6 +7,6 @@
     android:layout_marginTop="@dimen/mtrl_card_spacing"
     android:layout_marginRight="@dimen/mtrl_card_spacing">
 
-    <include layout="@layout/news_row" />
+    <include layout="@layout/compact" />
 
 </android.support.design.card.MaterialCardView>
