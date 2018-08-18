@@ -25,24 +25,14 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    // Android
+    // Android Support Library
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
-    // JRAW
-    implementation "net.dean.jraw:JRAW-Android:1.1.0"
-    // GSON
-    implementation 'com.google.code.gson:gson:2.8.5'
-    // Retrofit & GSON-converter
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
-    // Glide
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    /* Architecture Components */
     // Paging
     implementation 'android.arch.paging:runtime:1.0.1'
     // Lifecycle, including LiveData and ViewModel
@@ -50,10 +40,14 @@ dependencies {
     // Navigation
     implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha05"
     implementation "android.arch.navigation:navigation-ui:1.0.0-alpha05"
-    // javax.annotation library
-    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
-    // wasabeef recyclerview animators
+    // JRAW (Reddit API wrapper)
+    implementation "net.dean.jraw:JRAW-Android:1.1.0"
+    // Glide (for image loading)
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    // wasabeef RecyclerView animators
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
+    // Testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
