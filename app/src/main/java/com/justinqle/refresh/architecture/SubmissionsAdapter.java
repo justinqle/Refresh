@@ -193,7 +193,6 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
                 //holder.thumbnail.setVisibility(View.GONE);
             } else {
                 String url = preview.getImages().get(0).getSource().getUrl();
-                // TODO: Glide logcat errors
                 GlideApp.with(holder.thumbnail.getContext()).load(url).centerCrop().transition(DrawableTransitionOptions.withCrossFade()).into(holder.thumbnail);
             }
         }
