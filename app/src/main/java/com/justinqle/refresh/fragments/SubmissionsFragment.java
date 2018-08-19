@@ -58,7 +58,7 @@ public class SubmissionsFragment extends Fragment {
         // Hide FAB on scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 Activity activity = getActivity();
                 if (activity != null) {
                     FloatingActionButton fab = getActivity().findViewById(R.id.fab);
