@@ -10,8 +10,6 @@ import net.dean.jraw.pagination.DefaultPaginator;
 
 public class SubmissionsDataSource extends PageKeyedDataSource<DefaultPaginator<Submission>, Submission> {
 
-    private static final String TAG = "SubmissionsDataSource";
-
     private DefaultPaginator.Builder<Submission, SubredditSort> paginatorBuilder;
 
     // define the type of data that will be emitted by this data source

@@ -31,8 +31,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SubmissionsFragment extends Fragment {
 
-    private static final String TAG = "SubmissionsFragment";
-
     private SubmissionsAdapter mAdapter;
     private SubmissionsViewModel submissionsViewModel;
     private SwipeRefreshLayout swipeContainer;
