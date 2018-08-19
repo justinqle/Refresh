@@ -45,6 +45,8 @@ public class SubmissionsFragment extends Fragment {
         swipeContainer = view.findViewById(R.id.swipeContainer);
         // Initial refreshing
         swipeContainer.setRefreshing(true);
+        // Pull-down refresh listener
+        swipeContainer.setOnRefreshListener(() -> submissionsViewModel.invalidateDataSource());
 
         // RecyclerView
         RecyclerView mRecyclerView = view.findViewById(R.id.my_recycler_view);
@@ -53,7 +55,6 @@ public class SubmissionsFragment extends Fragment {
         // LinearLayout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
         // Hide FAB on scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -70,7 +71,6 @@ public class SubmissionsFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-
         // Adapter
         mAdapter = new SubmissionsAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -78,10 +78,6 @@ public class SubmissionsFragment extends Fragment {
         // Create a ViewModel the first time the system calls an activity's onCreate() method.
         // Re-created activities receive the same MyViewModel instance created by the first activity.
         submissionsViewModel = ViewModelProviders.of(this).get(SubmissionsViewModel.class);
-
-        // Pull-down refresh listener
-        swipeContainer.setOnRefreshListener(() -> submissionsViewModel.invalidateDataSource());
-
         // Switches to Userless mode, and then populate PagedList when completed
         Completable.create(emitter -> {
             MyApplication.getAccountHelper().switchToUserless();
