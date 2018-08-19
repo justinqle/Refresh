@@ -7,8 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="thumbnail">Thumbnail for Reddit posts</string>
-    <string name="upvote">Upvote button</string>
-    <string name="downvote">Downvote button</string>
+    <string name="upvote_button">Upvote button</string>
+    <string name="downvote_button">Downvote button</string>
     <string name="add_account">Add Account</string>
     <string name="log_in">Log In</string>
     <string name="profile">Profile</string>
