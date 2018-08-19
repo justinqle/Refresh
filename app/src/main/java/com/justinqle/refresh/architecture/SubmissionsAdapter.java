@@ -187,7 +187,7 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
 
             holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, submission.getCommentCount()));
             holder.points.setText(format(submission.getScore()));
-            // TODO: Show thumbnail for gifs and videos(?)
+            // TODO: Placeholder image depending on type; hide when selftext
             SubmissionPreview preview = submission.getPreview();
             if (preview == null) {
                 //holder.thumbnail.setVisibility(View.GONE);
