@@ -17,24 +17,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.justinqle.refresh.MyApplication;
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.architecture.SubmissionsAdapter;
 import com.justinqle.refresh.architecture.SubmissionsViewModel;
 
+import net.dean.jraw.RedditClient;
 import net.dean.jraw.models.SubredditSort;
 import net.dean.jraw.models.TimePeriod;
-
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class SubmissionsFragment extends Fragment {
 
     private SubmissionsAdapter mAdapter;
     private SubmissionsViewModel submissionsViewModel;
     private SwipeRefreshLayout swipeContainer;
+    private RedditClient redditClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,33 +86,19 @@ public class SubmissionsFragment extends Fragment {
 
         // Create a ViewModel the first time the system calls an activity's onCreate() method.
         // Re-created activities receive the same MyViewModel instance created by the first activity.
+        // Currently scoped to the current Fragment
         submissionsViewModel = ViewModelProviders.of(this).get(SubmissionsViewModel.class);
         // Switches to Userless mode, and then populate PagedList when completed
-        Completable.create(emitter -> {
-            MyApplication.getAccountHelper().switchToUserless();
-            emitter.onComplete();
-        }).subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                // Observer Pattern: Will be used to observe changes to the PagedList<Submissions>
-                // Initially null, so loads submissions and enacts observer
-                // Submit new set of data and set refreshing false
-                submissionsViewModel.getSubmissions().observe(SubmissionsFragment.this, submissions -> {
-                    // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
-                    mAdapter.submitList(submissions);
-                    swipeContainer.setRefreshing(false);
-                });
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
+        submissionsViewModel.getRedditClient().observe(this, redditClient -> {
+            this.redditClient = redditClient;
+            // Observer Pattern: Will be used to observe changes to the PagedList<Submissions>
+            // Initially null, so loads submissions and enacts observer
+            // Submit new set of data and set refreshing false
+            submissionsViewModel.getSubmissions(redditClient).observe(SubmissionsFragment.this, submissions -> {
+                // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
+                mAdapter.submitList(submissions);
+                swipeContainer.setRefreshing(false);
+            });
         });
 
         setHasOptionsMenu(true);
@@ -135,67 +117,67 @@ public class SubmissionsFragment extends Fragment {
                 break;
             case R.id.best:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.BEST));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.BEST));
                 break;
             case R.id.hot:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.HOT));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.HOT));
                 break;
             case R.id.sort_new:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.NEW));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.NEW));
                 break;
             case R.id.controversial_hour:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.HOUR));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.HOUR));
                 break;
             case R.id.controversial_day:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.DAY));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.DAY));
                 break;
             case R.id.controversial_week:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.WEEK));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.WEEK));
                 break;
             case R.id.controversial_month:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.MONTH));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.MONTH));
                 break;
             case R.id.controversial_year:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.YEAR));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.YEAR));
                 break;
             case R.id.controversial_all_time:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.ALL));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.CONTROVERSIAL).timePeriod(TimePeriod.ALL));
                 break;
             case R.id.top_hour:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.HOUR));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.HOUR));
                 break;
             case R.id.top_day:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.DAY));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.DAY));
                 break;
             case R.id.top_week:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.WEEK));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.WEEK));
                 break;
             case R.id.top_month:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.MONTH));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.MONTH));
                 break;
             case R.id.top_year:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.YEAR));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.YEAR));
                 break;
             case R.id.top_all_time:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.ALL));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.TOP).timePeriod(TimePeriod.ALL));
                 break;
             case R.id.rising:
                 swipeContainer.setRefreshing(true);
-                submissionsViewModel.changeDataSource(MyApplication.getAccountHelper().getReddit().frontPage().sorting(SubredditSort.RISING));
+                submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.RISING));
                 break;
             case R.id.change_view:
                 break;

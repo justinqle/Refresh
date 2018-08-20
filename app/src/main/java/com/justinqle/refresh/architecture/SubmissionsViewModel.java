@@ -1,26 +1,53 @@
 package com.justinqle.refresh.architecture;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
 import com.justinqle.refresh.MyApplication;
 
+import net.dean.jraw.RedditClient;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.SubredditSort;
 import net.dean.jraw.pagination.DefaultPaginator;
 
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
+
 public class SubmissionsViewModel extends ViewModel {
+
+    private MutableLiveData<RedditClient> redditClient;
 
     private LiveData<PagedList<Submission>> submissions;
     private SubmissionsDataSourceFactory factory;
 
-    public LiveData<PagedList<Submission>> getSubmissions() {
+    // Can define what kind of RedditClient we want on startup
+    public LiveData<RedditClient> getRedditClient() {
+        // Get userless RedditClient on startup
+        if (redditClient == null) {
+            redditClient = new MutableLiveData<>();
+            loadRedditClient();
+        }
+        return redditClient;
+    }
+
+    private void loadRedditClient() {
+        // Do an asynchronous operation to load RedditClient
+        Single.fromCallable(() -> MyApplication.getAccountHelper().switchToUserless())
+                .subscribeOn(Schedulers.io())
+                .subscribe(newRedditClient -> {
+                    // Posts value on background thread
+                    this.redditClient.postValue(newRedditClient);
+                });
+    }
+
+    public LiveData<PagedList<Submission>> getSubmissions(RedditClient redditClient) {
         // Initially null, so load submissions and call Observers
         if (submissions == null) {
             // Load default submissions on start up: frontpage
-            loadSubmissions(MyApplication.getAccountHelper().getReddit().frontPage());
+            loadSubmissions(redditClient.frontPage());
         }
         return submissions;
     }
