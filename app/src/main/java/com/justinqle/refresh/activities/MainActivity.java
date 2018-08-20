@@ -1,7 +1,7 @@
 package com.justinqle.refresh.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
+import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -9,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -26,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // BottomAppBar
+        BottomAppBar bar = findViewById(R.id.bar);
+        setSupportActionBar(bar);
 
         // Floating Action Button
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Drawer (Container)
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, bar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -63,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         // Listener for every navigation change
         navController.addOnNavigatedListener((controller, destination) -> {
-            // Since scrolling hides toolbar, ensures navigation changes reshows app bar
-            ((AppBarLayout) findViewById(R.id.app_bar)).setExpanded(true, true);
             // Hides floating action button on fragments that don't utilize it
             if (destination.getId() != R.id.postsFragment) {
                 fab.hide();
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
         // Sets up Toolbar with Navigation Component
         NavigationUI.setupActionBarWithNavController(this, navController, drawer);
-        NavigationUI.setupWithNavController(toolbar, navController, drawer);
+        NavigationUI.setupWithNavController(bar, navController, drawer);
         // Sets up Navigation View with Navigation Component
         NavigationUI.setupWithNavController(navigationView, navController);
     }
