@@ -82,6 +82,15 @@ public class SubmissionsFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
         // Adapter
         mAdapter = new SubmissionsAdapter();
+        // When new data is inserted into adapter, observer is notified and scrolls layout manager to top
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                if (positionStart == 0) {
+                    mLayoutManager.scrollToPosition(0);
+                }
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         // Create a ViewModel the first time the system calls an activity's onCreate() method.
@@ -95,7 +104,6 @@ public class SubmissionsFragment extends Fragment {
             // Initially null, so loads submissions and enacts observer
             // Submit new set of data and set refreshing false
             submissionsViewModel.getSubmissions(redditClient).observe(SubmissionsFragment.this, submissions -> {
-                // TODO: Changing listing sometimes puts you in the middle (possibly due to DiffUtil)
                 mAdapter.submitList(submissions);
                 swipeContainer.setRefreshing(false);
             });
