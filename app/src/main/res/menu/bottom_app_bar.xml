@@ -83,23 +83,44 @@
         </menu>
     </item>
     <item
+        android:id="@+id/change_theme"
+        android:title="@string/change_theme"
+        app:showAsAction="never">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/light"
+                    android:checked="true"
+                    android:title="@string/light" />
+                <item
+                    android:id="@+id/dark"
+                    android:title="@string/dark" />
+            </group>
+        </menu>
+    </item>
+    <item
         android:id="@+id/change_view"
         android:title="@string/change_view"
         app:showAsAction="never">
         <menu>
             <group android:checkableBehavior="single">
-                <item android:title="@string/cards" />
-                <item android:title="@string/small_cards" />
                 <item
+                    android:id="@+id/cards"
+                    android:title="@string/cards" />
+                <item
+                    android:id="@+id/small_cards"
+                    android:title="@string/small_cards" />
+                <item
+                    android:id="@+id/compact"
                     android:checked="true"
                     android:title="@string/compact" />
-                <item android:title="@string/list" />
-                <item android:title="@string/gallery" />
+                <item
+                    android:id="@+id/list"
+                    android:title="@string/list" />
+                <item
+                    android:id="@+id/gallery"
+                    android:title="@string/gallery" />
             </group>
         </menu>
     </item>
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 </menu>

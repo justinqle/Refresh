@@ -49,4 +49,7 @@
     <string name="saved">Saved</string>
     <string name="pinned">Pinned</string>
     <string name="favorites">Favorites</string>
+    <string name="change_theme">Change Theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>
