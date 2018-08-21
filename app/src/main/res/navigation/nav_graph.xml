@@ -11,12 +11,16 @@
         tools:layout="@layout/fragment_submissions">
         <action
             android:id="@+id/action_postsFragment_to_commentsFragment"
-            app:destination="@id/commentsFragment" />
+            app:destination="@id/commentsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
         android:name="com.justinqle.refresh.fragments.CommentsFragment"
-        android:label="fragment_comments"
+        android:label="@string/comments"
         tools:layout="@layout/fragment_comments" />
     <fragment
         android:id="@+id/loginFragment"
