@@ -3,39 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group
-        android:id="@+id/account_switcher"
-        android:visible="false">
+    <item
+        android:id="@+id/loginFragment"
+        android:icon="@drawable/add_account_light"
+        android:title="@string/add_account" />
 
-        <item
-            android:id="@+id/loginFragment"
-            android:icon="@drawable/add_account_light"
-            android:title="@string/add_account" />
+    <item
+        android:id="@+id/postsFragment"
+        android:icon="@drawable/home"
+        android:title="@string/home" />
 
-    </group>
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/account"
+        android:title="@string/profile" />
 
-    <group android:id="@+id/navigation">
+    <item
+        android:id="@+id/inbox"
+        android:icon="@drawable/ic_email_white_24dp"
+        android:title="@string/inbox" />
 
-        <item
-            android:id="@+id/postsFragment"
-            android:icon="@drawable/home"
-            android:title="@string/home" />
-
-        <item
-            android:id="@+id/profile"
-            android:icon="@drawable/account"
-            android:title="@string/profile" />
-
-        <item
-            android:id="@+id/inbox"
-            android:icon="@drawable/inbox"
-            android:title="@string/inbox" />
-
-        <item
-            android:id="@+id/settings"
-            android:icon="@drawable/settings"
-            android:title="@string/settings" />
-
-    </group>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/settings"
+        android:title="@string/settings" />
 
 </menu>
