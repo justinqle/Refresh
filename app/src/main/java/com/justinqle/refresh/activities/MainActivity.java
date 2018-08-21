@@ -22,13 +22,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // BottomAppBar
-        BottomAppBar bar = findViewById(R.id.bar);
+        BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
         // Fragments can create custom options menu with setHasOptionsMenu()
-        setSupportActionBar(bar);
+        setSupportActionBar(bottomAppBar);
         // BottomNavigationDrawerFragment
         BottomNavigationDrawerFragment bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment();
         // Clicking on BottomAppBar Navigation Icon shows BottomNavigationDrawerFragment
-        bar.setNavigationOnClickListener(view -> bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag()));
+        bottomAppBar.setNavigationOnClickListener(view -> bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag()));
 
         // Floating Action Button
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -44,14 +44,23 @@ public class MainActivity extends AppCompatActivity {
             if (bottomNavigationDrawerFragment.isVisible()) {
                 bottomNavigationDrawerFragment.dismiss();
             }
+
+            // FAB alignment
+            if (destination.getId() == R.id.postsFragment) {
+                bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+            } else if (destination.getId() == R.id.commentsFragment) {
+                bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+            }
+
             // Hides bottom app bar & floating action button on fragments that don't utilize it
             if (destination.getId() == R.id.loginFragment) {
                 getSupportActionBar().hide();
                 fab.hide();
             }
-            // Makes sure bottom app bar gets shown again if hidden before
-            else if (!getSupportActionBar().isShowing()) {
+            // Makes sure bottom app bar & floating action button gets shown again if hidden before
+            else {
                 getSupportActionBar().show();
+                fab.show();
             }
         });
     }
