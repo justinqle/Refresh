@@ -1,10 +1,8 @@
 package com.justinqle.refresh.fragments;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,22 +48,7 @@ public class SubmissionsFragment extends Fragment {
         // LinearLayout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        // Hide FAB on scroll
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-                    if (dy > 0) {
-                        fab.hide();
-                    } else {
-                        fab.show();
-                    }
-                }
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
+        // RecylerView gestures
         ItemTouchHelper.SimpleCallback simpleCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
@@ -115,7 +98,7 @@ public class SubmissionsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar, menu);
+        inflater.inflate(R.menu.bottom_app_bar, menu);
     }
 
     @Override
@@ -187,9 +170,19 @@ public class SubmissionsFragment extends Fragment {
                 swipeContainer.setRefreshing(true);
                 submissionsViewModel.changeDataSource(redditClient.frontPage().sorting(SubredditSort.RISING));
                 break;
-            case R.id.change_view:
+            case R.id.light:
                 break;
-            case R.id.action_settings:
+            case R.id.dark:
+                break;
+            case R.id.cards:
+                break;
+            case R.id.small_cards:
+                break;
+            case R.id.compact:
+                break;
+            case R.id.list:
+                break;
+            case R.id.gallery:
                 break;
         }
         return super.onOptionsItemSelected(item);
