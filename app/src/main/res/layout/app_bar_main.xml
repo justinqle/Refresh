@@ -19,8 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:backgroundTint="@color/primary"
         app:hideOnScroll="true"
-        app:navigationIcon="@drawable/hot" />
+        app:navigationIcon="@drawable/hamburger_menu" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
