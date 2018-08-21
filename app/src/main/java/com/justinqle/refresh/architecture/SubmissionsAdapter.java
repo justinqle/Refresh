@@ -1,5 +1,6 @@
 package com.justinqle.refresh.architecture;
 
+import android.app.Activity;
 import android.arch.paging.PagedListAdapter;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
@@ -27,6 +28,8 @@ import com.justinqle.refresh.R;
 
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.SubmissionPreview;
+
+import androidx.navigation.Navigation;
 
 public class SubmissionsAdapter extends PagedListAdapter<Submission, SubmissionsAdapter.ViewHolder> {
 
@@ -198,7 +201,7 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
         }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView title;
         private TextView description;
@@ -217,7 +220,15 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
             thumbnail = v.findViewById(R.id.thumbnail);
             upvote = v.findViewById(R.id.upvote);
             downvote = v.findViewById(R.id.downvote);
+            // OnClickListener for container
+            v.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            Navigation.findNavController((Activity) view.getContext(), R.id.nav_host_fragment).navigate(R.id.action_postsFragment_to_commentsFragment);
+        }
+
     }
 
 }
