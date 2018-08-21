@@ -8,7 +8,16 @@
         android:id="@+id/postsFragment"
         android:name="com.justinqle.refresh.fragments.SubmissionsFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_submissions" />
+        tools:layout="@layout/fragment_submissions">
+        <action
+            android:id="@+id/action_postsFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.justinqle.refresh.fragments.CommentsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comments" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.justinqle.refresh.fragments.LoginFragment"
