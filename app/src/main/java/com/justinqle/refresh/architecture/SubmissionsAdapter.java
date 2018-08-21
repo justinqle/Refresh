@@ -185,7 +185,7 @@ public class SubmissionsAdapter extends PagedListAdapter<Submission, Submissions
             spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(holder.description.getContext(), R.color.primary_dark)), 0, submission.getSubreddit().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.description.setText(spannable, TextView.BufferType.SPANNABLE);
 
-            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.comments, submission.getCommentCount()));
+            holder.num_comments.setText(holder.num_comments.getContext().getString(R.string.num_comments, submission.getCommentCount()));
             holder.points.setText(format(submission.getScore()));
             // TODO: Placeholder image depending on type; hide when selftext
             SubmissionPreview preview = submission.getPreview();

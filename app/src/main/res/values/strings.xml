@@ -18,7 +18,7 @@
     <string name="log_out">Log Out</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="subreddits">Subreddits</string>
-    <string name="comments">%1$d comments</string>
+    <string name="num_comments">%1$d comments</string>
     <string name="dropdown">Dropdown button</string>
     <string name="frontpage">Front Page</string>
     <string name="all">All</string>
