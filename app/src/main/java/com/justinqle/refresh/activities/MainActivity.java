@@ -2,17 +2,20 @@ package com.justinqle.refresh.activities;
 
 import android.os.Bundle;
 import android.support.design.bottomappbar.BottomAppBar;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.justinqle.refresh.R;
 import com.justinqle.refresh.fragments.BottomNavigationDrawerFragment;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationDrawerFragment.dismiss();
             }
 
+            // Since scrolling hides app bar, ensures navigation changes reshows app bar
+            ((AppBarLayout) findViewById(R.id.app_bar)).setExpanded(true, true);
+
             // FAB alignment
             if (destination.getId() == R.id.postsFragment) {
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
@@ -63,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 fab.show();
             }
         });
+
+        // Sets up toolbar with Navigation Component
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        NavigationUI.setupWithNavController(toolbar, navController);
     }
 
     // Closes sidebar on back press
